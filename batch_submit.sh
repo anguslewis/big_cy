@@ -34,10 +34,14 @@ if [[ -z "$big_cy" ]]; then
 fi
 echo "Submitting big_cy"
 
-# `to_run`: which files to submit this run. Read from the environment if
-# set (sherlock-agent-com submit "<jobs>"), else the committed default
-# below — which is EMPTY on purpose, so a bare submit fires nothing.
-to_run="${to_run:- }"
+# `to_run`: which files to submit this run. NOTE: this `sherlock-agent-com`
+# version runs `bash ./batch_submit.sh` with NO job argument, so `to_run` is the
+# committed default below (space-padded; the guards match " name "). Edit it to
+# pick what a `submit` fires.
+#   PHASE 1 (now): build the env once + solve the baseline (specs=1).
+#   After the env is built, drop setup_klrep_env_sherlock to avoid rebuilding.
+#   PHASE 2: set specs=1-9 (below) and to_run=" run_klrep ".
+to_run="${to_run:- setup_klrep_env_sherlock run_klrep }"
 
 ############################################################################
 # Shared SLURM settings
