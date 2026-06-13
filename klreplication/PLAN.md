@@ -1,0 +1,433 @@
+# PLAN — Tensorized-Python replication of the Kekre–Lenel (2024 AER) quantitative model
+
+**Agent:** big_cy-klrep · **Task:** Assignment 04 (Q0) · **Status:** drafted 2026-06-13.
+
+This is a **language refactor**, not an improvement pass: implement *exactly* what KL
+do — same equations, same algorithm, same inputs — to reproduce their point estimates
+and figures. Extensions come later. Everything is **tensor-native** (PyTorch),
+device-agnostic, GPU-ready, and runs **locally only**.
+
+> **Reference files** (read these for detail; this PLAN does not duplicate them):
+> - `reference/kl_model_equations.md` — equations (1)–(21), (23)–(72), (N1)–(N3); the
+>   ω convenience-yield mechanism; symbol↔name map. **The equation authority.**
+> - `reference/fortran_mod_calc.md` — the solver (`calc_steady`, `calc_sol`,
+>   `calc_equilibrium_and_update`, the 4 Brent root-finders, damping, staged activation).
+> - `reference/fortran_mod_results.md` — simulation, generalized IRFs, output files.
+> - `reference/fortran_auxcodes.md` — Smolyak grid/basis, Gauss–Hermite quadrature.
+> - `reference/matlab_postproc.md` — `get_var_indices` column map (151 rows), figures,
+>   tables, de-trending conventions.
+> - `…/big_cy/data/raw/klreplication/MANIFEST.md` — inputs + the 65-parameter layout.
+> - Online appendix saved at `…/papers/Kekre_Lenel_2024_AER_Online_appendix.pdf`
+>   (equations (33)–(72) are in Appendix A.6, pp. 9–13).
+
+---
+
+## 0. The model in one paragraph (what we are reproducing)
+
+A two-country (Home = US, Foreign = RoW, relative size ζ\*) open-economy NK model with
+Epstein–Zin recursive preferences and **bonds in the utility function**. Households value
+**safe dollar bonds** through a convenience term Ω(·); the marginal convenience yield ω_t
+is driven by an exogenous safety-demand shock ω^d and the (fixed-ratio) supply of
+government T-bills. Foreign *also* values safe dollar bonds — the channel for RoW dollar
+demand. Four aggregate shocks: global TFP z (unit-root + rare disaster φ), relative TFP
+z_F, disaster probability p, and safety demand ω^d. Rotemberg sticky wages, CPI-targeting
+Taylor rules, freely-deployable capital with investment adjustment costs. Solved globally
+on an **anisotropic Smolyak grid** by **dampened backward iteration**, with all real
+variables scaled by the TFP trend z_t (stationary "re-scaled economy") and value/consumption
+additionally scaled by agent wealth μ̃ for numerical conditioning. 9 calibrations
+(`param_file_1..9`), file 1 = benchmark.
+
+---
+
+## 1. Notation & symbol ↔ name map
+
+The full math-symbol ↔ Fortran-name map is in `reference/kl_model_equations.md §1`. The
+Python convention adds a third column. **Rule (from coding_conventions): paper symbol →
+descriptive Python name, with the symbol in a comment at definition.** We keep the Fortran
+names as the bridge because the Fortran is the executable ground truth.
+
+### 1.1 Parameters (the 65 in `param_file_*.csv`; order = `param_input_vec`)
+
+| Symbol | Meaning | Fortran | Python |
+|---|---|---|---|
+| ζ\* | Foreign relative size | `zeta` | `zeta` |
+| β, β\* | discount factors (H/F) | `bbeta_vec` | `beta[2]` |
+| γ, γ\* | risk aversion (H/F) | `gma_vec` | `gamma[2]` |
+| ψ | IES (both) | `ies_vec` | `ies[2]` |
+| χ^W | Rotemberg wage cost | `chi` | `chi_w` |
+| σ | trade (Armington) elasticity | `sigma` | `sigma` |
+| ς | home-bias in CES bundle (H/F) | `varsigma_vec` | `varsigma[2]` |
+| ℓ̄ | labor target (normalization) | `l_target` | `l_target` |
+| δ | depreciation | `ddelta` | `delta` |
+| α | capital share | `aalpha` | `alpha` |
+| χ^x | investment adj. curvature | `chiX` | `chi_x` |
+| — | Home investment share | `inv_share_h` | `inv_share_h` |
+| φ_w, ε_w | wage PC objects | `phi_w`,`vareps_w` | `phi_w`,`eps_w` |
+| φ (Taylor) | inflation coeff (H/F) | `phi_h`,`phi_f` | `phi_pi[2]` |
+| φ_y | output-gap coeff (H/F) | `phi_yh`,`phi_yf` | `phi_y[2]` |
+| — | Taylor intercept (H/F) | `tayl_ic_h`,`tayl_ic_f` | `tayl_ic[2]` |
+| ρ_i | rate smoothing | `rho_i` | `rho_i` |
+| b̄g | T-bill supply rule | `b_lmbd`,`bg_yss` | `b_lmbd`,`bg_yss` |
+| σ^z | global TFP innov. SD | `sig_z` | `sig_z` |
+| σ^F, ρ^F | rel-TFP SD / AR(1) | `zf_std`,`rho_zf` | `zf_std`,`rho_zf` |
+| disaster | p̄ level, jump, AR, SD | `disast_p_in`,`disast_shock`,`disast_rho`,`disast_std_in` | `disast_*` |
+| ω^d | safety demand: mean/SD/shift/AR | `omg_mean`,`omg_std`,`omg_shift`,`omg_rho` | `omg_*` |
+| ρ^{pω} | disaster–safety corr | `corr_omg_dis` | `corr_omg_dis` |
+| θ̄ | wealth-share target (H) | `tht_trgt_vec` | `tht_trgt[2]` |
+| grid devs/means | per-dim grid half-widths & centers | `*_grid_dev`,`*_grid_mean`,`k_dev_param`,`w_dev_param`,`*_grid_adj` | same |
+| μ-levels | per-dim Smolyak level (9) | `vector_mus_dimensions` | `mus_dims[9]` |
+| n_quad\_\* | GH nodes per shock (4) | `n_uni_quad_*` | `n_quad[4]` |
+| flags | `foreign_trading`,`run_bg`,`run_samp` | same | same |
+
+Derived in `init_setup` (port verbatim): `disast_p = exp(p_in + std²/2)`,
+`disast_std = sqrt((exp(std²)−1)·exp(2 p_in+std²))`, `sig_dis = std_in·√(1−ρ²)`,
+`sig_omg`, `sig_zf` analogous; the shock covariance + Cholesky (`F07FDF`='U' = `cholesky(upper)`);
+grid devs `= 3·SD`; IRF shock sizes (`irf_shock_sizes`, `irf_ll_shock_sizes`).
+
+### 1.2 State vector (Smolyak dims; `idx_*`), shocks (`sidx_*`), sizes
+
+```
+state[9] = [k (capital), θ_h (Home wealth share), z_F (rel TFP), w_h, w_f (wages),
+            p (disaster prob), i_h, i_f (lagged nom rates), ω (convenience)]
+```
+Baseline: dims 7 (`i_h`,`i_f`) are **inactive** unless `rho_i>0` → 7 active dims.
+Shocks[4] = [z, z_F, p, ω] (`sidx_z,sidx_zf,sidx_p,sidx_omg`); + disaster node + no-shock
+node ⇒ `n_quad = n_GH + 2`. `n_I=2`, `n_bond=20` (bond maturity ladder used in valuation),
+`n_interp = 52 + 6·12 = 124` interpolated variables.
+
+### 1.3 Scaling devices (must be reproduced exactly — see eq file §10–§11)
+
+- **Re-scaled economy:** all real vars ÷ z_t; the double-tilde `x̃̃` further deflates lagged
+  capital/wage *states* by `exp(σ^z ε^z + φ)`. Makes the system stationary.
+- **Wealth scaling:** `v̂ ≡ μ̃⁻¹ ṽ`, `ĉ ≡ μ̃⁻¹ c̃`, with
+  `μ̃_t = (θ_t(π_t+(1−δ)q^k_t) k̄̃̃_{t−1} + ā)/b̄`. (N1)–(N3) give SDF, CE, and μ̃_{t+1}.
+  ω enters via `(1+r)/(1−ω)` and the seigniorage term in μ̃_{t+1} / θ transition (51).
+
+---
+
+## 2. Module / function structure (function-per-file, tensor-native)
+
+Layout under `~/code/big_cy/klreplication/`:
+
+```
+klreplication/
+├── PLAN.md                      (this file)
+├── reference/                   (the 5 digests above)
+├── src/klrep/
+│   ├── config.py                # device/dtype; global tensor backend selection
+│   ├── params.py                # Params dataclass; load_param_file(i) -> Params
+│   ├── create_param_files.py    # PORT of create_param_files.m (+ get_moments, sim_moments)
+│   ├── grid/
+│   │   ├── smolyak_elem_isotrop.py
+│   │   ├── smolyak_elem_anisotrop.py
+│   │   ├── smolyak_grid.py          # Chebyshev-extrema (Lobatto) nodes, m(i)=2^(i-1)+1
+│   │   ├── smolyak_polynomial.py    # 1st-kind Chebyshev T basis (batched)
+│   │   ├── interp_fit.py            # solve B·c = v  (torch.linalg.solve)
+│   │   ├── interp_eval.py           # B_new @ c      (batched matmul)
+│   │   └── state_grid.py            # map smol_grid -> economic state_grid (grid_setup)
+│   ├── quad/
+│   │   ├── gauss_hermite.py         # standard-normal GH (hermegauss / √(2π)); prob-normalized
+│   │   └── shock_grid.py            # product nodes × Cholesky; + no-shock + disaster nodes
+│   ├── model/
+│   │   ├── util_fun.py              # Φ(ℓ), Φ'(ℓ); felicity bundle  (eq 3)
+│   │   ├── production.py            # κ allocation, wages, profits  (54-57,63,70-72)
+│   │   ├── prices.py               # P/P_H, P*/P*_F, q (terms of trade) (70-72)
+│   │   ├── capital_price.py        # q^k  (60)
+│   │   ├── returns.py              # r, r*, r^k, bond returns (67-69)
+│   │   ├── sdf.py                  # m̃, m̃*, CE via (N1),(N2)
+│   │   ├── portfolio_foc.py        # scaled portfolio residual (eq file; the FOC kernel)
+│   │   ├── bond_clearing_home.py   # solve i_t : Home bond mkt (66) [Brent]
+│   │   ├── bond_clearing_foreign.py# solve i*−i : Foreign bond mkt   [Brent]
+│   │   ├── capital_share.py        # portfolio share capital vs bond [Brent]
+│   │   ├── terms_of_trade.py       # solve s_t : goods mkt (35,36,44,45,58,59,61,62,65) [Brent]
+│   │   ├── consumption.py          # consumption-savings via (N1) (37,40,41,46,49,50)
+│   │   ├── labor_supply.py         # union FOC (52,53)
+│   │   ├── inflation.py            # Taylor rules -> P/P_{-1} (10)
+│   │   ├── wealth_transition.py    # θ_{t+1} (51); aggregate savings k̄̃_t (64)
+│   │   └── equilibrium_step.py     # calc_equilibrium_and_update: the 10 steps, batched over grid
+│   ├── solve/
+│   │   ├── steady_state.py         # calc_steady
+│   │   ├── solve_model.py          # calc_sol: dampened backward iteration + staged activation
+│   │   ├── damping.py              # per-object relaxation weights (match Fortran schedule)
+│   │   └── irf.py                  # MIT-shock generalized IRFs (+ long-lived run_bg)
+│   ├── simulate/
+│   │   ├── stochastic_ss.py        # no-shock fixed point
+│   │   ├── simulate.py             # burn-in + ensemble; sampleK_mat path-driven sims
+│   │   └── write_series.py         # emit the series the post-proc reads (or in-memory)
+│   ├── post/
+│   │   ├── var_indices.py          # PORT of get_var_indices.m (151-row column map)
+│   │   ├── read_series.py          # assemble stacked [shocks;states;vars;value]
+│   │   ├── extract_series.py / extract_irfs.py
+│   │   ├── moments.py              # calc_moments + collect_moments (+ swap)
+│   │   ├── figures.py              # fig 2,3,5,10,11-20 (+ recession 4,6,7) — STATA? see §6
+│   │   └── tables.py               # table 1-10
+│   └── run/
+│       ├── solve_calibration.py    # entry: solve_calibration(i) end-to-end (≈ ./main i)
+│       └── reproduce_all.py        # loop calibrations -> figures/tables (≈ runme.sh steps 4-5)
+└── tests/
+    ├── test_smolyak_basis.py       # vs Fortran basis on fixed elems + random pts
+    ├── test_quadrature.py          # GH nodes/weights vs analytic moments
+    ├── test_steady_state.py        # vs Fortran SS print (output_*.txt)
+    └── test_grid_csv.py            # grid.csv / grid_locs.csv vs Fortran
+```
+
+Each non-trivial routine is **one file, one function** (per C++-derived discipline). Pure
+functions take tensors + a `Params`/`Grid` struct and return tensors; no hidden globals.
+
+---
+
+## 3. Solve algorithm (port of `calc_sol`)
+
+Detailed mapping in `reference/fortran_mod_calc.md`. Skeleton:
+
+```
+init_setup(param_file_i)         # params, covariance+Cholesky, GH+shock grid, Smolyak grid
+calc_steady()                    # deterministic SS -> grid means (k,w_h,w_f,...), ā,b̄
+grid_setup()                     # smol_grid -> state_grid; next_zf/dis/omg transition mats
+# --- dampened backward iteration ---
+initialize guesses (v̂,v̂*,ĉ,ĉ*,ℓ,ℓ*, i,i*,q^k,s, P/P_{-1},P*/P*_{-1}, bond shares)
+outer_iter = 0; diff = ∞
+while diff > 1e-8 and outer_iter < max_iter (=5000):
+    fit interpolation coeffs:  solve smol_polynom · coeffs = current_values   (torch.linalg.solve)
+    parallel over n_states grid points (vectorized, not OMP loop):
+        evaluate Smolyak basis at the n_quad next-states (interp_eval)
+        calc_equilibrium_and_update(point)   # the 10 steps below
+    apply per-object damping (relaxation weights); compute diff vs previous
+    STAGED ACTIVATION:  bond clearing on after iter 10;  foreign_trading on after iter 100
+post: calc_bond_prices, calc_valuation (n_bond ladder), IRFs
+```
+
+**The 10 steps inside `equilibrium_step.py`** (eq groups from `kl_model_equations.md §11`):
+1. current production (54-57,63,70-72) → RHS of budgets (41,50)
+2. next-period production → expected capital return (69)
+3. price of capital q^k (60)
+4. **Home bond clearing**: solve i_t (66) holding c̃,c̃\*, Foreign-bond pos., r^k, spread fixed — Brent
+5. **Foreign bond clearing**: solve i\*−i holding c̃,c̃\*, capital pos., r^k, i_t fixed — Brent
+6. value functions (33,34,42,43) + θ transition (51) + aggregate savings (64); μ̃ via (N1)–(N3)
+7. **terms of trade**: solve s_t so relative Home-good demand = relative supply — Brent
+8. consumption-savings (37 via N1, 40,41,46,49,50): solve savings holding all but μ̃_{t+1}, c̃_t fixed
+9. labor supply: union FOC (52,53)
+10. inflation: Taylor rules (10)
+
+### 3.1 Within-point solve structure — THREE NESTED LEVELS (critic B1/B2; do not under-design)
+
+Vectorizing **across** `n_states` grid points is correct, but **within** each point the
+equilibrium step is NOT closed-form — it is a nest of iterative solves. Get this structure
+written down before coding `equilibrium_step.py`:
+
+- **Level 1 (outer):** the backward iteration (§3), damped, to `diff < 1e-8`.
+- **Level 2 (within-point root-finds, SEQUENTIAL):**
+  - Step 4 (Home bond clearing) is **Brent-inside-Brent**: an outer Brent on `i_h` (residual
+    `calc_excess_bond_nom`) that, per evaluation, runs an **inner Brent on each agent's
+    capital share** (`calc_portfolio_share`). 
+  - Step 5 (Foreign bond clearing) runs **after** step 4 with `i_h` held fixed: outer Brent on
+    the spread `i*−i` (`calc_excess_foreign_bond_nom`) wrapping `calc_bond_portfolio_share`.
+  - So steps 4→5 are ordered in the within-point dimension; each is batched over `n_states`.
+- **Level 3 (within-point damped fixed-point loops):** steps 7, 8, 9 are each iterated to
+  convergence with their own relaxation weights — **terms of trade s (weight 0.1), consumption
+  Euler (0.5), wage Phillips curve (0.005, the slowest)**. Implement as **batched fixed-point
+  iterations with a per-point convergence mask** (iterate until all points' residuals < tol).
+
+Implementation rule: the 10 step-functions take and return a typed `EquilibriumState`
+container (carrying shared scratch like the SDF matrix `M_vec_mat`, `r_alpha`, and the
+θ-dependent stationarity nudge `bbeta_adj(n_I)` — critic N1/N4) so cross-step coupling is
+explicit and the per-file functions never re-derive the SDF and drift out of sync.
+
+### 3.2 Disaster / no-shock quadrature nodes (critic S2 — exact, state-dependent)
+
+`n_quad = n_GH + 2`. The expectation weights are **state-dependent** through `p_dis`:
+```
+big_weight_vec[1:n_quad-1] = quad_weight_vec * (1 − p_dis)   # GH nodes + no-shock node
+big_weight_vec[n_quad]     = p_dis                            # disaster node
+```
+The disaster node carries only `z = −disast_shock` (other shocks 0) and an extra
+depreciation hit on the capital return (`r^k *= exp(dz)`). Forgetting the `(1−p_dis)` rescale
+double-counts probability mass — a classic silent bug. `p_dis` varies by grid point (the
+disaster-probability state), so this rescale is inside the batched expectation.
+
+**Root-finders.** All four are **hand-rolled Brent** in the Fortran (Home rate, Foreign
+spread, capital share, Foreign-bond share); a library Brent handles the ZLB/fixed-rate IRF
+branch. Port as **batched Brent** (`solve/brent_batched`) solving all grid points at once
+(vectorized bracketing + iteration to a tol matching Fortran), but **respect the nesting and
+ordering in §3.1** — this is NOT one flat batch. The residual functions
+(`calc_excess_bond_nom`, `calc_excess_foreign_bond_nom`, `portfolio_foc`,
+`calc_portfolio_share`, `calc_bond_portfolio_share`) must match the scaled FOC definitions
+exactly, including the `/(1−ω)` convenience wedge and natural-leverage bounds.
+
+**Damping & staged activation are load-bearing for convergence** — replicate the exact
+per-object relaxation weights and the iter-10 / iter-100 switches from `calc_sol`.
+
+---
+
+## 4. Calibration / "estimation" loop
+
+There is **no outer SMM loop in the released solver** — the 9 `param_file_*.csv` are
+pre-computed calibrations/counterfactuals. The mapping targets→parameters lives in
+`create_param_files.m` (with `get_moments.m`, `sim_moments.m`, `additional_params.mat`).
+
+**⚠ Dependency correction (critic B4).** `chi0_vec` (labor-disutility level) and the
+steady-state terms-of-trade `s_ss` are **calibrated inside `calc_steady`** (a per-agent damped
+fixed point), NOT in `create_param_files.m` — the Fortran emits `chi0(1..2)` to `extra_data.csv`
+for the tables. So: **port `calc_steady` FIRST** (it owns the SS inversions), and treat
+`create_param_files.py` as **best-effort, validated against the shipped CSVs** — which are the
+ground-truth inputs. Do not block the solver on a perfect generator port. (This reverses the
+naive ordering; see §9.)
+
+Port plan (`create_param_files.py`):
+- Reproduce each of the 9 specifications and write identical 65-column rows (validate byte-
+  for-byte against the copied `param_file_*.csv` — they are our ground truth; the port is
+  for reproducibility/extension, not to *replace* the inputs).
+- Some parameters are set by **steady-state inversion** (e.g. β to hit an NFA/wealth-share
+  target, ν̄ via `chi0_vec` to hit ℓ=1, T-bill level to hit `bg_yss`). Identify these in
+  `create_param_files.m` and reproduce the inversion. `additional_params.mat` → `scipy.io.loadmat`.
+- Emit `n_comp` (number of calibrations) as `create_param_files.m` does.
+
+What each calibration is (to confirm when porting): file 1 = benchmark; others toggle
+`foreign_trading`, the safety/disaster shocks, fiscal `run_bg`, sample runs `run_samp`,
+output-gap Taylor terms, and `rho_i` (which activates the `i_h,i_f` grid dims). Document the
+1→9 map in `create_param_files.py`'s header.
+
+---
+
+## 5. Vectorization / tensor-native strategy
+
+**Where tensor-native discipline matters most** (these are the hot paths):
+1. **Smolyak basis evaluation** — `B_new @ c` for all `n_states × n_quad` next-states is a
+   single batched matmul. Never loop over grid points or quadrature nodes in Python.
+2. **The equilibrium step over grid points** — the Fortran OMP-parallelizes over `n_states`;
+   we **vectorize** it: every per-point quantity carries a leading `n_states` (and where
+   relevant `n_quad`) batch dim. The 10 steps become tensor ops on `[n_states, ...]`.
+3. **Batched Brent root-finders** — solve all grid points' scalar root problems at once:
+   maintain `[n_states]` brackets, iterate Brent updates elementwise to a shared tol. No
+   per-point scipy calls.
+4. **Expectations** = weighted sums over `n_quad` → `einsum`/`tensordot` with `quad_weight_vec`.
+
+**Discipline (from CLAUDE.md standing policy):** PyTorch, `dtype=float64` (match Fortran
+`dp`), device-agnostic via `config.device` (CPU now, `cuda` later — no code change). **No
+non-tensorized NumPy in hot loops; no CPU↔GPU round-trips mid-solve.** NumPy/scipy allowed
+only at the edges (loading `.mat`, `create_param_files` setup, post-processing I/O).
+Sanity checks after non-trivial ops (portfolio shares sum to 1; market-clearing residuals ≈ 0;
+μ̃ > 0). Minimal try/except (let it crash — coding_conventions).
+
+**Smolyak linear solve conditioning (critic B3).** The Fortran fits coefficients with NAG
+`F07ABF` = LAPACK **`dgesvx`**, the *expert* driver with **equilibration + condition-number
+estimation** — chosen because the Chebyshev-extrema basis can be ill-conditioned at high
+anisotropic levels, and small errors compound over up to 5000 backward iterations. Port as
+`torch.linalg.lu_factor` once per outer iteration + `lu_solve` for the multiple RHS, in
+float64; **report the basis-matrix condition number at setup** (validation step 1) and add
+equilibration (column scaling) if it is large. Do not silently use a plain `solve`.
+
+**Why this keeps the GPU door open:** the entire solve is grid-batched tensor algebra +
+batched root-finding + matmul interpolation — moves to H100 with only a `device` change.
+
+---
+
+## 6. Post-processing → reproduce figures/numbers
+
+Port the MATLAB pipeline to Python (no MATLAB runtime). Detail in
+`reference/matlab_postproc.md`.
+
+- **`var_indices.py`** = exact port of `get_var_indices.m` (151 absolute row indices into the
+  stacked `[shocks(4); states(9); vars(124); value(14)]` series). This is the keystone —
+  get the column map exactly right. **Do not hardcode 124/9/151** (critic S7): read
+  `n_interp`, `smolyak_d`, `n_active_dims` from the solver-emitted `grid.csv` and assert the
+  map matches (`stopifnot`-style) at runtime.
+- **Calibration-index map is already known (critic S6) — lock it now**, don't defer: benchmark
+  `ix_bm`, plus `ix_no_omg`, `ix_symm`, … `ix_nocorr` (see `reference/matlab_postproc.md §0`).
+  Post-processing selects **different calibration subsets per table** (`comp_idxs`: Table 3 →
+  `[1,2,3]`, Table 9 → `[1,5,6]`, Table 10 → `[7,2,8,9,1]`). Encode this map in `tables.py`.
+- **`read_series.py`/`extract_*`** — assemble series, apply the **de-trending convention**
+  (`× exp(cumsum(z_shock))`, with `exp(dis)` return corrections and exact first-element
+  padding after diffs/shifts). This is the single trickiest reproduction.
+- **`moments.py`** — `calc_moments` (per-sim) → `collect_moments` (average across sims);
+  `collect_swap_moments` for Table 8. Fills the "Model" columns of tables 1–10.
+- **`tables.py`** — emit `table_1..10.tex` matching `Code/output/tables/`.
+
+**Figures: STATA vs Python.** The project's `coding_conventions.md` says *figures that go in
+a document must be made in Stata*. KL's figures are made in MATLAB. **Decision to confirm
+with Angus (low priority, defer to step 6):** for this *replication* the figures are a
+faithfulness check, not big_cy paper figures — so reproducing them in Python/matplotlib to
+compare against KL's PDFs is the natural first pass. If any figure becomes a big_cy
+deliverable, re-make it in Stata then. I will produce comparison plots in Python first and
+flag this choice in the closeness note. (Flagged in `reference/matlab_postproc.md`.)
+
+**Simulator details that change moments (critics S4/S5/N5):**
+- **Three different state-clipping regimes** (must be carried into `simulate.py`): no-disaster
+  sim clips next-state to `[−1,1]`; with-disaster sim does **not** clip; sample-path sim clips
+  to `[−1+eps, 1−eps]`. Silent if wrong; changes the disaster-sim moments (Table 7).
+- **Sample-path advance** (`run_samp`, needed for figs 4/6/7/10 + Table A1) uses NAG
+  `e01zmf`/`e01znf` scattered-data interpolation over the active-shock node grid. Replace with
+  `scipy.interpolate` (`RegularGridInterpolator` if the active-shock nodes form a regular
+  product grid — confirm; else `griddata`). This is the only piece needed for the **headline
+  fig 10** (ω-shock vs swapped-T-bill data), so it's not optional.
+- **RNG is not bit-reproducible.** The Fortran draws via NAG `g05*` (SEED=712, GENID=3). We do
+  not replicate that stream. So **simulated-moment agreement is statistical, not bit-exact**
+  (n_sims=100 × 400 periods averages out). The **bit-comparable** targets are the deterministic
+  objects: policy functions, steady state, and IRFs from fixed start states. Set this
+  expectation in the closeness note.
+
+**Comparison targets** (`Code/output/`): `figures/fig_2..20.pdf`, `tables/table_1..10.tex`,
+`results.pdf`. Closeness note: per-figure / per-number deviation + likely cause.
+
+---
+
+## 7. Validation ladder (build confidence bottom-up before trusting model output)
+
+1. **Smolyak basis** vs Fortran on a fixed `smol_elem` + random points (`test_smolyak_basis`);
+   also report the basis condition number (critic B3).
+2. **GH quadrature** integrates polynomials / normal moments exactly AND assert the nodes equal
+   the eigenvalues of the **probabilists'** Hermite Jacobi matrix (off-diagonal `√i`, not
+   `√(i/2)`) — guards the classic `hermegauss`-vs-`hermgauss` √2 footgun (critic S3). Moment
+   tests alone won't catch a uniform node-scaling error.
+3. **`grid.csv`/`grid_locs.csv`** vs Fortran (requires running Fortran once OR deriving from
+   params; we derive from params and cross-check dims). ⚠ confirm `smolyak_d`, `n_interp`.
+4. **Steady state** vs the Fortran SS print (`output_*.txt`) — needs the values; we compute
+   from params and sanity-check against appendix SS relations.
+5. **One full solve of benchmark (calibration 1)**; **proactively** cross-check the converged
+   stochastic-steady-state values (capital, wealth share, wages, rates) and the **Table-2
+   *targeted* moments** against KL's *published* numbers (critic S1) — a wrong sign in the (51)
+   seigniorage term or a `q` vs `1/q` in (N3) makes the model converge to the *wrong* fixed
+   point without crashing, so check early rather than waiting for a residual to misbehave.
+6. **All 9 calibrations** → all figures/tables.
+
+Because we are **not installing Fortran** (authorized last resort only), steps 1–2 are
+self-validating (analytic), and 3–5 cross-check against (a) appendix relations and (b) KL's
+*published* output files in `Code/output/`. If a discrepancy can't be resolved by reading,
+flag to Angus before resorting to gfortran.
+
+---
+
+## 8. Runtime / feasibility (local-only)
+
+KL: ~112 min for all 9 calibrations on a 32-core Xeon ⇒ ~12 min/calibration there, in
+compiled Fortran. Our vectorized Python on CPU will likely be **slower per iteration** but
+benefits from batching; expect the benchmark solve to take from tens of minutes to a few
+hours on the Mac. **Policy:** if local runtime/RAM becomes prohibitive, **stop and flag
+Angus to rethink** — do **not** move to Sherlock (CLAUDE.md standing policy). The
+tensor-native design means the eventual fix is a GPU, not the cluster. We will first get
+*correctness* on a coarse grid / few iterations, then scale.
+
+---
+
+## 9. Sequencing (next sessions)
+
+1. Backend + Smolyak grid/basis + quadrature + their tests (validation ladder 1–2). ✔ gate.
+2. `params.py` (load the shipped `param_file_*.csv` directly — the ground-truth inputs) +
+   `init_setup` (covariance/Cholesky, shock+disaster nodes, Smolyak grid) + `grid_setup`.
+3. `calc_steady` + steady-state checks (this owns the `chi0`/`s_ss` inversions — critic B4).
+   *Then* (optional, best-effort) `create_param_files.py`, validated against the shipped CSVs.
+4. `equilibrium_step` (the 10 steps, §3.1 nesting) + batched Brent + the FOC residuals — the bulk.
+5. `solve_model` (damping + staged activation) → benchmark converges; proactive SS/moment
+   cross-check (validation step 5) before scaling to the full grid.
+6. Simulation (3 clipping regimes) + IRFs; `var_indices` (assert vs `grid.csv`) + post-processing
+   (calib-subset map) + sample-path interp; figures/tables; closeness note.
+
+**Coarse-grid timing gate (critic N2):** before committing to a full benchmark run (full
+`vector_mus_dimensions` × up to 5000 iters), solve on a *reduced* anisotropic grid for a few
+outer iterations to measure per-iteration wall-clock, extrapolate, and confirm local
+feasibility — if prohibitive, stop and flag Angus (do not move to Sherlock).
+
+Open items to confirm during implementation (all flagged in the digests): the handful of
+`⚠ VERIFY` equation transcriptions (re-check vs appendix pp. 9–13/59–62 if a residual
+won't zero); exact per-object damping weights; the `sampleK_mat` column layout; the
+figures-language decision (§6).
