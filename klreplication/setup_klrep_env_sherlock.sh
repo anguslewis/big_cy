@@ -30,12 +30,20 @@ echo "=========================================="
 echo "Setting up conda environment: $ENV_NAME (Sherlock/HPC)"
 echo "=========================================="
 
-# Check if conda is available
+# Bootstrap conda — compute nodes don't have it on PATH by default. Source the
+# group miniconda profile (mirrors lx1's create_lx1_env.sh).
+for cbase in /home/groups/maggiori/miniconda3 "${HOME}/miniconda3" "${HOME}/anaconda3"; do
+    if [ -f "${cbase}/etc/profile.d/conda.sh" ]; then
+        source "${cbase}/etc/profile.d/conda.sh"
+        break
+    fi
+done
 if ! command -v conda &> /dev/null; then
-    echo "Error: conda is not available. Please load conda module first."
-    echo "Example: module load conda   (or source the group miniconda profile)"
+    echo "Error: conda not found. Tried group + home miniconda profiles."
+    echo "Adjust the cbase list or 'module load conda'."
     exit 1
 fi
+eval "$(conda shell.bash hook)"
 
 # Project root on oak (data root); fall back sensibly. Env + pkgs cache live
 # here / on scratch to save home-directory space (mirrors rier/lx1 convention).
