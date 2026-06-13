@@ -142,8 +142,10 @@ fi
 # maggiori 80G GPU (--gpus=1); the node has ~1000G RAM so mem is generous.
 file="run_klrep"
 if [[ ${to_run} == *" $file "* ]]; then
+    # ~7-10s/iter on A100; conv to 1e-8 can take ~1-1.5k dampened iters. 7h wall
+    # (maggiori allows 7 days) so the per-spec solve never TIMEOUTs mid-convergence.
     job_id=`sbatch ${shared_settings_gpu} ${depend_run_klrep} --gpus=1 --array=${specs} \
-                --time=0-04:00:00 --ntasks=1 --cpus-per-task=8 --mem=96G \
+                --time=0-07:00:00 --ntasks=1 --cpus-per-task=8 --mem=96G \
                 --job-name=$file --output="${logs}/${file}_%A_%a.out" --error="${logs}/${file}_%A_%a.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
     echo "Submitted $folder/$file (array=${specs}): ${job_id}"
