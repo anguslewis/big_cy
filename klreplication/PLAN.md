@@ -431,3 +431,50 @@ Open items to confirm during implementation (all flagged in the digests): the ha
 `⚠ VERIFY` equation transcriptions (re-check vs appendix pp. 9–13/59–62 if a residual
 won't zero); exact per-object damping weights; the `sampleK_mat` column layout; the
 figures-language decision (§6).
+
+---
+
+## 13. Solver implementation notes (from reading `calc_sol`, mod_calc.f90:204-523)
+
+Concrete details for porting the outer loop + equilibrium step (next session).
+
+**Interpolated next-period variables: `n_nxt = 8 + 2·n_I = 12`.** The
+`interp_input_mat` (n_states × 12) columns, in order, are:
+`[v_h, v_f, mc_h, mc_f, s, q, l_aggr_h, l_aggr_f, infl_h, infl_f, c_spending_h, c_spending_f]`.
+Each outer iteration: fit `smol_coeffs = solve(smol_polynom, interp_input_mat)`
+(LAPACK `dgesvx` w/ equilibration → our `interp_factor`/`interp_solve`). Then per
+grid point `sss`: `nxt_mat (n_quad×12) = Smolyak_basis(next_state_mat[:,:,sss]) @ smol_coeffs`,
+and non-interpolated `nxt_mat_2 (n_quad×3) = [k_next, next_zf, next_omg]`.
+
+**Outer loop:** `while diff > 1e-8 and outer_iter < max_iter(=5000)`. For each
+state, call `calc_equilibrium_and_update(...)` → new policies/prices/values; then
+damp + recompute `diff`. `M_vec_mat(n_quad, n_I, n_states)` carries the SDF across
+steps (shared scratch — our `EquilibriumState`).
+
+**Iteration-state initialization (mod_calc.f90:304-429):**
+- `l_aggr=1`, `q=q_ss`, `s=s_ss`, `infl=1`, `q_bond=1`, `share=0`, `bF_share=0`
+  (start dollar-only), `v=v_ss`, `mc=mc_ss`.
+- `nom_i(1,:) = (1+rf_ss)/(1+exp(omg_state))`; `nom_i(2,:) = 1+rf_ss − nom_i(1,:)`
+  (col 2 is the spread i*−i, NOT the level).
+- `inv_h = δ·k·inv_share_h`, `inv_f = δ·k·(1−inv_share_h)`.
+- `kappa` init via the s/zf/l ratio (lines 332-336); `w_choice` from kappa (341-344);
+  `c_spending(iii) = w_choice·l_ss + k·wealth_share·(1/β−1)` (349-352).
+- `k_next_mat(:,sss) = k·exp(dz_vec)/exp(dz_vec_adj)` → = k for all non-disaster
+  nodes, `k·exp(−disast_shock)` at the disaster node (capital destruction).
+- `next_state_mat(n_quad, n_active_dims, n_states)` = standardized next states:
+  capital `(k/exp(dz_adj) − k_grid_mean)/k_grid_dev`; wealth-share dim 0 (guess);
+  zf `(next_zf − mean)/dev`; wh/wf `(w_choice − mean)/dev`; dis `(next_dis − mean)/dev`
+  (0 if dev<sqrt_eps); ih/if 0; omg `(next_omg − mean)/dev`. **Clamped to [−1,1].**
+
+**The bulk still to port (exact Fortran line ranges):**
+- `calc_equilibrium_and_update` — mod_calc.f90:2176-3099 (the 10 steps).
+- `calc_unexpected_transition` — 1940-2174 (θ transition + seigniorage).
+- Brent helpers: `calc_excess_bond_nom` 3776-3868, `calc_portfolio_share`
+  3871-4082, `calc_excess_foreign_bond_nom` 4086-4175, `calc_bond_portfolio_share`
+  4178-4360. `portfolio_foc`/`portfolio_return` 4388-4410 (done: small).
+- `calc_bond_prices` 3101-3501, `calc_valuation` 3503-3774 (post-solve, n_bond ladder).
+- ZLB/fixed-rate IRF branch: `calc_equilibrium_ifixed` 4424-5175, `update_ifixed`
+  5178-5324.
+
+These are tightly coupled and only testable once the loop converges; port together,
+then gate on the proactive SS/Table-2 cross-check (§7 step 5).
