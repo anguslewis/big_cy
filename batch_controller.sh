@@ -71,9 +71,22 @@ fi
 
 # Python
 if [ "$extension" == "py" ]; then
+    # Bootstrap conda — compute nodes lack it on PATH (no ~/shell_profile.sh).
+    for cbase in /home/groups/maggiori/miniconda3 "${HOME}/miniconda3" "${HOME}/anaconda3"; do
+        if [ -f "${cbase}/etc/profile.d/conda.sh" ]; then
+            source "${cbase}/etc/profile.d/conda.sh"; break
+        fi
+    done
+    if ! command -v conda &> /dev/null; then
+        echo "ERROR: conda not found; cannot activate big_cy_klrep_env"; exit 1
+    fi
     eval "$(conda shell.bash hook)"
-    # Activate this repo's conda environment (klrep model-solve env).
-    conda activate big_cy_klrep_env
+    # Activate this repo's conda env (by name; fall back to its oak prefix).
+    conda activate big_cy_klrep_env 2>/dev/null || conda activate "${big_cy}/.conda/envs/big_cy_klrep_env"
+    # Fail loudly if we didn't land in the env (else we'd silently use system py2).
+    if ! python -c "import sys; assert sys.version_info[0]==3" 2>/dev/null; then
+        echo "ERROR: big_cy_klrep_env not active (python is $(python --version 2>&1))"; exit 1
+    fi
     umask 007
     python -u "${base_folder}/${1}/${2}.py" ${SLURM_JOB_ID} ${SLURM_ARRAY_TASK_ID} ${3}
     if [ -n "$SLURM_ARRAY_JOB_ID" ]; then

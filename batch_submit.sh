@@ -38,10 +38,11 @@ echo "Submitting big_cy"
 # version runs `bash ./batch_submit.sh` with NO job argument, so `to_run` is the
 # committed default below (space-padded; the guards match " name "). Edit it to
 # pick what a `submit` fires.
-#   PHASE 1 (now): build the env once + solve the baseline (specs=1).
-#   After the env is built, drop setup_klrep_env_sherlock to avoid rebuilding.
-#   PHASE 2: set specs=1-9 (below) and to_run=" run_klrep ".
-to_run="${to_run:- setup_klrep_env_sherlock run_klrep }"
+#   Env built OK (job 29446396) -> drop setup_klrep_env_sherlock; just solve.
+#   PHASE 1 (now): to_run=" run_klrep " with specs=1 (baseline).
+#   PHASE 2: set specs=1-9 (above) and keep to_run=" run_klrep ".
+#   (To rebuild the env, add ' setup_klrep_env_sherlock ' back.)
+to_run="${to_run:- run_klrep }"
 
 ############################################################################
 # Shared SLURM settings
