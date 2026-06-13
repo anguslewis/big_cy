@@ -494,6 +494,17 @@ states) 3.1s/iter pre-bond-clearing (more once Brent active). Convergence to 1e-
 needs ~thousands of dampened iters → benchmark solve ~hours on CPU, all 9 calibs
 ~a day. Tensor-native ⇒ GPU later cuts this to minutes. Flagged to Angus.
 
+**COARSE-GRID CONVERGENCE VALIDATION (800 iters, ~15 min):** diff fell
+1.2e-2(it100) → 8.4e-6(it800) monotonically — the dampened fixed point converges,
+no stalling/blowup. Central node vs deterministic SS: q 1.0007/1.0051, s
+0.9986/0.9918, l_h 1.002/1.000 (real quantities AT SS); v_h 0.81 vs 1.0, nom_i
+1.003 vs 1.011 (LOWER — correct: the global solution prices disaster risk that the
+deterministic SS ignores; with γ=21 the safe rate + welfare fall), share_h = -0.51
+(home leveraged into capital = equity bias, the model's central mechanism), bF_h
+-0.11. These risk-adjusted deviations are economically RIGHT, not bugs. Definitive
+gate = simulated moments vs KL tables (needs post-proc + full grid). Late
+convergence rate ⇒ ~1300 coarse iters to 1e-8; full-grid benchmark ≈ few hours.
+
 **NEXT (remaining):** (a) run benchmark to convergence (background/next session;
 consider a 1e-5/1e-6 tolerance for a first pass) + finish the SS/Table-2 gate;
 (b) port calc_bond_prices (3101-3501) + calc_valuation (3503-3774) — the post-solve
