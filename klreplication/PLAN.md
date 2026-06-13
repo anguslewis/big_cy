@@ -550,3 +550,34 @@ those pieces, following the exact Fortran (now fully read; key facts below).
 **Next action:** transcribe the per-object damping weights from calc_sol's update
 block (mod_calc.f90 ~1100-1937), then write equilibrium_step.py + solve_model.py,
 run a COARSE-grid solve (reduce mus_dims), gate on SS/Table-2, then scale.
+
+### 13.2 Damping weights + next_state rebuild + convergence (mod_calc.f90:524-709)
+
+**Per-object damping** `x = x + w*(x_new - x)` (line refs 676-704):
+v 1.0, mc 1.0, next_state_mat 0.1, q 0.2, s 0.1, l_aggr 0.2, c_spending 0.2,
+nom_i(1) 0.1, nom_i(2) 0.1, infl 0.05, k_next 0.2, share 0.1; bF_share 0.0 for
+outer_iter<101 else 0.05. **w_choice is LOG-damped**: `w = w*(1 + 0.2*log(w_new/w))`.
+
+**next_state_mat_new** (per active dim, then clamp [-1,1]); exogenous dims
+zf/dis/omg are NOT recomputed (kept from init, so damping leaves them fixed):
+- k:  `(k_next_new/exp(dz_vec_adj) - k_grid_mean)/k_grid_dev`  (per quad node)
+- θ:  `(theta_nxt - tht_h_grid_mean)/tht_h_grid_dev`
+- wh: `(w_choice_new[0]/exp(dz_vec_adj) / (varsigma1+(1-varsigma1)s^(σ-1))^(1/(σ-1)) - wh_grid_mean)/wh_grid_dev`
+- wf: `(w_choice_new[1]/exp(dz_vec_adj)*s / (varsigma2 s^(1-σ)+(1-varsigma2))^(1/(σ-1)) - wf_grid_mean)/wf_grid_dev`
+- ih: `((nom_i[0]-1) - ih_grid_mean)/ih_grid_dev`
+- if: `((nom_i[0]+nom_i[1]-1) - if_grid_mean)/if_grid_dev`
+Also `k_next_mat_new = k_next_new/exp(dz_vec_adj)*exp(dz_vec)` (the next-iter k_nxt:
+= k_next_new for non-disaster nodes, *exp(-disast_shock) at the disaster node).
+
+**Convergence diff** (line 604): max over [abs log-ratio of v, mc, c_spending,
+k_next, l_aggr, w_choice, q, infl ; abs diff of share, nom_i ; abs diff
+next_state]. Stop when diff < 1e-8 (conv_crit) or outer_iter == max_iter (5000).
+
+**Share solve bounds (calc_excess_bond_nom):** `temp = (-rk -
+bF_share*(rf_vec1 - rf_vec0)) / (rf_home - rk + sqrt_eps)` with rf_home =
+rf_vec0/(1-omg); share_low = max(-10, max_q{temp : temp<0}+eps); share_high =
+min(5, min_q{temp : temp>0}-eps). If foc(share_low)<=0 -> share_low; elif
+foc(share_high)>=0 -> share_high; else Brent. b_temp = savings*share;
+excess_b = sum_agent b_temp. (Foreign analog uses safe bounds [-10,10] and
+temp_r = rf_vec1 - rf_vec0/(1-omg); bh_temp = (share-bF_share)*savings;
+excess = -sum bh_temp.) savings = wealth + w_choice*l - c_spend (indep of nom_i).
