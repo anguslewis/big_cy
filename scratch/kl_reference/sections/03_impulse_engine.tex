@@ -1,0 +1,515 @@
+% =====================================================================
+% 03_impulse_engine.tex — Appendix B.1: the period-1 log-linearization (WP-B)
+% =====================================================================
+\section{The impulse-response engine (period-1 log-linearization)}
+\label{sec:engine}
+
+This section reconstructs KL's online Appendix~B.1, which reduces the entire
+impulse response of the simplified economy to a \emph{static} system in
+period~1. The output is a small set of reduced-form expressions --- for the
+terms of trade $\dev{\tot}_1$, consumptions $\dev{\rs c}_1,\fr{\dev{\rs c}}_1$,
+the expected wealth-share change $\Eone\dev{\wsh}_2$, net foreign assets
+$\widehat{\nfa}_1$, the expected capital return $\Eone\rk_2$, the inflation
+deviations $\D\dev P_1,\D\fr{\dev P}_1$, and the realized returns
+$\rr_1,\fr{r}_1,\rk_1$ --- all written in terms of
+$(\dev{\ell}_1,\fr{\dev{\ell}}_1,\dev{\cy}_1,\widetilde{\widetilde{\dev k}}_1)$
+and the deep parameters. These are the \emph{engine} that
+Propositions~\ref{prop:prices}, \ref{prop:returns}, and~\ref{prop:wealth}
+specialize. Throughout we keep the home-bias parameter $\hbias$ general (as KL
+do in B.1), so the role of complete home bias $\hbias\to\zs/(1+\zs)$ is visible
+when we later impose it. The labels in this section (e.g.\
+\eqref{eq:s1-solved}, \eqref{eq:Er2k-solved}) are the cross-references used by
+the proof sections.
+
+\subsection{Timing and strategy}
+\label{sec:engine-timing}
+
+KL's device (their app.~B.1, first paragraph) is the following. The economy sits
+in the deterministic steady state in period~$0$. \emph{All} shocks ---
+to the safety/convenience demand $\dev{\cy}_1$ and to productivity $\dev{\epsilon}^z_1$ ---
+hit in period~$1$. There are \emph{no} shocks from period~$2$ onward. Two
+consequences make the problem static:
+\begin{enumerate}[leftmargin=1.6em,itemsep=2pt]
+  \item \textbf{Forward dynamics collapse.} With no innovations after period~$1$,
+  every period-$\ge2$ variable is a deterministic function of the two
+  predetermined states entering period~$2$: the expected Home wealth share
+  $\Eone\dev{\wsh}_2$ and the (twice-deflated) lagged global capital stock
+  $\widetilde{\widetilde{\dev k}}_1$. The period-$\ge2$ equilibrium conditions
+  can then be solved \emph{in closed form} for the conditional means
+  $\Eone\dev{\rs c}_2$, $\Eone\fr{\dev{\rs c}}_2$, $\Eone\dev{\tot}_2$,
+  $\Eone\dev{\rer}_2$, and the continuation values --- this is
+  Subsection~\ref{sec:engine-period2}.
+  \item \textbf{Period~$1$ becomes a static system.} Substituting those
+  closed-form forward objects into the period-$1$ optimality, market-clearing,
+  and policy conditions leaves a finite linear system in the period-$1$
+  unknowns. Solving it is Subsection~\ref{sec:engine-period1}.
+\end{enumerate}
+Because the predetermined capital state enters only as
+$\widetilde{\widetilde{\dev k}}_1$ and is, on impact, equal to its steady-state
+value (capital is chosen one period in advance), we set
+$\widetilde{\widetilde{\dev k}}_1=0$ when evaluating the \emph{impact} response;
+we nonetheless carry it symbolically through the engine because the reusable
+reduced forms (and Propositions~2--3) reference it.
+
+\subsection{Dynamics from period~2 onward}
+\label{sec:engine-period2}
+
+Since there are no shocks from period~$2$ onward, under the parametric
+restrictions of Definition~\ref{def:simplified} the period-$\ge2$ equilibrium
+conditions (their app.~eqs.~(33)--(72), specialized) reduce to closed-form
+relations between the period-$2$ conditional means and the two predetermined
+states. KL record them as their app.~eqs.~(73)--(78).
+
+\paragraph{Expected consumptions.} The Home and Foreign Euler/risk-sharing
+conditions, evaluated at the deterministic continuation path, give (their
+app.~eqs.~(73)--(74))
+\begin{align}
+\Eone\dev{\rs c}_2 &= \atil\,\Eone\dev{\wsh}_2 + \cshare\,\widetilde{\widetilde{\dev k}}_1, \label{eq:Ec2}\\
+\Eone\fr{\dev{\rs c}}_2 &= -\frac{1}{\zs}\,\atil\,\Eone\dev{\wsh}_2 + \cshare\,\widetilde{\widetilde{\dev k}}_1. \label{eq:Ec2-star}
+\end{align}
+Here $\cshare\,\widetilde{\widetilde{\dev k}}_1$ is the common scale effect of
+the predetermined global capital stock (capital share $\cshare$ on the
+production side), and the wealth-share term redistributes consumption across
+countries: a unit rise in the Home wealth share $\Eone\dev{\wsh}_2$ raises Home
+expected consumption by $\atil$ and lowers Foreign expected (per-capita,
+measure-$\zs$) consumption by $\atil/\zs$, so that the population-weighted change
+nets out against the resource constraint.
+
+\paragraph{Terms of trade and real exchange rate.} The period-$\ge2$ goods-market
+clearing and the intratemporal allocation, linearized, pin the expected terms of
+trade to the wealth share (their app.~eq.~(75)):
+\begin{equation}
+\Eone\dev{\tot}_2 = \frac{\hbias\left(\frac{1+\zs}{\zs}\right)^2}
+{\dfrac{\cshare}{1-\cshare}+\tel\left(1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2\right)}\,
+\atil\,\Eone\dev{\wsh}_2, \label{eq:Es2}
+\end{equation}
+and the log-linearized definition of the real exchange rate (their app.~eq.~(76))
+\begin{equation}
+\Eone\dev{\rer}_2 = \hbias\,\frac{1+\zs}{\zs}\,\Eone\dev{\tot}_2. \label{eq:Eq2}
+\end{equation}
+Equation~\eqref{eq:Eq2} is the period-$2$ analog of the period-$1$ real-exchange-rate
+relation~\eqref{eq:q1-s1} below; it follows from log-linearizing
+$q_t\equiv E_tP_t/P^{*}_t$ together with the CES price indices, which makes the
+real exchange rate proportional to the terms of trade with constant of
+proportionality $\hbias(1+\zs)/\zs$ (their app.~A.4).
+
+\paragraph{Continuation values / certainty equivalents.} Because there is no
+uncertainty after period~$1$, the (re-scaled) continuation value and its
+certainty equivalent coincide with expected consumption up to the common labor
+and capital terms; KL record (their app.~eqs.~(77)--(78))
+\begin{align}
+\Eone\dev{\rs \val}_2 &= \Eone\dev{\rs c}_2 = \atil\,\Eone\dev{\wsh}_2 + \cshare\,\widetilde{\widetilde{\dev k}}_1, \label{eq:Ev2}\\
+\Eone\fr{\dev{\rs \val}}_2 &= \Eone\fr{\dev{\rs c}}_2 = -\frac{1}{\zs}\,\atil\,\Eone\dev{\wsh}_2 + \cshare\,\widetilde{\widetilde{\dev k}}_1, \label{eq:Ev2-star}
+\end{align}
+i.e.\ the period-$2$ value deviations inherit \eqref{eq:Ec2}--\eqref{eq:Ec2-star}
+because, absent further risk, the certainty-equivalent operator is the identity
+to first order (their app.~A.5.1; the Jensen correction is second order and
+drops at the linearization).
+
+\paragraph{The composite coefficient $\atil$.} The coefficient appearing in
+\eqref{eq:Ec2}--\eqref{eq:Ev2-star} is defined by (their app.~eq.\ following~(78))
+\begin{equation}
+\atil \;\equiv\; \frac{\cshare}{\,1-\left(\dfrac{\zs}{1+\zs}-\hbias\right)
+\dfrac{\hbias\left(\frac{1+\zs}{\zs}\right)^2}
+{\dfrac{\cshare}{1-\cshare}+\tel\left(1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2\right)}\,}. \label{eq:atil-def}
+\end{equation}
+It is the fixed-point coefficient that internalizes the feedback from the wealth
+share to the terms of trade \eqref{eq:Es2} and back into the resource
+constraint: the denominator subtracts the product of the net Home expenditure
+weight $\bigl(\frac{\zs}{1+\zs}-\hbias\bigr)$ and the terms-of-trade response
+multiplier from~\eqref{eq:Es2}. The numerator $\cshare$ is the capital-share
+scaling inherited from the production function. We follow the notational note in
+Section~\ref{sec:notation}: the macro renders $\atil=\tilde\alpha$, and KL refer
+to the same object as $\bar\alpha$ in the B.1.1 prose; they are identical.
+
+\medskip
+KL remark that ``these are the only conditions we need to solve for the
+equilibrium in period~$1$.'' We now turn to that period-$1$ system.
+
+\subsection{The period-1 log-linearized system}
+\label{sec:engine-period1}
+
+We transcribe KL's app.~eqs.~(79)--(98) and then perform the substitutions
+(their app.~pp.~18--19) that solve the system. We group the conditions into
+three blocks: (i) a relative-price block, (ii) an Euler/return block, and (iii)
+a wealth/NFA block.
+
+\subsubsection{Block (i): relative prices, allocation, clearing}
+
+Log-linearizing the definition of the real exchange rate $q_1\equiv E_1P_1/P^{*}_1$
+(their app.~eq.~(79)) gives the period-$1$ analog of~\eqref{eq:Eq2}:
+\begin{equation}
+\dev{\rer}_1 = \hbias\,\frac{1+\zs}{\zs}\,\dev{\tot}_1, \label{eq:q1-s1}
+\end{equation}
+a relation we use repeatedly. Log-linearizing the intratemporal allocation of
+consumption, the equilibrium factor prices, the resource constraints, and
+goods-market clearing yields the population-weighted resource constraint (their
+app.~eq.~(80))
+\begin{equation}
+\frac{1}{1+\zs}\dev{\rs c}_1 + \frac{\zs}{1+\zs}\fr{\dev{\rs c}}_1
+= (1-\cshare)\left[\frac{1}{1+\zs}\dev{\ell}_1 + \frac{\zs}{1+\zs}\fr{\dev{\ell}}_1\right]
++ \cshare\,\widetilde{\widetilde{\dev k}}_1, \label{eq:rc-agg}
+\end{equation}
+and the cross-country (relative) goods-market condition (their app.~eq.~(81))
+\begin{equation}
+\hbias\,\frac{1+\zs}{\zs}\left(\dev{\rs c}_1 - \fr{\dev{\rs c}}_1\right)
+= \left[\frac{\cshare}{1-\cshare} + \tel\left(1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2\right)\right]\dev{\tot}_1
++ \dev{\ell}_1 - \fr{\dev{\ell}}_1. \label{eq:rc-rel}
+\end{equation}
+The bracket multiplying $\dev{\tot}_1$ in \eqref{eq:rc-rel} is exactly the
+denominator appearing in the period-$2$ terms-of-trade relation~\eqref{eq:Es2};
+it combines the income (capital-share) channel $\cshare/(1-\cshare)$ with the
+substitution channel $\tel(1-(\hbias(1+\zs)/\zs)^2)$ of the trade elasticity.
+
+\subsubsection{Block (ii): Euler equations, returns, Fisher/Taylor}
+
+Log-linearizing the Euler equations (their app.~eqs.~(82)--(85)) gives, for the
+\emph{expected} (period-$1$ to period-$2$) changes,
+\begin{align}
+\D\Eone\dev{\rs c}_2 &= \D\Eone\fr{\dev{\rs c}}_2 - \hbias\,\frac{1+\zs}{\zs}\,\D\Eone\dev{\tot}_2, \label{eq:euler-cc}\\
+\D\Eone\dev{\rs c}_2 &= \Eone\rk_2, \label{eq:euler-rk}\\
+\Eone\rk_2 &= \Eone\rr_2 + \dev{\cy}_1, \label{eq:euler-r}\\
+\Eone\fr{r}_2 &= \Eone\rr_2 + \dev{\cy}_1 + \hbias\,\frac{1+\zs}{\zs}\,\D\Eone\dev{\tot}_2, \label{eq:euler-rstar}
+\end{align}
+where $\D x_2 \equiv x_2-x_1$ denotes the period-$1$-to-$2$ change and
+\eqref{eq:euler-rstar} uses~\eqref{eq:Eq2} (KL note ``where we have used~(76)'').
+The crucial object is the safety wedge $\dev{\cy}_1$ in \eqref{eq:euler-r}: in
+the household's Euler equation the convenience term enters as the factor
+$(1+r_{t+1})/(1-\cy_t)$, so to first order the \emph{expected} real return on
+the safe bond falls one-for-one with the convenience yield relative to the
+capital return --- the wedge $\Eone\rk_2-\Eone\rr_2=\dev{\cy}_1$ in
+\eqref{eq:euler-r} is the linearized statement of exactly this.
+
+Log-linearizing the Fisher equations and Taylor rules (their app.~eqs.~(88)--(91))
+gives
+\begin{align}
+\Eone\rr_2 &= \dev{\inom}_1, & \Eone\fr{r}_2 &= \fr{\dev{\inom}}_1, \label{eq:fisher}\\
+\dev{\inom}_1 &= \taylor\,\D\dev{P}_1, & \fr{\dev{\inom}}_1 &= \taylor\,\D\fr{\dev{P}}_1, \label{eq:taylor}
+\end{align}
+where the Taylor rules implement $\D\dev P_2=\D\fr{\dev P}_2=0$ from period~$2$
+on (so all forward inflation is zero) and $\taylor$ is the inflation-response
+coefficient. Finally, the realized period-$1$ bond returns are pure inflation
+surprises (their app.~eqs.~(95)--(96)):
+\begin{equation}
+\rr_1 = -\D\dev{P}_1, \qquad \fr{r}_1 = -\D\fr{\dev{P}}_1, \label{eq:realized-bond}
+\end{equation}
+since the period-$0$ nominal rate is predetermined and the real return on a
+nominal bond is minus realized inflation to first order.
+
+\subsubsection{Block (iii): wealth share, NFA, capital returns}
+
+Log-linearizing the \emph{expected} evolution of Home's wealth share (using
+equilibrium factor prices and the Home resource constraint) gives (their
+app.~eq.~(86))
+\begin{equation}
+\Eone\dev{\wsh}_2 = \frac{1}{\disc\cshare}\Bigl[(1-\disc)\Bigl(\tfrac{\zs}{1+\zs}-\hbias\Bigr)\dev{\tot}_1
++(1-\disc)(1-\cshare)\dev{\ell}_1
++(1-\disc)\cshare\,\widetilde{\widetilde{\dev k}}_1+\cshare\dev{\wsh}_1
+-(1-\disc)\dev{\rs c}_1\Bigr]. \label{eq:Ewsh-raw}
+\end{equation}
+Linearizing the definition of Home net foreign assets (equilibrium factor
+prices, Home resource constraint, and cross-country capital allocation) gives
+(their app.~eq.~(87))
+\begin{multline}
+\widehat{\nfa}_1 = \sav\Biggl[\frac{1}{\disc\cshare}\Bigl[(1-\disc)\Bigl(\tfrac{\zs}{1+\zs}-\hbias\Bigr)\dev{\tot}_1
++(1-\disc)(1-\cshare)\dev{\ell}_1\\
++\cshare\,\widetilde{\widetilde{\dev k}}_1+\cshare\dev{\wsh}_1-(1-\disc)\dev{\rs c}_1\Bigr]
+-\frac{\zs}{1+\zs}\frac{1}{1-\cshare}\dev{\tot}_2-\widetilde{\widetilde{\dev k}}_1\Biggr], \label{eq:nfa-raw}
+\end{multline}
+where $\sav$ is steady-state Home saving. Log-linearizing the \emph{realized}
+evolution of Home's wealth share (their app.~eq.~(92)) gives
+\begin{equation}
+\dev{\wsh}_1 = \Bigl(\frac{\qk\,k}{\sav}-1\Bigr)\bigl(\rk_1-\rr_1\bigr)
++\frac{b_F}{\sav}\bigl(\fr{r}_1-\dev{\rer}_1-\rr_1\bigr)
+-\disc\,\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}\,\dev{\cy}_1, \label{eq:wsh-realized}
+\end{equation}
+where $q^kk$, $b_F$, $b^g_{H,s}$ are the steady-state Home capital, Foreign-bond,
+and government-safe-debt positions; this is the revaluation equation that drives
+Proposition~\ref{prop:wealth}. Log-linearizing the realized return on capital
+(equilibrium profits; their app.~eq.~(93)) gives
+\begin{equation}
+\rk_1 = (1-\disc)\left[-\hbias\,\dev{\tot}_1 + (1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
+-(1-\cshare)\widetilde{\widetilde{\dev k}}_1\right]+\disc\,\dev{\qk}_1, \label{eq:rk1-raw}
+\end{equation}
+and the \emph{expected} return on capital (their app.~eq.~(94))
+\begin{equation}
+\dev{\qk}_1 = -\hbias\,\Eone\dev{\tot}_2 - (1-\cshare)\widetilde{\widetilde{\dev k}}_1 - \Eone\rk_2, \label{eq:qk1-raw}
+\end{equation}
+which is the linearized capital-pricing (no-arbitrage) condition relating today's
+capital price to the future terms of trade, capital stock, and expected return.
+
+\subsubsection{Solving the system: substitution chain}
+\label{sec:engine-solve}
+
+We now reproduce KL's substitution chain (their app.~pp.~18--19), which solves
+the block above for the reduced forms. The strategy is: (1) eliminate
+$\fr{\dev{\rs c}}_1$ using the aggregate resource constraint~\eqref{eq:rc-agg};
+(2) substitute into the relative condition~\eqref{eq:rc-rel} to get $\dev{\tot}_1$
+in terms of consumptions; (3) use the forward Euler block to express $\dev{\rs c}_1$
+in terms of $\Eone\dev{\wsh}_2$ and labor; (4) back-substitute to get closed
+forms for $\dev{\tot}_1$, $\dev{\rs c}_1$, $\Eone\dev{\wsh}_2$, $\widehat{\nfa}_1$,
+$\Eone\rk_2$, and then prices and returns.
+
+\paragraph{Step 1: eliminate $\fr{\dev{\rs c}}_1$.} Solving the aggregate resource
+constraint~\eqref{eq:rc-agg} for $\fr{\dev{\rs c}}_1$ (their app.~p.~18, ``(80)
+implies''):
+\begin{equation}
+\fr{\dev{\rs c}}_1 = -\frac{1}{\zs}\dev{\rs c}_1
++\frac{1+\zs}{\zs}\left[(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)+\cshare\,\widetilde{\widetilde{\dev k}}_1\right]. \label{eq:cstar-solved}
+\end{equation}
+
+\paragraph{Step 2: terms of trade in terms of $\dev{\rs c}_1$.} Substituting
+\eqref{eq:cstar-solved} into the relative condition~\eqref{eq:rc-rel} and solving
+for $\dev{\tot}_1$ (their app.~p.~18, ``Substituting in (81) implies''):
+\begin{multline}
+\dev{\tot}_1 = \frac{1}{\dfrac{\cshare}{1-\cshare}+\tel\left(1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2\right)}
+\Biggl[\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\\
++\hbias\left(\frac{1+\zs}{\zs}\right)^2\!\left(\dev{\rs c}_1
+-\left[(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)+\cshare\,\widetilde{\widetilde{\dev k}}_1\right]\right)\Biggr]. \label{eq:s1-intermediate}
+\end{multline}
+\gapflag{KL display \eqref{eq:s1-intermediate} directly. The intermediate step is:
+substitute \eqref{eq:cstar-solved} into the left side of \eqref{eq:rc-rel}, so
+that $\hbias\frac{1+\zs}{\zs}(\dev{\rs c}_1-\fr{\dev{\rs c}}_1)
+=\hbias\frac{1+\zs}{\zs}\bigl(\dev{\rs c}_1+\frac{1}{\zs}\dev{\rs c}_1
+-\frac{1+\zs}{\zs}[\cdots]\bigr)
+=\hbias(\frac{1+\zs}{\zs})^2\bigl(\dev{\rs c}_1-[\cdots]\bigr)$,
+using $1+\frac{1}{\zs}=\frac{1+\zs}{\zs}$; then move
+$\dev{\ell}_1-\fr{\dev{\ell}}_1$ to the left, divide by the bracket. We have
+expanded that algebra; \eqref{eq:s1-intermediate} matches KL's displayed line.}
+
+\paragraph{Step 3: period-1 Home consumption.} Combining \eqref{eq:cstar-solved}
+and \eqref{eq:s1-intermediate} with the forward block
+\eqref{eq:Ec2}--\eqref{eq:Es2} and the consumption-Euler
+relation~\eqref{eq:euler-cc} (their app.~p.~18, ``Combining these with (73),
+(74), (75), and (82) implies'') yields the closed form for $\dev{\rs c}_1$:
+\begin{multline}
+\dev{\rs c}_1 = \atil\,\Eone\dev{\wsh}_2
++(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
++\cshare\,\widetilde{\widetilde{\dev k}}_1\\
+-\frac{\hbias}{\dfrac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\,\frac{1+\zs}{\zs}\right)^2}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr). \label{eq:c1-solved}
+\end{multline}
+\gapflag{KL state \eqref{eq:c1-solved} as ``Combining these \dots\ implies'' with
+the intervening algebra suppressed. The mechanism: the Euler
+relation~\eqref{eq:euler-cc} written in levels (period~1) sets
+$\dev{\rs c}_1=\Eone\dev{\rs c}_2-(\Eone\dev{\rs c}_2-\dev{\rs c}_1)$; using the
+forward terms-of-trade response~\eqref{eq:Es2} and the period-2 consumption
+\eqref{eq:Ec2}, the wealth-share and capital terms reproduce
+$\atil\Eone\dev{\wsh}_2+\cshare\widetilde{\widetilde{\dev k}}_1$, the labor terms
+reproduce $(1-\cshare)(\cdots)$, and the relative-labor term collects into the
+final coefficient. The denominator
+$\frac{\cshare}{1-\cshare}+\tel+(1-\tel)(\hbias\frac{1+\zs}{\zs})^2$ is the same
+bracket as in \eqref{eq:rc-rel}/\eqref{eq:Es2} after using
+$\tel(1-x^2)=\tel-\tel x^2$ and adding back the $+x^2$ contributed by the
+home-bias share, i.e.\ $\tel(1-x^2)+x^2=\tel+(1-\tel)x^2$ with
+$x\equiv\hbias\frac{1+\zs}{\zs}$. We verified this identity; it is the recurring
+denominator below.}
+
+For brevity define the recurring composite denominator
+\begin{equation}
+\Lambda \;\equiv\; \frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\,\frac{1+\zs}{\zs}\right)^2, \label{eq:Lambda-def}
+\end{equation}
+so that the relative-labor coefficient in \eqref{eq:c1-solved} is
+$\hbias/\Lambda$. (KL do not name $\Lambda$; we introduce it purely as
+shorthand. It is \emph{not} the same as the bracket in \eqref{eq:rc-rel}, which
+is $\frac{\cshare}{1-\cshare}+\tel(1-(\hbias\frac{1+\zs}{\zs})^2)
+=\Lambda-(\hbias\frac{1+\zs}{\zs})^2$.)
+
+\paragraph{Step 4: the two solved forms for $\dev{\tot}_1$.} Substituting
+\eqref{eq:c1-solved} back into \eqref{eq:s1-intermediate} (their app.~p.~18,
+``which we can substitute into the previous result to give'') yields the first
+solved form,
+\begin{equation}
+\dev{\tot}_1 = \frac{1}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)
++\frac{\hbias\left(\frac{1+\zs}{\zs}\right)^2}
+{\dfrac{\cshare}{1-\cshare}+\tel\left(1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2\right)}\,\atil\,\Eone\dev{\wsh}_2. \label{eq:s1-solved}
+\end{equation}
+The first term is the \emph{relative-labor} (supply) channel: if Foreign works
+relatively more, Home's terms of trade improve. The second term is the
+\emph{wealth-share} (demand) channel, with the identical multiplier as in the
+period-$2$ relation~\eqref{eq:Es2}. Using the real-exchange-rate
+relation~\eqref{eq:q1-s1}, the equivalent statement for the real exchange rate is
+\begin{equation}
+\dev{\rer}_1 = \hbias\,\frac{1+\zs}{\zs}\,\dev{\tot}_1
+=\frac{\hbias\frac{1+\zs}{\zs}}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)
++\hbias\,\frac{1+\zs}{\zs}\,\frac{\hbias\left(\frac{1+\zs}{\zs}\right)^2}
+{\dfrac{\cshare}{1-\cshare}+\tel\left(1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2\right)}\,\atil\,\Eone\dev{\wsh}_2. \label{eq:q1-solved}
+\end{equation}
+The two displayed forms of $\dev{\tot}_1$ that KL refer to are
+\eqref{eq:s1-intermediate} (in terms of consumptions) and \eqref{eq:s1-solved}
+(in terms of labor and the wealth share).
+
+\paragraph{Step 5: expected wealth share and NFA.} Substituting
+\eqref{eq:c1-solved} and \eqref{eq:s1-solved} into the raw wealth-share
+linearization~\eqref{eq:Ewsh-raw} (their app.~p.~18, ``Substituting these
+into~(86) implies'') gives
+\begin{equation}
+\Eone\dev{\wsh}_2 = \dev{\wsh}_1
++(1-\disc)\frac{\zs}{1+\zs}(\tel-1)\frac{1-\cshare}{\cshare}\,
+\frac{1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr). \label{eq:Ewsh-solved}
+\end{equation}
+\gapflag{KL display \eqref{eq:Ewsh-solved}. The reconstruction: substituting
+\eqref{eq:c1-solved} for $\dev{\rs c}_1$ and \eqref{eq:s1-solved} for
+$\dev{\tot}_1$ into \eqref{eq:Ewsh-raw}, the $\atil\Eone\dev{\wsh}_2$ pieces
+cancel against the $\frac{\cshare}{\disc\cshare}\dev{\wsh}_1$ normalization
+\emph{except} for the relative-labor term, and the
+$\bigl(\frac{\zs}{1+\zs}-\hbias\bigr)$-weighted terms-of-trade term combines with
+the $-(1-\disc)\dev{\rs c}_1$ term. The factor $(\tel-1)$ arises because the
+wealth-share revaluation depends on whether expenditure-switching
+(elasticity $\tel$) over- or under-compensates the relative price move; at
+$\tel=1$ (Cobb--Douglas trade) the channel vanishes. We reproduce KL's
+coefficient; the $\frac{1-(\hbias(1+\zs)/\zs)^2}{\Lambda}$ factor is the ratio of
+the \eqref{eq:rc-rel}-bracket-residual to $\Lambda$ that survives after the
+$\atil$ cancellation. The full term-by-term cancellation is mechanical but
+lengthy; we have checked the coefficient against KL's displayed line and flag
+that we did not re-expand every one of the $\sim10$ intermediate terms.}
+The net-foreign-assets reduced form follows by the identical substitution into
+\eqref{eq:nfa-raw} (their app.~pp.~18--19):
+\begin{equation}
+\widehat{\nfa}_1 = \sav\Biggl[\Eone\dev{\wsh}_2
+-\frac{\zs}{1+\zs}\frac{1}{1-\cshare}\dev{\tot}_2\Biggr]
+=\sav\Eone\dev{\wsh}_2 - \sav\frac{\zs}{1+\zs}\frac{1}{1-\cshare}\Eone\dev{\tot}_2, \label{eq:nfa-solved}
+\end{equation}
+where $\Eone\dev{\wsh}_2$ is \eqref{eq:Ewsh-solved} and $\Eone\dev{\tot}_2$ is
+\eqref{eq:Es2}; KL write the bracket with the $\frac{\zs}{1+\zs}\frac{1}{1-\cshare}\dev{\tot}_2$
+term carried to the next page. The economic content: Home NFA moves with its
+wealth share, net of a valuation term in the future terms of trade.
+
+\paragraph{Step 6: expected capital return.} Substituting the solved forms into
+the capital-Euler relation~\eqref{eq:euler-rk}--\eqref{eq:euler-r} and using the
+forward consumption~\eqref{eq:Ec2} (their app.~p.~19, ``substituting these
+into~(83) and making use of~(73) implies'') gives
+\begin{equation}
+\Eone\rk_2 = -(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
++\frac{\hbias}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr). \label{eq:Er2k-solved}
+\end{equation}
+This is the key supply-side object: the expected capital return falls when global
+employment rises (the first term, via diminishing returns / lower future
+marginal product) and responds to the relative-labor gap through the same
+$\hbias/\Lambda$ coefficient as $\dev{\rs c}_1$.
+
+\paragraph{Step 7: inflation and realized returns.} The Fisher/Taylor
+block~\eqref{eq:fisher}--\eqref{eq:taylor} gives the period-$1$ inflation
+deviations. From $\Eone\rk_2=\Eone\rr_2+\dev{\cy}_1$ \eqref{eq:euler-r},
+$\Eone\rr_2=\dev{\inom}_1$ \eqref{eq:fisher}, and $\dev{\inom}_1=\taylor\D\dev P_1$
+\eqref{eq:taylor}, the Home Taylor rule implies (their app.~p.~19)
+\begin{equation}
+\D\dev{P}_1 = \frac{1}{\taylor}\bigl(\Eone\rk_2-\dev{\cy}_1\bigr), \label{eq:dP1}
+\end{equation}
+while for Foreign, using \eqref{eq:euler-rstar} with~\eqref{eq:Es2} for
+$\D\Eone\dev{\tot}_2$,
+\begin{equation}
+\D\fr{\dev{P}}_1 = \frac{1}{\taylor}\left(\Eone\rk_2 - \frac{1+\zs}{\zs}\,
+\frac{\hbias}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\right). \label{eq:dPstar1}
+\end{equation}
+\gapflag{For \eqref{eq:dPstar1} we substituted \eqref{eq:Es2} into the Foreign
+Euler~\eqref{eq:euler-rstar}: $\fr{\dev{\inom}}_1=\Eone\fr r_2=\Eone\rk_2
+-\dev{\cy}_1+\dev{\cy}_1+\hbias\frac{1+\zs}{\zs}\D\Eone\dev{\tot}_2$, and the
+term $\hbias\frac{1+\zs}{\zs}\D\Eone\dev{\tot}_2$ evaluates, via the
+$\Eone\dev{\tot}_2$ relation and the $\dev{\tot}_1$ solution~\eqref{eq:s1-solved},
+to $\frac{1+\zs}{\zs}\frac{\hbias}{\Lambda}(\fr{\dev{\ell}}_1-\dev{\ell}_1)$ on
+impact (the wealth-share piece of $\D\Eone\dev{\tot}_2$ is absorbed into
+$\Eone\rk_2$). KL display the Foreign inflation line with the second-form
+$\frac{\hbias\frac{1+\zs}{\zs}}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)(\hbias\frac{1+\zs}{\zs})^2}$
+coefficient $=\frac{1+\zs}{\zs}\frac{\hbias}{\Lambda}$ (note
+$\hbias(\frac{1+\zs}{\zs})/\Lambda=\frac{1+\zs}{\zs}\cdot\hbias/\Lambda$); we
+matched the magnitude and flag the one-line forward-substitution we filled.}
+The realized bond returns then follow from~\eqref{eq:realized-bond}:
+\begin{align}
+\rr_1 &= -\D\dev{P}_1 = -\frac{1}{\taylor}\bigl(\Eone\rk_2-\dev{\cy}_1\bigr), \label{eq:r1-solved}\\
+\fr{r}_1 &= -\D\fr{\dev{P}}_1 = -\frac{1}{\taylor}\left(\Eone\rk_2 - \frac{1+\zs}{\zs}\,\frac{\hbias}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\right), \label{eq:rstar1-solved}
+\end{align}
+with $\Eone\rk_2$ given by~\eqref{eq:Er2k-solved}. Writing
+\eqref{eq:Er2k-solved} into~\eqref{eq:r1-solved} gives the fully reduced Home
+realized bond return
+\begin{equation}
+\rr_1 = -\frac{1}{\taylor}\left[-(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
++\frac{\hbias}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)-\dev{\cy}_1\right]. \label{eq:r1-full}
+\end{equation}
+
+\paragraph{Step 8: realized capital return.} Finally, substituting the realized
+capital-return linearization~\eqref{eq:rk1-raw} and the capital-price
+relation~\eqref{eq:qk1-raw} (eliminating $\dev{\qk}_1$, using
+$\Eone\dev{\tot}_2$ from~\eqref{eq:Es2} and $\Eone\rk_2$
+from~\eqref{eq:Er2k-solved}) gives (their app.~p.~19, ``(93) and (94) imply'')
+\begin{multline}
+\rk_1 = -\frac{\hbias}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)
+-\frac{\left(\hbias\,\frac{1+\zs}{\zs}\right)^2}
+{\dfrac{\cshare}{1-\cshare}+\tel\left(1-\left(\hbias\,\frac{1+\zs}{\zs}\right)^2\right)}\,\atil\,\Eone\dev{\wsh}_2\\
++(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
+-(1-\cshare)\widetilde{\widetilde{\dev k}}_1. \label{eq:rk1-solved}
+\end{multline}
+\gapflag{KL display \eqref{eq:rk1-solved} as ``(93) and (94) imply.'' The
+reconstruction combines the realized profit linearization~\eqref{eq:rk1-raw}
+with the capital-pricing condition~\eqref{eq:qk1-raw}: writing
+$\dev{\qk}_1=-\hbias\Eone\dev{\tot}_2-(1-\cshare)\widetilde{\widetilde{\dev k}}_1-\Eone\rk_2$
+and substituting into the $\disc\dev{\qk}_1$ term of \eqref{eq:rk1-raw}, then
+replacing $\dev{\tot}_1$ via~\eqref{eq:s1-solved}, $\Eone\dev{\tot}_2$
+via~\eqref{eq:Es2}, and $\Eone\rk_2$ via~\eqref{eq:Er2k-solved}. The
+$\rk_1=\divr$-and-revaluation terms collect: the $(1-\disc)$ profit piece plus
+the $\disc$ price-revaluation piece combine so that the labor-income terms
+appear with coefficient $(1-\cshare)$ (not $(1-\disc)(1-\cshare)$), the
+relative-labor term collapses to $-\hbias/\Lambda$, and the wealth-share term
+inherits the $\Eone\dev{\tot}_2$ multiplier $\times\atil$. We verified the
+\emph{structure} against KL's displayed line (their app.~p.~19): the four terms
+(relative-labor, wealth-share, global-employment, lagged-capital) match in form;
+we flag that the exact cancellation of the $\disc$ vs.\ $(1-\disc)$ weights in
+combining \eqref{eq:rk1-raw} and \eqref{eq:qk1-raw} is the one place we filled
+the algebra.}
+
+\subsection{The reusable reduced forms}
+\label{sec:engine-summary}
+
+The engine is now complete. The objects cited by
+Propositions~\ref{prop:prices}--\ref{prop:wealth} are the boxed reduced forms
+below, each a function of
+$(\dev{\ell}_1,\fr{\dev{\ell}}_1,\dev{\cy}_1,\widetilde{\widetilde{\dev k}}_1,
+\Eone\dev{\wsh}_2)$ and the deep parameters, with $\Eone\dev{\wsh}_2$ itself
+given by~\eqref{eq:Ewsh-solved}:
+\[
+\boxed{\;
+\begin{aligned}
+&\dev{\tot}_1 \text{ \eqref{eq:s1-solved}},\quad
+\dev{\rer}_1 \text{ \eqref{eq:q1-solved}},\quad
+\dev{\rs c}_1 \text{ \eqref{eq:c1-solved}},\quad
+\Eone\dev{\wsh}_2 \text{ \eqref{eq:Ewsh-solved}},\quad
+\widehat{\nfa}_1 \text{ \eqref{eq:nfa-solved}},\\[2pt]
+&\Eone\rk_2 \text{ \eqref{eq:Er2k-solved}},\quad
+\D\dev P_1 \text{ \eqref{eq:dP1}},\quad
+\D\fr{\dev P}_1 \text{ \eqref{eq:dPstar1}},\quad
+\rr_1 \text{ \eqref{eq:r1-full}},\quad
+\fr{r}_1 \text{ \eqref{eq:rstar1-solved}},\quad
+\rk_1 \text{ \eqref{eq:rk1-solved}}.
+\end{aligned}\;}
+\]
+What remains to close the system is a \emph{labor block}: two equations pinning
+$\dev{\ell}_1$ and $\fr{\dev{\ell}}_1$. The simplified environment offers two
+closures. Under \textbf{flexible wages with infinite Frisch elasticity}
+($\frisch\to0$), the union's wage-setting condition forces (their app.~eq.\
+before~(97))
+\begin{equation}
+\dev{\ell}_1 = \fr{\dev{\ell}}_1 = 0. \label{eq:flex-labor}
+\end{equation}
+Under \textbf{wages set one period in advance}, the predetermined-wage conditions
+are (their app.~eqs.\ before~(97))
+\begin{equation}
+\dev{\rw}_1 = -\D\dev{P}_1 - \tel^z\dev{\epsilon}^z_1, \qquad
+\fr{\dev{\rw}}_1 + \dev{\rer}_1 = -\D\fr{\dev{P}}_1 - \tel^z\dev{\epsilon}^z_1, \label{eq:predet-wage}
+\end{equation}
+where $\tel^z$ scales the productivity surprise $\dev{\epsilon}^z_1$ (KL's
+$\sigma^z$). Combining \eqref{eq:predet-wage} with the firms' log-linearized
+labor demand gives the $2\times2$ system (their app.~eqs.~(97)--(98))
+\begin{align}
+&\left[\Bigl(\tfrac{\zs}{1+\zs}-\hbias\Bigr)+\tfrac{\zs}{1+\zs}\tfrac{\cshare}{1-\cshare}\right]\dev{\tot}_1
+-\cshare\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
+-(1-\cshare)\widetilde{\widetilde{\dev k}}_1 = -\D\dev{P}_1, \label{eq:firm-H}\\
+&-\left[\Bigl(\tfrac{1}{1+\zs}-\tfrac{\hbias}{\zs}\Bigr)+\tfrac{1}{1+\zs}\tfrac{\cshare}{1-\cshare}\right]\dev{\tot}_1
+-\cshare\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
+-(1-\cshare)\widetilde{\widetilde{\dev k}}_1 = -\D\fr{\dev{P}}_1. \label{eq:firm-F}
+\end{align}
+Equations~\eqref{eq:firm-H}--\eqref{eq:firm-F} are the combined firm-labor-demand
+system; together with the inflation reduced forms \eqref{eq:dP1}--\eqref{eq:dPstar1}
+they determine $(\dev{\ell}_1,\fr{\dev{\ell}}_1)$. The proofs of
+Propositions~\ref{prop:prices}--\ref{prop:wealth} take exactly this route: impose
+the relevant portfolio specialization (which fixes $\dev{\wsh}_1$ and
+$\Eone\dev{\wsh}_2$), then solve the labor block, then read off prices, returns,
+and revaluation from the boxed reduced forms.

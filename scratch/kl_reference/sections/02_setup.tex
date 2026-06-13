@@ -1,0 +1,522 @@
+% =====================================================================
+% 02_setup.tex — households, optimality, market clearing, equilibrium (WP-A)
+% =====================================================================
+\section{Setup: households, optimality, market clearing, equilibrium}
+\label{sec:setup}
+
+This section transcribes the building blocks of the model needed for the proofs:
+the Home household problem, the convenience-yield wedge, the supply side and
+policy, the household first-order conditions and pricing kernel, the auxiliary
+variable definitions, the re-scaled (stationary) recursive equilibrium, and the
+Devereux--Sutherland portfolio method. We follow KL's equation numbering
+throughout (``their eq.'' for the main paper, ``their app.\ eq.'' for the online
+appendix) so that the proof work packages can cross-reference. This is setup,
+not yet a proof: where an object is stated rather than derived, that is by
+design.
+
+\subsection{The Home household problem}
+\label{sec:hh-problem}
+
+The representative Home household has recursive (Epstein--Zin) preferences over
+consumption $c_t$, labor $\ell_t$, and the real value of safe dollar bonds
+$B_{Ht,s}/P_t$ (their eq.~(1)):
+\begin{equation}
+\label{eq:ez-value}
+\val_t=\left\{(1-\disc)\Bigl[c_t\,\Lphi(\ell_t)\,
+\bondu_t\!\bigl(B_{Ht,s}/P_t\bigr)\Bigr]^{1-1/\ies}
++\disc\,\Et\!\Bigl[\val_{t+1}^{1-\rra}\Bigr]^{\frac{1-1/\ies}{1-\rra}}\right\}^{\frac{1}{1-1/\ies}}.
+\end{equation}
+Consumption is a CES aggregate of Home- and Foreign-produced goods with
+home-bias weight $\hbias$ and trade elasticity $\tel$ (their eq.~(2)):
+\begin{equation}
+\label{eq:ces-c}
+c_t=\left[\Bigl(\tfrac{1}{1+\zs}+\hbias\Bigr)^{\!\frac1\tel}c_{Ht}^{\frac{\tel-1}{\tel}}
++\Bigl(\tfrac{\zs}{1+\zs}-\hbias\Bigr)^{\!\frac1\tel}c_{Ft}^{\frac{\tel-1}{\tel}}\right]^{\frac{\tel}{\tel-1}}.
+\end{equation}
+The disutility of labor follows Shimer (2010) and Trabandt--Uhlig (2011)
+(their eq.~(3)):
+\begin{equation}
+\label{eq:labor-phi}
+\Lphi(\ell_t)=\left[1+(1/\ies-1)\,\labdis\,
+\frac{(\ell_t)^{1+1/\frisch}}{1+1/\frisch}\right]^{\frac{1/\ies}{1-1/\ies}}.
+\end{equation}
+The function $\bondu_t(\cdot)$ delivers the nonpecuniary (liquidity/safety) value
+of safe dollar bonds, in the spirit of money-in-the-utility (Sidrauski 1967) and
+the convenience-yield literature (Krishnamurthy--Vissing-Jorgensen 2012); its
+functional form is given in \eqref{eq:Omega-form} below. The household supplies a
+continuum of labor varieties $j\in[0,1]$, $\ell_t=\int_0^1\ell_t(j)\,dj$.
+
+Each period the household chooses consumption and a portfolio
+$\{B_{Ht,s},B_{Ht,o},B_{Ft},k_t\}$ --- safe dollar bonds (nominal rate $i_t$),
+other dollar bonds (rate $\ioth_t$), Foreign nominal bonds (rate $i_t^{*}$), and
+capital (price $Q^k_t$, dividend $\Pi_{t+1}$, depreciation $\delta$) --- subject
+to the resource constraint (their eq.~(4)):
+\begin{align}
+\label{eq:budget}
+P_{Ht}c_{Ht}+E_t^{-1}P^{*}_{Ft}c_{Ft}
+&+B_{Ht,s}+B_{Ht,o}+E_t^{-1}B_{Ft}+Q^k_t k_t \notag\\
+\le\;(1+i_{t-1})B_{Ht-1,s}&+(1+\ioth_{t-1})B_{Ht-1,o}+E_t^{-1}(1+i^{*}_{t-1})B_{Ft-1}\notag\\
+&+\Bigl[\Pi_t+(1-\dep)Q^k_t\Bigr]k_{t-1}\exp(\varphi_t)
++\int_0^1 W_t(j)\ell_t(j)\,dj\notag\\
+&\quad-\int_0^1 AC^W_t(j)\,dj+T_t,
+\end{align}
+where $P_{Ht},P^{*}_{Ft}$ are Home/Foreign producer prices in their own units of
+account, $E_t$ is the nominal exchange rate (Foreign units per dollar), the
+disaster term $\exp(\varphi_t)$ scales the capital stock, $T_t$ is a government
+transfer, and producer-currency pricing is assumed so the law of one price
+holds. The Rotemberg wage-adjustment cost is (their eq.~(5))
+\begin{equation}
+\label{eq:rotemberg}
+AC^W_t(j)=\frac{\wadj}{2}\,W_t\ell_t
+\left[\frac{W_t(j)}{W_{t-1}(j)\exp(\varphi_t)}-1\right]^2,
+\end{equation}
+rebated lump-sum. In the simplified environment of
+Definition~\ref{def:simplified}, \eqref{eq:rotemberg} is replaced by flexible or
+one-period-predetermined wages.
+
+\paragraph{Foreign analog.} Foreign households (measure $\zs$) solve an
+analogous problem with risk aversion $\rraF$ that may differ from $\rra$, the
+same $\ies,\hbias,\tel,\frisch,\wadj$, and possibly a different discount factor
+$\discF$ and labor-disutility scale $\bar\nu^{*}$. They too receive nonpecuniary
+utility $\bondu^{*}_t\bigl(B^{*}_{Ht,s}/(E_t^{-1}P^{*}_t)\bigr)$ from safe dollar
+bonds. All starred objects are the Foreign counterparts of the Home objects
+above.
+
+\subsection{The convenience yield}
+\label{sec:cy}
+
+Because safe dollar bonds and other dollar bonds pay in the same unit of account
+and are both risk-free, investor indifference at Home requires that the
+\emph{effective} return on safe bonds equal the return on other bonds
+(their eq.~(14)):
+\begin{equation}
+\label{eq:wedge}
+\frac{1+i_t}{\,1-c_t\,\bondu_t'(B_{Ht,s}/P_t)/\bondu_t(B_{Ht,s}/P_t)\,}=1+\ioth_t.
+\end{equation}
+The denominator's second term is the marginal nonpecuniary value of safe bonds.
+Equating this nonpecuniary value across Home and Foreign agents on the margin
+defines the (common) convenience yield $\cy_t$ (their eq.~(15)):
+\begin{equation}
+\label{eq:omega-def}
+\cy_t\equiv c_t\,\frac{\bondu_t'(B_{Ht,s}/P_t)}{\bondu_t(B_{Ht,s}/P_t)}
+=c_t^{*}\,\frac{\bondu_t^{*}{}'\!\bigl(B^{*}_{Ht,s}/(E_t^{-1}P^{*}_t)\bigr)}
+{\bondu_t^{*}\!\bigl(B^{*}_{Ht,s}/(E_t^{-1}P^{*}_t)\bigr)}.
+\end{equation}
+KL adopt the convenient functional form (their displayed equation on p.~1659):
+\begin{equation}
+\label{eq:Omega-form}
+\bondu_t\!\left(\frac{B_{Ht,s}}{P_t}\right)
+=\exp\!\left(\omega^d_t\frac{B_{Ht,s}}{P_t\,\bar c_t}
+-\frac12\frac1{\edem}\Bigl(\frac{B_{Ht,s}}{P_t\,\bar c_t}\Bigr)^{2}
+-\Bigl[\omega^d_t\frac{\bar B_{Ht,s}}{P_t\,\bar c_t}
+-\frac12\frac1{\edem}\Bigl(\frac{\bar B_{Ht,s}}{P_t\,\bar c_t}\Bigr)^{2}\Bigr]\right),
+\end{equation}
+where $\omega^d_t$ is an exogenous driving force (the \emph{safety shock}),
+$\edem$ a parameter, and bars denote aggregates the household takes as given. The
+first two terms inside the exponential make the nonpecuniary value
+time-varying; the bracketed terms ensure $\bondu_t(B_{Ht,s}/P_t)=1$ in
+equilibrium, so the convenience yield has no mechanical effect on the
+household's position through the level of $\bondu_t$. Given the analogous Foreign
+form, the second equality in \eqref{eq:omega-def} together with market clearing
+in safe dollar bonds implies (their eq.~(16))
+\begin{equation}
+\label{eq:safe-bond-clearing}
+\frac{B_{Ht,s}}{P_t c_t}=\frac{B^{*}_{Ht,s}}{E_t^{-1}P^{*}_t c^{*}_t}
+=\frac{(-B^g_{Ht,s})}{P_t c_t+\zs E_t^{-1}P^{*}_t c^{*}_t},
+\end{equation}
+and the first equality in \eqref{eq:omega-def} then yields the
+\emph{reduced-form} convenience yield (their eq.~(17))
+\begin{equation}
+\label{eq:omega-reduced}
+\cy_t=\omega^d_t-\frac1{\edem}\,
+\frac{(-B^g_{Ht,s})}{P_t c_t+\zs E_t^{-1}P^{*}_t c^{*}_t}.
+\end{equation}
+Intuitively, $\cy_t$ rises with private demand for safe dollar bonds
+$\omega^d_t$ (latent demand) and falls with public supply $-B^g_{Ht,s}$; the
+relative strength of supply is governed by $\edem$, the elasticity of demand to
+the nonpecuniary value. Under the fiscal rule \eqref{eq:fiscal-supply} below the
+supply term is proportional to global consumption, so $\cy_t$ inherits the
+stochastic properties of the safety shock $\omega^d_t$ and is effectively
+exogenous.
+
+\subsection{Supply side and policy}
+\label{sec:supply-policy}
+
+\paragraph{Producers (their app.\ A.5.3).} The representative Home producer hires
+$\ell_t$ from the domestic labor packer and rents $\kappa_t$ of capital on the
+international market, producing with productivity $z_t$ and capital share
+$\alpha$ (their eq.~(7)). Its first-order conditions are
+\begin{equation}
+\label{eq:prod-foc-home}
+\rw_t=\frac{P_{Ht}}{P_t}(1-\alpha)z_t^{1-\alpha}\ell_t^{-\alpha}\kappa_t^{\alpha},
+\qquad
+\divr_t=\frac{P_{Ht}}{P_t}\alpha z_t^{1-\alpha}\ell_t^{1-\alpha}\kappa_t^{\alpha-1}.
+\end{equation}
+The representative Foreign producer's FOCs are analogous, with relative
+productivity $z_{Ft}$ and the real exchange rate $q_t$ converting units:
+\begin{equation}
+\label{eq:prod-foc-foreign}
+\rw_t^{*}=q_t^{-1}\frac{P^{*}_{Ft}}{P^{*}_t}(1-\alpha)(z_t z_{Ft})^{1-\alpha}
+(\zs\ell_t^{*})^{-\alpha}\kappa_t^{*\alpha},\qquad
+\divr_t=q_t^{-1}\frac{P^{*}_{Ft}}{P^{*}_t}\alpha(z_t z_{Ft})^{1-\alpha}
+(\zs\ell_t^{*})^{1-\alpha}\kappa_t^{*\alpha-1}.
+\end{equation}
+Because capital is rented on a single international market, its dividend
+$\divr_t$ (in dollars) is common across countries.
+
+\paragraph{Unions (their app.\ A.5.2).} Each Home union $j$ sets the wage
+$W_t(j)$ and supplies labor $\ell_t(j)$ to maximize members' utilitarian
+welfare subject to the Rotemberg cost \eqref{eq:rotemberg}. The resulting wage
+first-order condition is
+\begin{equation}
+\label{eq:union-foc}
+\begin{aligned}
+\rw_t-\frac{c_t\Lphi'(\ell_t)}{\Lphi(\ell_t)}
++\rw_t\frac{\wadj}{\lel}\Bigg[
+&\frac{\rw_t}{\rw_{t-1}\exp(\varphi_t)}\frac{P_t}{P_{t-1}}
+\left(\frac{\rw_t}{\rw_{t-1}\exp(\varphi_t)}\frac{P_t}{P_{t-1}}-1\right)\\
+&-\Et m_{t,t+1}\left(\frac{\rw_{t+1}}{\rw_t\exp(\varphi_{t+1})}\right)^{2}
+\frac{P_{t+1}}{P_t}\frac{\ell_{t+1}}{\ell_t}
+\left(\frac{\rw_{t+1}}{\rw_t\exp(\varphi_{t+1})}\frac{P_{t+1}}{P_t}-1\right)
+\Bigg]=0,
+\end{aligned}
+\end{equation}
+with an analogous condition in Foreign. In the simplified environment this
+collapses to a flexible or one-period-predetermined wage equation.
+
+\paragraph{Global capital producer (their eqs.~(8)--(9)).} A representative
+global capital producer combines Home and Foreign consumption goods (without home
+bias) to produce new capital with adjustment-cost scale $\chi^x$; profit
+maximization yields the real price of capital
+\begin{equation}
+\label{eq:qk}
+\qk_t=\left(\frac{\bar k_t}{\bar k_{t-1}\exp(\varphi_t)}\right)^{\chi^x}
+\left[\Bigl(\tfrac{1}{1+\zs}+\hbias\Bigr)\Bigl(\tfrac{P_{Ht}}{P_t}\Bigr)^{1-\tel}
++\Bigl(\tfrac{\zs}{1+\zs}-\hbias\Bigr)\Bigl(\tfrac{P^{*}_{Ft}}{P_t}\Bigr)^{1-\tel}\right]^{\frac1{1-\tel}}.
+\end{equation}
+In the simplified environment $\chi^x\!\to\!\infty$ with $\bar k_t$ fixed.
+
+\paragraph{Monetary policy (their eqs.~(10)--(11)).} A Taylor (1993) rule
+governs the Home nominal rate,
+\begin{equation}
+\label{eq:taylor}
+1+i_t=(1+\bar\imath)\left(\frac{P_t}{P_{t-1}}\right)^{\taylor},
+\end{equation}
+where the ideal CPI is
+\begin{equation}
+\label{eq:cpi}
+P_t=\left[\Bigl(\tfrac{1}{1+\zs}+\hbias\Bigr)P_{Ht}^{1-\tel}
++\Bigl(\tfrac{\zs}{1+\zs}-\hbias\Bigr)\bigl(E_t^{-1}P^{*}_{Ft}\bigr)^{1-\tel}\right]^{\frac1{1-\tel}}.
+\end{equation}
+An analogous CPI-targeting rule with the same coefficient $\taylor$ determines
+$i_t^{*}$ in Foreign.
+
+\paragraph{Fiscal policy (their eqs.~(12)--(13)).} The Home government maintains
+a constant ratio of safe dollar debt to global consumption,
+\begin{equation}
+\label{eq:fiscal-supply}
+-B^g_{Ht,s}=\bar b^g\bigl(P_t c_t+\zs E_t^{-1}P^{*}_t c^{*}_t\bigr),
+\end{equation}
+with $\bar b^g>0$ the empirically relevant case (the government borrows in safe
+dollar bonds, i.e.\ issues Treasuries), and rebates with lump-sum transfers
+\begin{equation}
+\label{eq:fiscal-transfer}
+T_t=\int_0^1 AC^W_t(j)\,dj+(1+i_{t-1})B^g_{Ht-1,s}-B^g_{Ht,s}.
+\end{equation}
+Ricardian equivalence holds for all government activity other than safe-bond
+issuance, which alone provides nonpecuniary services. Combining
+\eqref{eq:fiscal-supply} with \eqref{eq:omega-reduced} renders $\cy_t$
+proportional to the exogenous safety shock $\omega^d_t$ (up to the
+constant $\bar b^g/\edem$).
+
+\subsection{Household first-order conditions and pricing kernel}
+\label{sec:hh-foc}
+
+Home intratemporal optimality across Home and Foreign goods is (their app.\
+A.5.1)
+\begin{equation}
+\label{eq:intratemporal}
+\frac{c_{Ht}}{c_{Ft}}
+=\frac{\tfrac{1}{1+\zs}+\hbias}{\tfrac{\zs}{1+\zs}-\hbias}\,\tot_t^{-\tel},
+\qquad \tot_t\equiv\frac{E_t P_{Ht}}{P^{*}_{Ft}}\ \ \text{(terms of trade)}.
+\end{equation}
+The Home \emph{real pricing kernel} is the Epstein--Zin stochastic discount
+factor (their app.\ A.5.1), evaluated using $\bondu_t(B_{Ht,s}/P_t)=1$ in
+equilibrium:
+\begin{equation}
+\label{eq:kernel}
+\pk_{t,t+1}=\disc\,\frac{c_t}{c_{t+1}}
+\left(\frac{c_{t+1}\Lphi(\ell_{t+1})}{c_t\Lphi(\ell_t)}\right)^{1-1/\ies}
+\left(\frac{\val_{t+1}}{\ce_t}\right)^{1/\ies-\rra},
+\qquad
+\ce_t=\Et\!\Bigl[\val_{t+1}^{1-\rra}\Bigr]^{\frac1{1-\rra}},
+\end{equation}
+where $\ce_t$ is the certainty equivalent of the continuation value. Intertemporal
+optimality is characterized by three Euler equations (their app.\ A.5.1) --- for
+safe dollar bonds (adjusted by the convenience yield), Foreign bonds (UIP), and
+capital, respectively:
+\begin{align}
+\label{eq:euler-safe}
+1&=\Et\,\pk_{t,t+1}\,\frac{1+\rr_{t+1}}{1-\cy_t},\\
+\label{eq:euler-uip}
+1&=\Et\,\pk_{t,t+1}\,\frac{\rer_t}{\rer_{t+1}}\bigl(1+\fr{r}_{t+1}\bigr),\\
+\label{eq:euler-capital}
+1&=\Et\,\pk_{t,t+1}\bigl(1+\rk_{t+1}\bigr).
+\end{align}
+Equation \eqref{eq:euler-safe} is implied by optimality in \emph{either} safe or
+other dollar bonds given the definition of $\cy_t$ in \eqref{eq:omega-def}: the
+$1/(1-\cy_t)$ factor converts the safe-bond return into the convenience-adjusted
+return that the kernel prices. Analogous starred conditions hold for Foreign
+households, using the Foreign kernel $\pk^{*}_{t,t+1}$ (their app.\ eqs.\
+(47)--(49)).
+
+\paragraph{Safe-bond market clearing and the real resource constraint.} Combining
+the cross-country indifference condition \eqref{eq:omega-def} (which gives
+$B_{Ht,s}/(P_t c_t)=B^{*}_{Ht,s}/(E_t^{-1}P^{*}_t c^{*}_t)$) with global market
+clearing in safe dollar bonds yields the allocation of safe bonds across
+countries (their app.\ A.5.1, restating \eqref{eq:safe-bond-clearing}):
+\begin{equation}
+\label{eq:safe-bond-split}
+B_{Ht,s}=\frac{P_t c_t}{P_t c_t+\zs E_t^{-1}P^{*}_t c^{*}_t}(-B^g_{Ht,s}),
+\qquad
+B^{*}_{Ht,s}=\frac{E_t^{-1}P^{*}_t c^{*}_t}{P_t c_t+\zs E_t^{-1}P^{*}_t c^{*}_t}(-B^g_{Ht,s}).
+\end{equation}
+Substituting government transfers \eqref{eq:fiscal-transfer} into the budget
+constraint \eqref{eq:budget}, dividing by $P_t$, and denoting real positions
+$b_{Ht,s}\equiv B_{Ht,s}/P_t$, $b^g_{Ht,s}\equiv B^g_{Ht,s}/P_t$,
+$b_{Ht,o}\equiv B_{Ht,o}/P_t$, $b_{Ft}\equiv B_{Ft}/P_t$, $\qk_t\equiv Q^k_t/P_t$,
+$\divr_t\equiv\Pi_t/P_t$, $\rw_t\equiv W_t/P_t$, the Home household's real
+resource constraint is (their app.\ A.5.1)
+\begin{equation}
+\label{eq:real-budget-home}
+\begin{aligned}
+c_t+b_{Ht,s}+b^g_{Ht,s}+b_{Ht,o}+\rer_t^{-1}b_{Ft}+\qk_t k_t
+&=\rw_t\ell_t
++(1+\rr_t)\bigl(b_{Ht-1,s}+b^g_{Ht-1,s}\bigr)\\
+&\quad+\left(\frac{1+\rr_t}{1-\cy_{t-1}}\right)b_{Ht-1,o}
++\rer_t^{-1}(1+\fr{r}_t)b_{Ft-1}\\
+&\quad+\bigl(\divr_t+(1-\dep)\qk_t\bigr)k_{t-1}\exp(\varphi_t).
+\end{aligned}
+\end{equation}
+KL further define each agent's net dollar-bond position
+$b_{Ht}\equiv(1-\cy_t)(b_{Ht,s}+b^g_{Ht,s})+b_{Ht,o}$ and
+$b^{*}_{Ht}\equiv(1-\cy_t)b^{*}_{Ht,s}+b^{*}_{Ht,o}$, each earning the
+``other-bond'' return $1+\ioth_t=(1+i_t)/(1-\cy_t)$; the composition of the
+dollar-bond position matters only for the seigniorage Home earns on the safe debt
+held by Foreign (their p.~1661 and app.\ A.5.1).
+
+\subsection{Additional variables (their app.\ A.4)}
+\label{sec:aux-vars}
+
+The following auxiliary definitions are used throughout the proofs. The real
+exchange rate (an increase is a Home appreciation):
+\begin{equation}
+\label{eq:rer-def}
+\rer_t\equiv\frac{E_t P_t}{P^{*}_t}.
+\end{equation}
+The real interest rates and the real return on capital (in Home consumption
+units):
+\begin{equation}
+\label{eq:returns-def}
+1+\rr_{t+1}\equiv(1+i_t)\frac{P_t}{P_{t+1}},\quad
+1+\fr{r}_{t+1}\equiv(1+i^{*}_t)\frac{P^{*}_t}{P^{*}_{t+1}},\quad
+1+\rk_{t+1}\equiv\frac{\bigl(\Pi_{t+1}+(1-\dep)Q^k_{t+1}\bigr)}{Q^k_t}\frac{P_t}{P_{t+1}}\exp(\varphi_{t+1}).
+\end{equation}
+Output, the real value of aggregate saving, and real net foreign assets at Home:
+\begin{equation}
+\label{eq:agg-def}
+\out_t\equiv(z_t\ell_t)^{1-\alpha}(\kappa_t)^{\alpha},\quad
+\sav_t\equiv\frac{1}{P_t}\bigl(B_{Ht}+E_t^{-1}B_{Ft}+Q^k_t k_t\bigr),\quad
+\nfa_t\equiv\sav_t-\frac{Q^k_t}{P_t}\kappa_{t+1}\exp(-\varphi_{t+1}).
+\end{equation}
+All variables are dated at the end of the period (their app.\ fn.~53); the factor
+$\exp(-\varphi_{t+1})$ in $\nfa_t$ undoes capital destruction so that capital
+\emph{used} at Home is compared with capital \emph{owned} by Home residents (their
+app.\ fn.~54).
+
+\subsection{The re-scaled (stationary) recursive equilibrium}
+\label{sec:rescaled}
+
+Because global productivity $z_t$ has a unit root (their eq.~(18)), KL stationarize
+by dividing all real variables (and real-deflated nominal variables) by $z_t$,
+\emph{labor excepted} (their app.\ A.6). Write $\rs{x}\equiv x/z_t$; lagged stocks
+carry a second deflation by the growth term
+$\exp(\sigma^z\epsilon^z_t+\varphi_t)$, denoted with a double tilde
+$\widetilde{\widetilde{x}}_{t-1}$. After scaling, global-productivity shocks
+(inclusive of disasters) only govern the transition across states. The recursive
+equilibrium is the system of their app.\ eqs.~(33)--(72); we transcribe the
+economically central conditions and refer to the rest by number.
+
+\paragraph{Home block (their app.\ eqs.~(33)--(41)).} The re-scaled value
+recursion, certainty equivalent, CES aggregator, intratemporal allocation, and
+kernel are their app.\ eqs.~(33)--(37). The three re-scaled Euler equations are
+\begin{align}
+\label{eq:reuler-safe}
+1&=\Et\,\rs{\pk}_{t,t+1}\exp\!\bigl(-\rra[\sigma^z\epsilon^z_{t+1}+\varphi_{t+1}]\bigr)
+\frac{1+\rr_{t+1}}{1-\cy_t}, &&\text{(their app.\ eq.~(38))}\\
+\label{eq:reuler-uip}
+1&=\Et\,\rs{\pk}_{t,t+1}\exp\!\bigl(-\rra[\sigma^z\epsilon^z_{t+1}+\varphi_{t+1}]\bigr)
+\frac{\rer_t}{\rer_{t+1}}(1+\fr{r}_{t+1}), &&\text{(their app.\ eq.~(39))}\\
+\label{eq:reuler-cap}
+1&=\Et\,\rs{\pk}_{t,t+1}\exp\!\bigl(-\rra[\sigma^z\epsilon^z_{t+1}+\varphi_{t+1}]\bigr)
+(1+\rk_{t+1}), &&\text{(their app.\ eq.~(40))}
+\end{align}
+and the re-scaled Home resource constraint is
+\begin{equation}
+\label{eq:rbudget-home}
+\rs{c}_t+\rs{b}_{Ht}+\rer_t^{-1}\rs{b}_{Ft}+\qk_t\rs{k}_t
+=\rs{w}_t\ell_t+\theta_t\bigl(\divr_t+(1-\dep)\qk_t\bigr)\widetilde{\widetilde{k}}_{t-1},
+\quad\text{(their app.\ eq.~(41))}
+\end{equation}
+where $\theta_t$ is the Home wealth share. The Foreign block (their app.\
+eqs.~(42)--(50)) is symmetric, with risk aversion $\rraF$, Euler equations
+\begin{align}
+\label{eq:reuler-safe-f}
+1&=\Et\,\rs{\pk}^{*}_{t,t+1}\exp\!\bigl(-\rraF[\sigma^z\epsilon^z_{t+1}+\varphi_{t+1}]\bigr)
+\frac{\rer_{t+1}}{\rer_t}\frac{1+\rr_{t+1}}{1+\cy_t}, &&\text{(their app.\ eq.~(47))}\\
+\label{eq:reuler-uip-f}
+1&=\Et\,\rs{\pk}^{*}_{t,t+1}\exp\!\bigl(-\rraF[\sigma^z\epsilon^z_{t+1}+\varphi_{t+1}]\bigr)
+(1+\fr{r}_{t+1}), &&\text{(their app.\ eq.~(48))}\\
+\label{eq:reuler-cap-f}
+1&=\Et\,\rs{\pk}^{*}_{t,t+1}\exp\!\bigl(-\rraF[\sigma^z\epsilon^z_{t+1}+\varphi_{t+1}]\bigr)
+\frac{\rer_{t+1}}{\rer_t}(1+\rk_{t+1}), &&\text{(their app.\ eq.~(49))}
+\end{align}
+and the Foreign resource constraint (their app.\ eq.~(50)).
+
+\noindent\emph{(Note: these match KL's app.\ eqs.\ (47)--(49) verbatim, verified
+against their appendix p.~64. Observe the Home/Foreign asymmetry in the
+convenience adjustment: the Home safe-bond Euler equation~\eqref{eq:reuler-safe}
+carries $1/(1-\cy_t)$, whereas the Foreign safe-bond Euler
+equation~\eqref{eq:reuler-safe-f} carries $1/(1+\cy_t)$, because the convenience
+benefit accrues to the issuer's residents and is netted out of the price Foreign
+agents are willing to pay. The $q_{t+1}/q_t$ placement is exactly as in KL.)}
+
+\paragraph{Wealth-share law of motion (their app.\ eq.~(51)).} The global wealth
+share of Home households, inclusive of seigniorage, evolves as
+\begin{equation}
+\label{eq:wealth-share}
+\theta_{t+1}=\frac{1}{(\divr_{t+1}+(1-\dep)\qk_{t+1})\widetilde{\widetilde{k}}_t}
+\left[\frac{1+\rr_{t+1}}{1-\cy_t}\rs{b}_{Ht}
++\frac{1}{\rer_{t+1}}(1+\fr{r}_{t+1})\rs{b}_{Ft}
++(\divr_{t+1}+(1-\dep)\qk_{t+1})\widetilde{\widetilde{k}}_t
+-\cy_{t+1}\frac{\zs\rer^{-1}_{t+1}\rs{c}^{*}_{t+1}}{\rs{c}_{t+1}+\zs\rer^{-1}_{t+1}\rs{c}^{*}_{t+1}}\rs{b}^g_{Ht+1,s}\right].
+\end{equation}
+The last term is the seigniorage Home earns on the share of its safe debt held by
+Foreign.
+
+\paragraph{Supply, market clearing, returns, prices (their app.\ eqs.~(52)--(72)).}
+Supply-side optimality (re-scaled union and producer FOCs) is their app.\
+eqs.~(52)--(60); goods-, factor-, and asset-market clearing
+\begin{align}
+\label{eq:mc-goods}
+&\rs{c}_{Ht}+\zs\rs{c}^{*}_{Ht}+\Bigl(\tfrac{\widetilde{\widetilde{k}}_t}{\widetilde{\widetilde{k}}_{t-1}}\Bigr)^{\!\chi^x}\rs{x}_{Ht}=(\ell_t)^{1-\alpha}(\rs\kappa_t)^{\alpha}, &&\text{(their app.\ eq.~(61))}\\
+&\rs{c}_{Ft}+\zs\rs{c}^{*}_{Ft}+\Bigl(\tfrac{\widetilde{\widetilde{k}}_t}{\widetilde{\widetilde{k}}_{t-1}}\Bigr)^{\!\chi^x}\rs{x}_{Ft}=(z_{Ft}\zs\ell^{*}_t)^{1-\alpha}(\rs\kappa^{*}_t)^{\alpha}, &&\text{(their app.\ eq.~(62))}\\
+&\rs\kappa_t+\rs\kappa^{*}_t=\widetilde{\widetilde{k}}_{t-1}, \quad
+\rs{k}_t+\zs\rs{k}^{*}_t=\widetilde{\widetilde{k}}_t,\quad
+(1-\dep)\widetilde{\widetilde{k}}_{t-1}+\rs{x}_t=\widetilde{\widetilde{k}}_t, &&\text{(their app.\ eqs.~(63)--(65))}\\
+\label{eq:mc-bonds}
+&\rs{b}_{Ht}+\zs\rs{b}^{*}_{Ht}=0, &&\text{(their app.\ eq.~(66))}
+\end{align}
+the return definitions
+\begin{equation}
+\label{eq:rescaled-returns}
+1+\rr_{t+1}=(1+i_t)\tfrac{P_t}{P_{t+1}},\quad
+1+\fr{r}_{t+1}=(1+i^{*}_t)\tfrac{P^{*}_t}{P^{*}_{t+1}},\quad
+1+\rk_{t+1}=\tfrac{\divr_{t+1}+(1-\dep)\qk_{t+1}}{\qk_t}\exp(\varphi_{t+1}),
+\end{equation}
+(their app.\ eqs.~(67)--(69)), and the price relations linking the CPI, terms of
+trade, and real exchange rate (their app.\ eqs.~(70)--(72)):
+\begin{equation}
+\label{eq:price-relations}
+\frac{P_t}{P_{Ht}}=\Bigl[\bigl(\tfrac{1}{1+\zs}+\hbias\bigr)+\bigl(\tfrac{\zs}{1+\zs}-\hbias\bigr)\tot_t^{\tel-1}\Bigr]^{\frac1{1-\tel}},
+\quad
+\rer_t=\tot_t\left[\frac{(\tfrac{1}{1+\zs}+\hbias)+(\tfrac{\zs}{1+\zs}-\hbias)\tot_t^{\tel-1}}{(\tfrac{1}{1+\zs}-\tfrac{\hbias}{\zs})\tot_t^{1-\tel}+(\tfrac{\zs}{1+\zs}+\tfrac{\hbias}{\zs})}\right]^{\frac1{1-\tel}}.
+\end{equation}
+
+\paragraph{Equilibrium and state vector.} Together with the Taylor and fiscal
+rules and the driving forces, their app.\ eqs.~(33)--(72) define the recursive
+equilibrium in the sense of the following definition.
+
+\begin{definition}[Equilibrium; KL app.\ A.3 Definition~1]
+\label{def:equilibrium}
+An equilibrium is a sequence of prices and policies such that: each Home
+representative household chooses $\{c_{Ht},c_{Ft},B_{Ht,s},B_{Ht,o},B_{Ft},k_t\}$
+to maximize \eqref{eq:ez-value} subject to \eqref{eq:ces-c}--\eqref{eq:rotemberg}
+(and analogously in Foreign); each Home union $j$ chooses $\{W_t(j),\ell_t(j)\}$
+to maximize members' utilitarian welfare subject to \eqref{eq:rotemberg}
+(analogously in Foreign); the Home labor packer chooses $\{\ell_t(j)\}$ to
+maximize profits (their eq.~(6), analogously in Foreign); the Home producer
+chooses $\{\ell_t,\kappa_t\}$ to maximize profits (their eq.~(7), analogously in
+Foreign); the global capital producer chooses $\{x_{Ht},x_{Ft},x_t\}$ to maximize
+profits (their eq.~(9)) subject to \eqref{eq:qk}; the Home government sets
+$B^g_{Ht,s}$ by \eqref{eq:fiscal-supply} and $\{i_t,\{T_t\}\}$ by
+\eqref{eq:taylor} and \eqref{eq:fiscal-transfer} (and the Foreign government the
+latter); and goods, factor, and asset markets clear (their app.\ eqs.~(23)--(32),
+including $B_{Ft}+\zs B^{*}_{Ft}=0$, their app.\ eq.~(32)).
+\end{definition}
+
+After re-scaling, the aggregate state in period $t$ is seven-dimensional:
+\begin{equation}
+\label{eq:state}
+\bigl\{\,p_t,\ \cy_t,\ z_{Ft},\ \theta_t,\ \widetilde{\widetilde{k}}_{t-1},\
+\rs{w}_{t-1},\ \rs{w}^{*}_{t-1}\,\bigr\},
+\end{equation}
+i.e.\ disaster probability, convenience yield, Foreign relative productivity,
+Home wealth share, lagged (re-scaled) global capital, and lagged (re-scaled) Home
+and Foreign real wages. By Walras' law the Foreign bond market clears given the
+rest. In the simplified environment, $p$ and $z_F$ are constant
+(Definition~\ref{def:simplified}(iv)) and the wage states are trivial under
+flexible or one-period-predetermined wages, so the effective state collapses to
+$\{\cy,\theta\}$ around the steady state --- the two variables that carry the
+analytical dynamics.
+
+\subsection{The Devereux--Sutherland portfolio method}
+\label{sec:ds-method}
+
+Equilibrium \emph{portfolios} --- the steady-state holdings of dollar bonds,
+capital, and Foreign bonds that each country chooses --- cannot be read off the
+first-order (linearized) equilibrium conditions alone. KL pin them down with the
+second-order method of Devereux and Sutherland (2011); we lay out the logic here
+and defer the algebra to the portfolio work package (WP-D).
+
+To first order, the three asset returns
+$\{1+\rr_{t+1},\,1+\rk_{t+1},\,(\rer_t/\rer_{t+1})(1+\fr{r}_{t+1})\}$ enter the
+Euler equations \eqref{eq:euler-safe}--\eqref{eq:euler-capital} only through
+their conditional means, which the Euler equations equate. Hence to first order
+all assets are \emph{perfect substitutes} and the portfolio weights are
+\emph{indeterminate}: any portfolio is consistent with the first-order
+equilibrium. The Devereux--Sutherland insight is that portfolios are pinned down
+by a \emph{second-order} object. Specifically, the steady-state portfolio is the
+unique one for which the first-order \emph{excess-return} (risk-sharing)
+conditions --- the differences of the Euler equations
+\eqref{eq:euler-safe}--\eqref{eq:euler-capital} across assets --- hold once the
+portfolio Euler equations are approximated to \emph{second} order. Equivalently,
+the portfolio is chosen so that the conditional covariances between the pricing
+kernel and excess returns (which are second-order objects) are consistent with
+the first-order dynamics of consumption and the real exchange rate that those
+same portfolios induce.
+
+Two structural facts make this tractable and economically sharp in the simplified
+environment. First, there are exactly \emph{three} traded assets (safe dollar
+bonds, capital, Foreign bonds). Second, by Definition~\ref{def:simplified}(iv)
+the economy is subject to exactly \emph{two} aggregate shocks (global
+productivity $\epsilon^z$ and safety $\epsilon^\omega$). With one more asset than
+shock, the asset span is \emph{locally complete} in the sense of Coeurdacier and
+Gourinchas (2016): around the deterministic steady state the available assets
+suffice to implement the constrained-efficient (complete-markets) risk-sharing
+allocation. Consequently the equilibrium portfolios that the
+Devereux--Sutherland method selects are precisely those that implement efficient
+risk sharing to first order. This is the formal content behind KL's statement
+(their p.~1664) that ``the three available assets implement efficient risk
+sharing around the steady state.'' The closed-form characterization of these
+portfolios and of the resulting risk premia (their Propositions~4--5) is carried
+out in WP-D; here we only fix the method and its scope.
+
+\gapflag{KL state local completeness and efficient risk sharing as a consequence
+of the ``one more asset than shock'' count (their p.~1664, citing Coeurdacier and
+Gourinchas 2016) but do not, in the main text, prove that the
+Devereux--Sutherland-selected portfolio coincides with the efficient one in this
+specific three-asset/two-shock setting. We state the equivalence here as KL
+assert it; the explicit verification (that the span $\{$bond, capital, FX$\}$
+covers the two shocks and that no redundancy or rank-deficiency arises at the
+symmetric steady state) belongs to WP-D and is flagged for the critic.}

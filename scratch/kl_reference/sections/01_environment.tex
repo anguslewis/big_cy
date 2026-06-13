@@ -1,0 +1,99 @@
+% =====================================================================
+% 01_environment.tex — the simplified environment (Definition 1) (WP-A)
+% =====================================================================
+\section{The simplified environment}
+\label{sec:environment}
+
+The analytical results of KL's Section~II are derived in a \emph{simplified
+environment}: a set of parametric restrictions on the full model of Section~I
+that admits closed-form first-order results while preserving the two essential
+ingredients --- a time-varying convenience yield on safe dollar bonds and
+cross-country heterogeneity in risk-bearing capacity. We state these
+restrictions exactly as KL's Definition~1 (their p.~1660), and after each item
+note which step of the analysis it buys, following KL's own discussion on
+p.~1660.
+
+\begin{definition}[Simplified environment; KL Definition~1]
+\label{def:simplified}
+The simplified environment features:
+\begin{enumerate}[label=(\roman*),leftmargin=2.0em,itemsep=3pt]
+  \item \textbf{Flexible wages, or wages set one period in advance.} In place of
+  the Rotemberg (1982) wage-adjustment cost of the full model (their eq.~(5),
+  scale $\wadj$), wages are either fully flexible or predetermined by one
+  period. \\[2pt]
+  \emph{What it buys:} this replaces the forward-looking wage Phillips curve
+  (their app.\ eq.~(52)) by a static or one-period-lagged wage equation,
+  simplifying the dynamics so that the impulse responses can be solved in closed
+  form. The two cases (flexible vs.\ one-period-in-advance) correspond exactly
+  to the two bullet groups in Propositions~1--2.
+  \item \textbf{Fixed global capital stock} $\bigl(\kadj\!\to\!\infty,\
+  \dep\!\to\!0\bigr)$. Infinite capital-adjustment costs freeze the global
+  capital stock $\bar k_t$, and zero depreciation removes investment dynamics. \\[2pt]
+  \emph{What it buys:} together with (i), this eliminates the endogenous
+  capital-accumulation state and the investment Euler equation as a source of
+  dynamics, so the only ``real'' margins left are the international allocation of
+  a fixed capital stock and the portfolio. It also makes capital a pure
+  store-of-value claim whose quantity is fixed.
+  \item \textbf{Unitary IES} $(\ies=1)$, \textbf{complete home bias}
+  $\bigl(\hbias\!\to\!\zs/(1+\zs)\bigr)$, and \textbf{infinite Frisch
+  elasticity} $(\frisch\!\to\!0)$. \\[2pt]
+  \emph{What it buys:} $\ies=1$ collapses the Epstein--Zin time aggregator to the
+  Cobb--Douglas / log case, so that intertemporal substitution drops out of the
+  consumption Euler equation's drift and the value-function recursion
+  log-linearizes cleanly. Complete home bias
+  $\hbias\!\to\!\zs/(1+\zs)$ sends the CES weight on the foreign good in
+  consumption to zero (each country consumes only its own good in the
+  deterministic steady state), which decouples the steady-state real exchange
+  rate from the consumption shares and is what makes the role of home bias
+  \emph{transparent} in the final results. Infinite Frisch ($\frisch\!\to\!0$ in
+  the parameterization of their eq.~(3)) makes the labor-disutility multiplier
+  $\Phi(\ell)$ linear in the relevant sense, simplifying the supply block.
+  \item \textbf{No disaster risk} $(p=0,\ \sigma^p=0)$, \textbf{constant relative
+  productivity} $(\sigma^F=0)$, and \textbf{transitory safety}
+  $(\rho^\omega=0)$. \\[2pt]
+  \emph{What it buys:} switching off disasters and Foreign-productivity shocks
+  leaves \emph{two} aggregate shocks --- global productivity $\epsilon^z$ and the
+  safety shock $\epsilon^\omega$ --- which is exactly the count needed for the
+  ``locally complete'' three-asset structure used in the portfolio analysis
+  (Proposition~4). Transitory safety ($\rho^\omega=0$) means a safety shock dies
+  out after one period, which is what licenses the period-$1$/period-$\ge 2$
+  decomposition of the impulse responses (their app.\ B.1).
+  \item \textbf{Identical per-capita wealth across countries in the
+  deterministic steady state.} \\[2pt]
+  \emph{What it buys:} this pins down a symmetric deterministic steady state
+  around which the perturbation is taken, ensuring the steady state is
+  well-defined and that the linearized system has the symmetric structure used
+  throughout the proofs.
+  \item \textbf{Identical discount factors} $(\disc=\discF)$. \\[2pt]
+  \emph{What it buys:} with $\disc=\discF$ the two countries share the same
+  steady-state interest rate and (given (v)) the same steady-state wealth share
+  $\theta=1/(1+\zs)$, removing a level asymmetry that would otherwise complicate
+  the steady state. (In the calibrated model KL allow $\disc\neq\discF$ to match
+  the level of net foreign assets; here it is shut off.)
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[General home bias in the proofs; KL app.\ B.1]
+\label{rem:general-sigma}
+A crucial nuance for what follows: although Definition~\ref{def:simplified}
+imposes \emph{complete} home bias $\hbias\!\to\!\zs/(1+\zs)$, KL carry out the
+impulse-response and portfolio proofs of Appendix~B for a \emph{general}
+home-bias parameter $\hbias$, and only specialize to complete home bias
+$\hbias\!\to\!\zs/(1+\zs)$ at the very end, ``so that the role of home bias is
+clear'' (their app.\ B.1, opening paragraph). Accordingly, the re-scaled
+equilibrium system (Section~\ref{sec:setup} below) and the period-$1$
+log-linearization (introduced in the impulse-response engine, WP-B) retain
+$\hbias$ as a free parameter; the limit $\hbias\!\to\!\zs/(1+\zs)$ is taken only
+where a proposition's stated form requires it. We preserve this convention
+throughout this reference: \emph{$\hbias$ is general until explicitly
+specialized}.
+\end{remark}
+
+\begin{remark}[Perturbation, not the global solution]
+The simplified environment is studied with a perturbation (first-order for the
+impulse responses, second-order for portfolios) around the deterministic steady
+state guaranteed by (v)--(vi). KL emphasize that \emph{none} of the assumptions
+in Definition~\ref{def:simplified} is imposed in the quantitative sections~III--V,
+which instead solve the full model globally (their app.\ A.7). This reference
+concerns only the analytical (simplified-environment) results.
+\end{remark}

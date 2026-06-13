@@ -1,0 +1,109 @@
+% =====================================================================
+% kl_analytical_reference.tex
+% A clean, self-contained re-derivation of ALL analytical results in
+% Kekre & Lenel (2024, AER), "The Flight to Safety and International
+% Risk Sharing" — Section II of the paper and Appendix B of the online
+% appendix. Faithful re-derivation (not an extension, not a critique).
+%
+% Produced for the big_cy project (task T1b / Assignment 02) as a durable
+% reference for the KL extension (T1c) and the quantitative work.
+%
+% Build:  pdflatex kl_analytical_reference  (x2)
+% Sources used:
+%   - Main paper:  Kekre_Lenel_2024_AER_...pdf  (Section I model, Section II results)
+%   - Online appendix (proofs):  scratch/kl_sources/kl_online_appendix.pdf
+% =====================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+
+\input{macros.tex}
+
+% ---- theorem-like environments ----
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+
+\allowdisplaybreaks
+\numberwithin{equation}{section}
+
+\title{\textbf{The Flight to Safety and International Risk Sharing:\\
+A Complete Re-Derivation of the Analytical Results}\\[4pt]
+\large A faithful, self-contained reference for Kekre \& Lenel (2024, AER),\\
+Section II and online Appendix B}
+\author{big\_cy project --- task T1b (theory reference)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent This document re-derives, with complete algebra and full proofs, every
+analytical result in Kekre and Lenel (2024, AER), ``The Flight to Safety and
+International Risk Sharing.'' We restate the simplified environment (their
+Definition~1), the household problems, first-order conditions, market clearing,
+the recursive (re-scaled) equilibrium, and the Devereux--Sutherland (2011)
+second-order portfolio method; we then prove Propositions~1--5, the
+efficient-risk-sharing / law-of-one-price relation, and the ``specialness of safe
+dollar bonds'' arguments. Each result is followed by a discussion of its economic
+intuition, the load-bearing assumptions, and its connection to the paper's three
+target empirical facts (the dollar's negative beta; the United States as the
+world's insurer; the reserve-currency paradox). The aim is twofold: a durable
+reference for the big\_cy extension, and a complete account of \emph{exactly} what
+drives each result, with nothing taken on faith. Steps where the published
+appendix is terse and the derivation had to be reconstructed are flagged
+explicitly with \textbf{[Reconstruction flag]}.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ---- front matter: symbol table + paper-to-document map ----
+\input{sections/00_notation.tex}
+
+% ---- 1. simplified environment (Definition 1) ----
+\input{sections/01_environment.tex}
+
+% ---- 2. setup: households, FOCs, market clearing, equilibrium, rescaling, DS method ----
+\input{sections/02_setup.tex}
+
+% ---- 3. impulse-response engine (Appendix B.1) ----
+\input{sections/03_impulse_engine.tex}
+
+% ---- 4. Proposition 1: prices and production ----
+\input{sections/04_prop1.tex}
+
+% ---- 5. Proposition 2: realized and expected excess returns ----
+\input{sections/05_prop2.tex}
+
+% ---- 6. Proposition 3: wealth share / NFA revaluation ----
+\input{sections/06_prop3.tex}
+
+% ---- 7. pricing kernels, portfolios, risk premia engine (Appendix B.2) ----
+\input{sections/07_portfolio_engine.tex}
+
+% ---- 8. Proposition 4: equilibrium portfolios ----
+\input{sections/08_prop4.tex}
+
+% ---- 9. Proposition 5: sign of the risk premium / reserve-currency paradox ----
+\input{sections/09_prop5.tex}
+
+% ---- 10. efficient risk sharing / LOOP + specialness of safe dollar bonds ----
+\input{sections/10_risksharing_specialness.tex}
+
+% ---- 11. synthesis: load-bearing assumptions + connection to empirical facts ----
+\input{sections/11_synthesis.tex}
+
+\end{document}

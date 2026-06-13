@@ -1,0 +1,235 @@
+% =====================================================================
+% 06_prop3.tex — Proposition 3: Home wealth share / NFA revaluation (WP-C)
+% =====================================================================
+\section{Proposition 3: Home wealth share and NFA revaluation}
+\label{sec:prop3}
+
+This section proves Proposition~3 of KL: how a flight-to-safety shock
+$\dev{\cy}_1>0$ redistributes financial wealth across countries on impact, and
+how it revalues Home's net foreign assets. Unlike Propositions~1--2, here the
+portfolios are \emph{not} identical: we allow Home to be levered long in capital,
+to hold a nonzero Foreign-bond position, and the Home government to have issued
+safe debt. The result is the realized wealth-share identity that the engine
+already records as~\eqref{eq:wsh-realized} (their app.~eq.~(92)); the work of the
+proof is to expose its three components and to combine them with the realized
+returns of Proposition~\ref{prop:returns}.
+
+\subsection{Statement}
+
+\begin{proposition}[Home wealth share and NFA revaluation]
+\label{prop:wealth}
+Consider the simplified economy of Definition~\ref{def:simplified} with portfolios
+initially close to the symmetric benchmark and with Home government safe debt
+$b^g_{H,s}$ not too far from zero, and consider a flight-to-safety shock
+$\dev{\cy}_1>0$ in period~$1$ with $\widetilde{\widetilde{\dev k}}_1=0$ on
+impact. Then, to first order, Home's financial wealth share is revalued on impact
+by
+\begin{equation}
+\dev{\wsh}_1 = \Bigl(\frac{\qk\,k}{\sav}-1\Bigr)\bigl(\rk_1-\rr_1\bigr)
++\frac{b_F}{\sav}\bigl(\fr{r}_1-\D\dev{\rer}_1-\rr_1\bigr)
+-\disc\,\frac{\zs}{1+\zs}\,\frac{b^g_{H,s}}{\sav}\,\dev{\cy}_1, \label{eq:prop3-wsh}
+\end{equation}
+where $\qk k$, $b_F$, and $b^g_{H,s}$ are the steady-state Home positions in
+capital, Foreign bonds, and government safe debt (as shares of Home saving
+$\sav$), and the realized returns $\rk_1,\rr_1,\fr{r}_1,\D\dev{\rer}_1$ are those
+of Proposition~\ref{prop:returns}. Home's net foreign assets $\widehat{\nfa}_1$
+are revalued in the same direction.
+\end{proposition}
+
+\noindent (We transcribe the proposition to match KL's main-paper statement
+(p.~1664). As in Proposition~\ref{prop:returns}, $\D\dev{\rer}_1=\dev{\rer}_1$
+because $\dev{\rer}_0=0$ at the deterministic steady state.)
+
+\subsection{Proof}
+
+\paragraph{The identity is the engine's realized wealth-share linearization.}
+Equation~\eqref{eq:prop3-wsh} is \emph{verbatim} the engine's realized
+wealth-share reduced form~\eqref{eq:wsh-realized}, which is KL's app.~eq.~(92).
+We reproduce here the derivation of that reduced form (their derivation of (92)),
+so that the three coefficients in \eqref{eq:prop3-wsh} are exposed, and then sign
+each component using Proposition~\ref{prop:returns}.
+
+\subparagraph{Step 1: linearize the wealth-share law of motion.} Home's financial
+wealth share evolves according to the accounting identity that next period's Home
+wealth equals the gross return on this period's Home portfolio, divided by the
+gross return on world wealth (the setup's wealth-share law of motion; their
+app.~eq.~(51), in re-scaled form). Writing $\dev{\wsh}_1$ as the deviation of the
+realized period-$1$ wealth share from its steady-state value and linearizing the
+portfolio return around the symmetric steady state, the realized wealth share is
+the steady-state-weighted sum of the \emph{excess} realized returns Home earns on
+each asset it is differentially exposed to, plus the seigniorage Home earns on the
+safe debt it has issued:
+\begin{equation}
+\dev{\wsh}_1 = \sum_{j}\frac{x_j}{\sav}\bigl(R^{j}_1 - R^{\text{ref}}_1\bigr)
+\;+\;(\text{seigniorage on Home safe debt}), \label{eq:prop3-decomp-schema}
+\end{equation}
+where $x_j$ is the steady-state Home position in asset $j$, $R^{j}_1$ its realized
+return, and $R^{\text{ref}}_1$ the return on the reference (safe dollar bond)
+funding leg. The three differential exposures in the simplified economy are
+(i) leverage in capital, (ii) the Foreign-bond position, and (iii) Home-issued
+safe government debt; we take them in turn.
+\gapflag{KL do not display the linearization of (51) into (92) term by term; they
+write (92) directly as ``log-linearizing the realized evolution of Home's wealth
+share implies.'' The schema~\eqref{eq:prop3-decomp-schema} is the standard
+budget-constraint linearization for a wealth-share / NFA accounting identity (cf.\
+the Devereux--Sutherland portfolio method used in the setup, Section~\ref{sec:setup}):
+to first order, the change in a portfolio's relative value is the
+steady-state-weighted sum of excess realized returns on the legs in which the
+portfolio differs from the reference benchmark. The three coefficients
+$\frac{\qk k}{\sav}-1$, $\frac{b_F}{\sav}$, and
+$-\disc\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}$ are the steady-state portfolio
+weights that multiply each excess return, evaluated at the symmetric benchmark.
+We reconstruct the assignment of each weight to its excess-return leg below; the
+weights themselves are read from KL's eq.~(92).}
+
+\subparagraph{Step 2: the leverage-in-capital term.} Home holds steady-state
+capital $\qk k$ financed partly by issuing safe (dollar) claims. Its net long
+position in capital, relative to a portfolio fully funded by the safe leg, is
+$\qk k-\sav$ (its capital holdings net of its own wealth $\sav$); as a share of
+$\sav$ this is $\frac{\qk k}{\sav}-1$. The realized excess return on this levered
+position is the realized capital return over the dollar-bond funding return,
+$\rk_1-\rr_1$. Hence the first term of \eqref{eq:prop3-wsh},
+\begin{equation}
+\Bigl(\frac{\qk k}{\sav}-1\Bigr)\bigl(\rk_1-\rr_1\bigr). \label{eq:prop3-T1}
+\end{equation}
+Sign on impact: with Home levered long capital, $\frac{\qk k}{\sav}-1>0$; and from
+Proposition~\ref{prop:returns}(a)--(b), the realized excess return on capital is
+negative, $\rk_1-\rr_1<0$ (zero capital return minus a positive dollar-bond
+return under flexible wages, or a negative capital return minus a positive
+dollar-bond return under predetermined wages). Therefore
+\eqref{eq:prop3-T1}$<0$: Home \emph{loses} wealth share because the risky capital
+it is levered into underperforms the dollar bonds it is short.
+
+\subparagraph{Step 3: the Foreign-bond term.} Home holds steady-state Foreign
+bonds $b_F$ (financed at the dollar-bond rate). The realized excess return on this
+position, in Home consumption units, is the Home-currency Foreign-bond return over
+the dollar-bond return, $\fr{r}_1-\D\dev{\rer}_1-\rr_1$ (the $\D\dev{\rer}_1$
+converts the Foreign return into Home units). As a share of $\sav$ the position is
+$\frac{b_F}{\sav}$, giving the second term of \eqref{eq:prop3-wsh},
+\begin{equation}
+\frac{b_F}{\sav}\bigl(\fr{r}_1-\D\dev{\rer}_1-\rr_1\bigr). \label{eq:prop3-T2}
+\end{equation}
+Sign on impact: from Proposition~\ref{prop:returns}(c),
+$\fr{r}_1-\D\dev{\rer}_1-\rr_1<0$ (Foreign bonds underperform dollar bonds, both
+because of the dollar's deflation and, under nominal rigidity, the real dollar
+appreciation). With $b_F>0$ (Home long Foreign bonds), \eqref{eq:prop3-T2}$<0$:
+Home loses wealth on its Foreign-bond position as well.
+
+\subparagraph{Step 4: the seigniorage term.} The Home government has issued safe
+dollar debt $b^g_{H,s}$ (a \emph{negative} position from Home's private-sector
+perspective: $b^g_{H,s}<0$ means Home is a net issuer of safe claims). A share
+$\frac{\zs}{1+\zs}$ of this safe debt is held by the Rest of the World. When the
+safety shock raises the convenience yield $\dev{\cy}_1$, the issuer of safe debt
+earns \emph{seigniorage}: it borrows at a convenience-discounted rate, and the
+discount widens by $\dev{\cy}_1$ to first order. The Home private sector captures
+the seigniorage on the share held abroad, discounted by $\disc$ (the safe debt
+pays off next period). This is the third term of \eqref{eq:prop3-wsh},
+\begin{equation}
+-\disc\,\frac{\zs}{1+\zs}\,\frac{b^g_{H,s}}{\sav}\,\dev{\cy}_1. \label{eq:prop3-T3}
+\end{equation}
+Sign on impact: when Home is a net issuer, $b^g_{H,s}<0$, so
+$-\disc\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}>0$, and with $\dev{\cy}_1>0$ this
+term is \emph{positive}: Home \emph{gains} wealth share through the seigniorage it
+earns on the safe debt it has issued to the Rest of the World.
+\gapflag{The coefficient $-\disc\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}$ is read
+directly from KL's eq.~(92); we supply its interpretation. The factor
+$\frac{\zs}{1+\zs}$ is the RoW population share (so it is the fraction of Home
+safe debt held \emph{abroad}, where the convenience rent is a transfer to Home
+rather than an internal wash); the discount $\disc$ converts the next-period
+payoff to present value; and $\dev{\cy}_1$ is the first-order widening of the
+convenience discount. The convenience term enters the household Euler equation as
+$(1+r_{t+1})/(1-\cy_t)$ (Section~\ref{sec:engine}, discussion after
+\eqref{eq:euler-r}), so a one-unit rise in $\dev{\cy}_1$ lowers the real cost of
+the safe debt by one unit to first order; the issuer's private-sector wealth
+gains $\disc\frac{\zs}{1+\zs}\frac{|b^g_{H,s}|}{\sav}\dev{\cy}_1$. We reconstruct
+the sign and economic content; the magnitude is KL's.}
+
+\subparagraph{Step 5: assemble.} Summing \eqref{eq:prop3-T1}, \eqref{eq:prop3-T2},
+and \eqref{eq:prop3-T3} reproduces \eqref{eq:prop3-wsh}, i.e.\ the engine's
+\eqref{eq:wsh-realized}:
+\[
+\dev{\wsh}_1 = \underbrace{\Bigl(\tfrac{\qk k}{\sav}-1\Bigr)\bigl(\rk_1-\rr_1\bigr)}_{<0}
++\underbrace{\tfrac{b_F}{\sav}\bigl(\fr{r}_1-\D\dev{\rer}_1-\rr_1\bigr)}_{<0}
+\underbrace{-\disc\tfrac{\zs}{1+\zs}\tfrac{b^g_{H,s}}{\sav}\dev{\cy}_1}_{>0\text{ when }b^g_{H,s}<0},
+\]
+the realized wealth-share revaluation, with the first two components negative and
+the third positive (for a net issuer) on impact of a positive safety shock.
+
+\paragraph{The ``close to the symmetric benchmark'' qualifier.} The linear
+decomposition \eqref{eq:prop3-wsh} is valid because the coefficients
+$\frac{\qk k}{\sav}-1$, $\frac{b_F}{\sav}$, and $\frac{b^g_{H,s}}{\sav}$ are
+\emph{steady-state} portfolio weights, evaluated at the symmetric benchmark. KL's
+qualifier ``portfolios initially close to the symmetric benchmark and $b^g_{H,s}$
+not too far from zero'' is exactly what licenses this first-order treatment: it
+keeps the deviations $\dev{\wsh}_1$ small enough that the realized returns
+$\rk_1,\rr_1,\fr{r}_1,\D\dev{\rer}_1$ --- which were computed in
+Proposition~\ref{prop:returns} \emph{at} the symmetric benchmark
+($\Eone\dev{\wsh}_2=0$) --- remain valid inputs to \eqref{eq:prop3-wsh} to first
+order. Were the steady-state portfolio far from symmetric, the realized returns
+would themselves depend on the wealth-share dynamics (through the
+$\Eone\dev{\wsh}_2$ terms in the engine), and the clean three-way decomposition
+would break.
+\gapflag{KL phrase the qualifier as ``portfolios initially close to the symmetric
+benchmark.'' We make explicit \emph{why} it is needed: it decouples the
+realized-return inputs (computed at symmetry in Proposition~\ref{prop:returns})
+from the wealth-share output, so that the portfolio weights enter only as
+constant coefficients. This is the standard first-order portfolio logic; KL leave
+it implicit.}
+
+\paragraph{NFA revaluation.} Home's net foreign assets are revalued in the same
+direction as the wealth share. The engine's NFA reduced form is
+\eqref{eq:nfa-solved}, $\widehat{\nfa}_1=\sav[\Eone\dev{\wsh}_2-\frac{\zs}{1+\zs}\frac{1}{1-\cshare}\Eone\dev{\tot}_2]$,
+which is the linearization of the NFA definition (their app.~eq.~(87),
+\eqref{eq:nfa-raw}). The realized revaluation channel that drives $\dev{\wsh}_1$
+in \eqref{eq:prop3-wsh} feeds NFA through the same realized excess returns: a
+fall in Home's wealth share on impact is, to first order, a fall in the market
+value of Home's net foreign asset position. Concretely, the realized
+return-differential terms~\eqref{eq:prop3-T1}--\eqref{eq:prop3-T2} are a
+\emph{valuation} loss on Home's external balance sheet (Home's external assets,
+levered long risky and long Foreign bonds, lose value relative to its external
+liabilities, the safe dollar claims it has issued), exactly the revaluation that
+moves $\widehat{\nfa}_1$ down; the seigniorage term~\eqref{eq:prop3-T3} is a
+partial offset. Hence ``Home's NFA are revalued in the same way.'' \qed
+(\,Proposition~\ref{prop:wealth}\,)
+
+\subsection{Discussion}
+
+\paragraph{Two transfers out, one rent in.} Proposition~3 decomposes the wealth
+redistribution in a flight to safety into three pieces. The first two ---
+\eqref{eq:prop3-T1} and \eqref{eq:prop3-T2} --- are a direct consequence of
+Proposition~\ref{prop:returns}: Home's wealth falls in its \emph{leveraged
+capital} position and in its \emph{Foreign-bond} position, because both of these
+risky assets underperform the safe dollar bonds that fund them exactly when the
+safety shock hits. The third --- \eqref{eq:prop3-T3} --- runs the other way:
+Home's wealth \emph{rises} in the safe debt issued by its government, because Home
+earns the convenience rent (seigniorage) on the share of that safe debt held by
+the Rest of the World. The net revaluation is the sum: on impact, the two
+valuation losses dominate for a country that is levered long risky assets and
+short safe debt, so Home loses wealth and transfers it to the Rest of the World.
+
+\paragraph{Connection to the target facts: the US as the world's insurer.} This
+is the model's account of the United States as the ``world's insurer'' and of the
+valuation channel of US external adjustment. The US runs an external balance sheet
+that is \emph{long risky, short safe}: it holds foreign equity and risky claims
+(here, levered capital and Foreign bonds) financed by issuing safe dollar claims
+(Treasuries and dollar bank liabilities) to the rest of the world. In a global
+flight to safety, this balance sheet delivers a large \emph{valuation loss} ---
+the US transfers wealth to the rest of the world precisely in bad global states,
+which is the insurance it provides. Proposition~3 is the structural counterpart of
+the empirical NFA-revaluation fact: US net foreign assets fall in value in risk-off
+episodes, by an amount governed by the leverage weight $\frac{\qk k}{\sav}-1$ and
+the Foreign-bond weight $\frac{b_F}{\sav}$, partially offset by the seigniorage
+the US earns on its safe-debt issuance, $-\disc\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}\dev{\cy}_1$.
+
+\paragraph{The big\_cy reading.} A \emph{large absolute} convenience yield
+$\dev{\cy}_1$ does two things to \eqref{eq:prop3-wsh}. Through
+Proposition~\ref{prop:returns} it magnifies the realized excess-return terms
+\eqref{eq:prop3-T1}--\eqref{eq:prop3-T2} (larger deflation and real appreciation
+$\Rightarrow$ larger underperformance of risky assets), deepening the valuation
+transfer the US makes as the world's insurer. But it also magnifies the
+seigniorage term \eqref{eq:prop3-T3}: the larger the absolute convenience yield,
+the more the US earns on its safe-debt issuance, partially insulating its wealth.
+The balance between these is precisely the quantitative question big\_cy poses ---
+whether a DiTella-magnitude convenience yield lets the model match the observed
+US insurance role and home-currency bias \emph{without} the counterfactual US
+risk-tolerance asymmetry that Kekre and Lenel otherwise require.

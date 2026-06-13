@@ -1,0 +1,332 @@
+% =====================================================================
+% 04_prop1.tex — Proposition 1: prices and production (WP-B)
+% =====================================================================
+\section{Proposition 1: effects of a safety shock on prices and production}
+\label{sec:prop1}
+
+This section proves Proposition~1 of KL: how a flight-to-safety shock
+$\dev{\cy}_1>0$ propagates to expected real rates, inflation, the relative price
+of capital, and global employment. The proof specializes the
+engine of Section~\ref{sec:engine} to identical portfolios and complete home
+bias, which forces the wealth share to be inert, so that the only moving parts
+are prices and production. We treat the two wage regimes in turn.
+
+\subsection{Statement}
+
+\begin{proposition}[Effects of a safety shock on prices and production]
+\label{prop:prices}
+Consider the simplified economy of Definition~\ref{def:simplified} with identical
+portfolios across countries, no Home government safe debt
+($b^g_{H,s}=0$), and complete home bias $\hbias\to\zs/(1+\zs)$, so that
+$\dev{\wsh}_1=0$ and $\Eone\dev{\wsh}_2=0$. Consider a flight-to-safety shock
+$\dev{\cy}_1>0$ in period~$1$, with $\widetilde{\widetilde{\dev k}}_1=0$ on
+impact.
+\begin{enumerate}[label=(\alph*),leftmargin=1.8em,itemsep=3pt]
+  \item \textbf{Flexible wages} ($\frisch\to0$). The shock is absorbed entirely
+  by lower expected real rates and Home deflation, with no effect on the real
+  exchange rate or production:
+  \begin{equation}
+  \Eone\rr_2 = -\dev{\cy}_1, \qquad
+  \D\dev{P}_1 = -\frac{1}{\taylor}\dev{\cy}_1, \qquad
+  \dev{\rer}_1 = \dev{\ell}_1 = \fr{\dev{\ell}}_1 = 0. \label{eq:prop1-flex}
+  \end{equation}
+  \item \textbf{Wages set one period in advance.} The shock causes a global
+  recession and the responses are \emph{strictly} attenuated relative to the
+  flexible-wage benchmark:
+  \begin{equation}
+  0 > \Eone\rr_2 > -\dev{\cy}_1, \qquad
+  0 > \D\dev{P}_1 > -\frac{1}{\taylor}\dev{\cy}_1, \qquad
+  \dev{\rer}_1 \propto \dev{\cy}_1 \;(>0), \label{eq:prop1-sticky}
+  \end{equation}
+  and global employment falls, \emph{disproportionately at Home}:
+  \begin{equation}
+  \frac{1}{1+\zs}\dev{\ell}_1 + \frac{\zs}{1+\zs}\fr{\dev{\ell}}_1 \;\propto\; -\dev{\cy}_1, \qquad
+  \dev{\ell}_1 - \fr{\dev{\ell}}_1 \;\propto\; -\dev{\cy}_1. \label{eq:prop1-labor}
+  \end{equation}
+\end{enumerate}
+\end{proposition}
+
+\noindent (We transcribe the proposition to match KL's main-paper statement; the
+proportionality constants in \eqref{eq:prop1-sticky}--\eqref{eq:prop1-labor} are
+made explicit in the proof.)
+
+\subsection{Proof}
+
+\paragraph{Specialization of the engine.} Following KL's app.~B.3.1, impose
+identical portfolios --- so that the steady-state positions satisfy
+$\qk\,k=\sav$, $b_F=0$, $b_H=0$ --- and no Home government safe debt,
+$b^g_{H,s}=0$. The realized wealth-share equation~\eqref{eq:wsh-realized} then
+has \emph{every} coefficient equal to zero:
+\[
+\dev{\wsh}_1 = \underbrace{\Bigl(\tfrac{\qk k}{\sav}-1\Bigr)}_{=0}\bigl(\rk_1-\rr_1\bigr)
++\underbrace{\tfrac{b_F}{\sav}}_{=0}\bigl(\fr{r}_1-\dev{\rer}_1-\rr_1\bigr)
+-\disc\,\tfrac{\zs}{1+\zs}\underbrace{\tfrac{b^g_{H,s}}{\sav}}_{=0}\dev{\cy}_1
+= 0.
+\]
+Moreover, with complete home bias $\hbias\to\zs/(1+\zs)$, the net Home
+expenditure weight in the wealth-share law~\eqref{eq:Ewsh-solved} vanishes,
+$\frac{\zs}{1+\zs}-\hbias\to0$, and the relative-labor channel multiplier
+collapses; combined with $\dev{\wsh}_1=0$ this gives
+\begin{equation}
+\Eone\dev{\wsh}_2 = 0. \label{eq:prop1-wsh0}
+\end{equation}
+\gapflag{KL state ``since $\hbias\to\zs/(1+\zs)$, we have that $\Eone\dev{\wsh}_2=0$''
+(their app.~B.3.1). Two facts combine. First, $\dev{\wsh}_1=0$ from the
+identical-portfolio specialization above. Second, in \eqref{eq:Ewsh-solved} the
+surviving relative-labor term carries the factor
+$\bigl(\frac{\zs}{1+\zs}-\hbias\bigr)$ \emph{through} $\Eone\dev{\tot}_2$ and the
+$\atil$ feedback: with complete home bias $\hbias=\frac{\zs}{1+\zs}$ one checks
+$\hbias\frac{1+\zs}{\zs}=1$, so $1-(\hbias\frac{1+\zs}{\zs})^2=0$, killing the
+relative-labor coefficient in \eqref{eq:Ewsh-solved}. Hence $\Eone\dev{\wsh}_2
+=\dev{\wsh}_1=0$. We verified $\hbias\frac{1+\zs}{\zs}=1$ at complete home bias
+and that this zeroes the $1-(\hbias\frac{1+\zs}{\zs})^2$ factor; KL suppress this
+one-line check.}
+With \eqref{eq:prop1-wsh0}, the wealth-share terms drop out of every reduced form
+in Section~\ref{sec:engine-summary}. In particular, using
+$\hbias\frac{1+\zs}{\zs}=1$ (complete home bias) the composite denominator
+\eqref{eq:Lambda-def} simplifies to
+\begin{equation}
+\Lambda = \frac{\cshare}{1-\cshare}+\tel+(1-\tel)\cdot1
+=\frac{\cshare}{1-\cshare}+1 = \frac{1}{1-\cshare}, \label{eq:Lambda-cmplt}
+\end{equation}
+so the relative-labor coefficient becomes
+$\hbias/\Lambda=\frac{\zs}{1+\zs}(1-\cshare)$. We record this for the sticky-wage
+case below.
+
+\subparagraph{(a) Flexible wages.} With flexible wages and infinite Frisch
+elasticity $\frisch\to0$, the union's wage-setting condition gives
+\eqref{eq:flex-labor}:
+\[
+\dev{\ell}_1 = \fr{\dev{\ell}}_1 = 0.
+\]
+Substitute $\dev{\ell}_1=\fr{\dev{\ell}}_1=0$, $\Eone\dev{\wsh}_2=0$, and
+$\widetilde{\widetilde{\dev k}}_1=0$ into the engine. The expected capital
+return~\eqref{eq:Er2k-solved} becomes
+\[
+\Eone\rk_2 = -(1-\cshare)\underbrace{\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)}_{=0}
++\frac{\hbias}{\Lambda}\underbrace{\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)}_{=0} = 0.
+\]
+The capital-Euler relation~\eqref{eq:euler-r} then gives the expected real bond
+return,
+\begin{equation}
+\Eone\rr_2 = \Eone\rk_2 - \dev{\cy}_1 = -\dev{\cy}_1, \label{eq:prop1a-Er2}
+\end{equation}
+which is the first claim in~\eqref{eq:prop1-flex}. The Home Taylor
+rule~\eqref{eq:dP1} gives the inflation deviation,
+\begin{equation}
+\D\dev{P}_1 = \frac{1}{\taylor}\bigl(\Eone\rk_2-\dev{\cy}_1\bigr)
+=\frac{1}{\taylor}\bigl(0-\dev{\cy}_1\bigr) = -\frac{1}{\taylor}\dev{\cy}_1, \label{eq:prop1a-dP}
+\end{equation}
+the second claim. Finally the capital-price relation~\eqref{eq:qk1-raw} with
+$\Eone\dev{\tot}_2=0$ (from \eqref{eq:Es2} and \eqref{eq:prop1-wsh0}),
+$\widetilde{\widetilde{\dev k}}_1=0$, and $\Eone\rk_2=0$ gives
+\[
+\dev{\qk}_1 = -\hbias\underbrace{\Eone\dev{\tot}_2}_{=0}-(1-\cshare)\underbrace{\widetilde{\widetilde{\dev k}}_1}_{=0}-\underbrace{\Eone\rk_2}_{=0}=0,
+\]
+which with \eqref{eq:flex-labor} completes \eqref{eq:prop1-flex}. KL note these
+claims ``follow immediately from the above results given
+$\dev{\ell}_1=\fr{\dev{\ell}}_1=0$.''
+
+\subparagraph{(b) Wages set one period in advance.} Now wages are predetermined.
+Substituting the inflation reduced forms~\eqref{eq:dP1}--\eqref{eq:dPstar1} (with
+$\Eone\dev{\wsh}_2=0$) into the firm-labor-demand
+system~\eqref{eq:firm-H}--\eqref{eq:firm-F}, and using complete home bias and
+$\widetilde{\widetilde{\dev k}}_1=0$, KL reduce the $2\times2$ system to a linear
+map from $(\dev{\cy}_1,\widetilde{\widetilde{\dev k}}_1)$ to
+$(\dev{\ell}_1,\fr{\dev{\ell}}_1)$. The solution is (their app.~B.3.1)
+\begin{align}
+\dev{\ell}_1 &= -\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\,\frac{1}{\taylor}\,\dev{\cy}_1
+\;-\;\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\,(1-\cshare)\,\widetilde{\widetilde{\dev k}}_1, \label{eq:prop1b-l}\\
+\fr{\dev{\ell}}_1 &= -\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\,(1-\cshare)\,\widetilde{\widetilde{\dev k}}_1. \label{eq:prop1b-lstar}
+\end{align}
+\gapflag{KL display \eqref{eq:prop1b-l}--\eqref{eq:prop1b-lstar} as the solution
+of \eqref{eq:firm-H}--\eqref{eq:firm-F} but do not show the elimination. The
+reconstruction: at complete home bias $\hbias\frac{1+\zs}{\zs}=1$, so the
+terms-of-trade coefficients in \eqref{eq:firm-H}--\eqref{eq:firm-F} simplify
+(the $\frac{\zs}{1+\zs}-\hbias$ and $\frac{1}{1+\zs}-\frac{\hbias}{\zs}$ pieces
+each $\to0$, leaving only the $\frac{\cshare}{1-\cshare}$-weighted terms-of-trade
+terms). Replacing $\D\dev P_1,\D\fr{\dev P}_1$ on the right via
+\eqref{eq:dP1}--\eqref{eq:dPstar1} with $\Eone\rk_2$ from~\eqref{eq:Er2k-solved}
+(and $\Lambda=1/(1-\cshare)$, so $\frac{\hbias}{\Lambda}=\frac{\zs}{1+\zs}(1-\cshare)$),
+the system becomes, after collecting the global-employment combination
+$L\equiv\frac{1}{1+\zs}\dev{\ell}_1+\frac{\zs}{1+\zs}\fr{\dev{\ell}}_1$ and the
+relative-employment gap $G\equiv\dev{\ell}_1-\fr{\dev{\ell}}_1$:
+\[
+\cshare L + \tfrac{1}{\taylor}(1-\cshare)L = -\tfrac{1}{\taylor}\dev{\cy}_1
+-(1-\cshare)\widetilde{\widetilde{\dev k}}_1,
+\qquad
+\bigl[\cshare+\tfrac{1}{\taylor}(1-\cshare)\bigr]\,(\text{relative part}) = -\tfrac{1}{\taylor}\dev{\cy}_1,
+\]
+where the first equation is the population-weighted (Home+Foreign) sum of
+\eqref{eq:firm-H}--\eqref{eq:firm-F} and the second is the Home$-$Foreign
+difference. The convenience shock $\dev{\cy}_1$ enters only the Home Taylor
+rule~\eqref{eq:dP1} (Foreign's \eqref{eq:dPstar1} has no $\dev{\cy}_1$), so it
+loads asymmetrically: it appears in the global sum and the difference but
+\emph{not} in $\fr{\dev{\ell}}_1$ alone. Solving the two scalar equations for
+$\dev{\ell}_1$ and $\fr{\dev{\ell}}_1$ gives
+\eqref{eq:prop1b-l}--\eqref{eq:prop1b-lstar}. We checked: (i) $\fr{\dev{\ell}}_1$
+has no $\dev{\cy}_1$ term --- the safety shock leaves Foreign employment
+unaffected at complete home bias, consistent with KL's remark that
+``$\hbias\to\frac{\zs}{1+\zs}$ implies $\fr{\dev{\ell}}_1$ is unaffected by a
+safety shock''; (ii) the common denominator
+$\cshare+\frac{1}{\taylor}(1-\cshare)$ matches KL's
+$\alpha+\frac{1}{\phi}(1-\alpha)$. The forms match KL exactly with
+$\frac{1}{\phi}=\frac{1}{\taylor}$.}
+
+Set $\widetilde{\widetilde{\dev k}}_1=0$ on impact. Then
+\eqref{eq:prop1b-l}--\eqref{eq:prop1b-lstar} reduce to
+\begin{equation}
+\dev{\ell}_1 = -\frac{1}{\taylor}\,\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\,\dev{\cy}_1 < 0,
+\qquad \fr{\dev{\ell}}_1 = 0. \label{eq:prop1b-impact}
+\end{equation}
+Because $\cshare\in(0,1)$ and $\taylor>1$, the denominator
+$\cshare+\frac{1}{\taylor}(1-\cshare)>0$, so $\dev{\ell}_1<0$ for $\dev{\cy}_1>0$:
+\emph{Home employment falls}, while Foreign employment is unchanged on impact.
+We now read off the remaining claims.
+
+\emph{Global employment falls disproportionately at Home.} From
+\eqref{eq:prop1b-impact},
+\begin{align}
+\frac{1}{1+\zs}\dev{\ell}_1+\frac{\zs}{1+\zs}\fr{\dev{\ell}}_1
+&= \frac{1}{1+\zs}\,\dev{\ell}_1
+= -\frac{1}{1+\zs}\frac{1}{\taylor}\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\dev{\cy}_1 \;\propto\; -\dev{\cy}_1, \\
+\dev{\ell}_1-\fr{\dev{\ell}}_1 &= \dev{\ell}_1
+= -\frac{1}{\taylor}\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\dev{\cy}_1 \;\propto\; -\dev{\cy}_1,
+\end{align}
+establishing both proportionalities in~\eqref{eq:prop1-labor}: aggregate
+employment falls (negative) and the Home$-$Foreign gap is negative (Home falls
+by more), exactly the ``disproportionately at Home'' claim.
+
+\emph{Expected capital return and expected real rate.} Substituting
+\eqref{eq:prop1b-impact} into~\eqref{eq:Er2k-solved} with
+$\Lambda=1/(1-\cshare)$:
+\begin{align}
+\Eone\rk_2 &= -(1-\cshare)\,\frac{1}{1+\zs}\dev{\ell}_1
++\frac{\zs}{1+\zs}(1-\cshare)\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr) \notag\\
+&= -(1-\cshare)\frac{1}{1+\zs}\dev{\ell}_1 - \frac{\zs}{1+\zs}(1-\cshare)\dev{\ell}_1
+= -(1-\cshare)\dev{\ell}_1 > 0, \label{eq:prop1b-Erk}
+\end{align}
+using $\fr{\dev{\ell}}_1=0$ and
+$\frac{1}{1+\zs}+\frac{\zs}{1+\zs}=1$. Since $\dev{\ell}_1<0$, we have
+$\Eone\rk_2>0$. Then the expected real bond return from~\eqref{eq:euler-r} is
+\begin{equation}
+\Eone\rr_2 = \Eone\rk_2 - \dev{\cy}_1 = -(1-\cshare)\dev{\ell}_1 - \dev{\cy}_1. \label{eq:prop1b-Er2}
+\end{equation}
+Substituting $\dev{\ell}_1$ from~\eqref{eq:prop1b-impact},
+\[
+\Eone\rr_2 = (1-\cshare)\frac{1}{\taylor}\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\dev{\cy}_1 - \dev{\cy}_1
+= -\dev{\cy}_1\left[1 - \frac{\frac{1}{\taylor}(1-\cshare)}{\cshare+\frac{1}{\taylor}(1-\cshare)}\right]
+= -\dev{\cy}_1\,\frac{\cshare}{\cshare+\frac{1}{\taylor}(1-\cshare)}.
+\]
+The bracket $\frac{\cshare}{\cshare+\frac{1}{\taylor}(1-\cshare)}\in(0,1)$ for
+$\cshare\in(0,1),\taylor>1$, so
+\begin{equation}
+0 > \Eone\rr_2 = -\frac{\cshare}{\cshare+\frac{1}{\taylor}(1-\cshare)}\dev{\cy}_1 > -\dev{\cy}_1, \label{eq:prop1b-Er2-ineq}
+\end{equation}
+which is the first strict-inequality chain in~\eqref{eq:prop1-sticky}: the
+expected real rate falls, but by \emph{less} than the convenience yield ---
+strictly between $0$ and $-\dev{\cy}_1$ --- because part of the safety shock is
+now absorbed by the recession (the positive $\Eone\rk_2$) rather than by the real
+rate alone.
+
+\emph{Inflation.} From the Home Taylor rule~\eqref{eq:dP1},
+\begin{equation}
+\D\dev{P}_1 = \frac{1}{\taylor}\bigl(\Eone\rk_2-\dev{\cy}_1\bigr) = \frac{1}{\taylor}\Eone\rr_2
+= -\frac{1}{\taylor}\frac{\cshare}{\cshare+\frac{1}{\taylor}(1-\cshare)}\dev{\cy}_1, \label{eq:prop1b-dP}
+\end{equation}
+so dividing the inequality~\eqref{eq:prop1b-Er2-ineq} by $\taylor>0$,
+\[
+0 > \D\dev{P}_1 > -\frac{1}{\taylor}\dev{\cy}_1,
+\]
+the second chain in~\eqref{eq:prop1-sticky}: Home still deflates, but less than in
+the flexible benchmark~\eqref{eq:prop1a-dP}.
+
+\emph{Real exchange rate.} At complete home bias $\hbias(1+\zs)/\zs=1$, so the
+real-exchange-rate relation~\eqref{eq:q1-s1} reads $\dev{\rer}_1=\dev{\tot}_1$.
+From the solved terms of trade~\eqref{eq:s1-solved} with $\Eone\dev{\wsh}_2=0$,
+\begin{equation}
+\dev{\rer}_1 = \dev{\tot}_1 = \frac{1}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)
+= -(1-\cshare)\dev{\ell}_1
+= (1-\cshare)\frac{1}{\taylor}\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\dev{\cy}_1 \;>\;0, \label{eq:prop1b-q}
+\end{equation}
+using $\Lambda=1/(1-\cshare)$ at complete home bias and $\fr{\dev{\ell}}_1=0$,
+$\dev{\ell}_1<0$. Since the convention is that a rise in $\rer$ is a \emph{Home
+appreciation}, a positive safety shock \emph{appreciates} the Home real exchange
+rate by a positive multiple of $\dev{\cy}_1$, establishing the third claim
+in~\eqref{eq:prop1-sticky} (in the flexible case $\dev{\ell}_1=0$ so
+$\dev{\rer}_1=0$, the third claim in~\eqref{eq:prop1-flex}). \qed
+(\,Proposition~\ref{prop:prices}\,)
+
+\begin{remark}[The relative price of capital, an engine by-product]
+KL's Proposition~1 makes no claim about the real price of installed capital
+$\qk$, but the engine pins it down and it is useful downstream (Propositions~2--3).
+From the capital-price relation~\eqref{eq:qk1-raw} with $\Eone\dev{\tot}_2=0$ and
+$\widetilde{\widetilde{\dev k}}_1=0$,
+\begin{equation}
+\dev{\qk}_1 = -\Eone\rk_2 = (1-\cshare)\dev{\ell}_1
+= -(1-\cshare)\frac{1}{\taylor}\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\dev{\cy}_1 \;<\;0. \label{eq:prop1b-qk}
+\end{equation}
+The price of installed capital \emph{falls} in a flight to safety: the expected
+capital return $\Eone\rk_2$ rises (the recession raises the marginal product of
+capital), and the no-arbitrage condition $\dev{\qk}_1=-\Eone\rk_2$ revalues
+capital down. Note $\dev{\qk}_1=-\dev{\rer}_1$ here: the price of capital and the
+real exchange rate move by equal and opposite amounts on impact.
+\end{remark}
+
+\subsection{Discussion}
+
+\paragraph{The Euler-equation wedge.} The entire result is driven by the
+convenience term in the Home Euler equation. The safe bond enters the
+intertemporal condition through the factor $(1+r_{t+1})/(1-\cy_t)$: holders accept
+a lower pecuniary return because the bond yields nonpecuniary (safety/liquidity)
+services. To first order this is the wedge~\eqref{eq:euler-r},
+$\Eone\rk_2-\Eone\rr_2=\dev{\cy}_1$: a flight to safety raises the required
+\emph{spread} of capital over safe bonds by exactly $\dev{\cy}_1$.
+
+\paragraph{Flexible wages: one-for-one absorption.} With flexible wages and
+prices, output cannot move ($\dev{\ell}_1=\fr{\dev{\ell}}_1=0$, so the marginal
+product of capital and hence $\Eone\rk_2$ are unchanged). The required spread is
+then met \emph{entirely} by a fall in the expected real rate,
+$\Eone\rr_2=-\dev{\cy}_1$. Under the Taylor rule, a lower expected real rate
+requires Home deflation, $\D\dev{P}_1=-\frac{1}{\taylor}\dev{\cy}_1$: the central
+bank delivers exactly enough deflation that the Fisher relation produces the
+needed real-rate decline. There is no recession and no revaluation of capital.
+
+\paragraph{Sticky wages: a deflationary recession, worse at Home.} When nominal
+wages are predetermined, the deflationary pressure from the flight to safety
+raises the \emph{product wage} $W/P$ (since $P$ falls but $W$ is fixed), which
+depresses labor demand and output. The recession raises the expected marginal
+product of capital, so $\Eone\rk_2>0$ absorbs part of the required spread; the
+expected real rate therefore falls by \emph{less} than $\dev{\cy}_1$
+(eq.~\eqref{eq:prop1b-Er2-ineq}), and deflation is correspondingly milder
+(eq.~\eqref{eq:prop1b-dP}). The recession is concentrated at Home because the
+safety shock enters only the \emph{Home} Taylor rule: the convenience yield is on
+\emph{dollar} bonds, so it is Home monetary policy that must accommodate it.
+Foreign employment is unchanged on impact ($\fr{\dev{\ell}}_1=0$), so Home's
+terms of trade and (via~\eqref{eq:q1-s1}) the real exchange rate \emph{appreciate}
+($\dev{\ell}_1<\fr{\dev{\ell}}_1=0\Rightarrow\dev{\tot}_1=\frac{1}{\Lambda}(\fr{\dev{\ell}}_1-\dev{\ell}_1)>0$):
+the dollar appreciates in the flight to safety.
+
+\paragraph{Load-bearing assumptions.} (i) \emph{Nominal rigidity} is essential
+for the recession: with flexible wages the real allocation is untouched and only
+prices move. (ii) The \emph{Taylor rule that does not cut nominal rates
+one-for-one with $\cy$} (an inflation coefficient $\taylor$, not a peg on the
+convenience-adjusted rate) is what forces deflation to do the work; a central
+bank that fully accommodated the safety shock would short-circuit the result.
+(iii) The \emph{trade elasticity} $\tel$ governs the size of the terms-of-trade /
+real-exchange-rate response through $\Lambda$; here, at complete home bias,
+$\Lambda=1/(1-\cshare)$ and the $\tel$-dependence drops from the labor solution,
+but it returns away from complete home bias. (iv) \emph{Complete home bias}
+$\hbias\to\zs/(1+\zs)$ is what delivers the clean $\dev{\wsh}_1=\Eone\dev{\wsh}_2=0$,
+isolating the price/production channel from wealth-share redistribution (which is
+the subject of Propositions~\ref{prop:returns}--\ref{prop:wealth}).
+
+\paragraph{Connection to the target facts.} Proposition~\ref{prop:prices} is the
+model's account of the empirical regularity that a global flight to safety
+coincides with (a) \emph{dollar appreciation} --- here Home's terms of trade and
+real exchange rate appreciate because the dollar convenience shock forces Home
+deflation and a Home-concentrated contraction --- and (b) a \emph{global
+recession that hits the safe-asset issuer's economy hardest}. In the big\_cy
+reading, the same mechanism with a \emph{large absolute} convenience yield
+$\dev{\cy}_1$ amplifies both the appreciation and the asymmetric contraction,
+which is the channel we will quantify downstream.

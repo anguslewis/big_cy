@@ -1,0 +1,162 @@
+% =====================================================================
+% 00_notation.tex — symbol table + paper-to-document map (WP-A)
+% =====================================================================
+\section{Notation and paper-to-document map}
+\label{sec:notation}
+
+This section fixes notation for the entire document. We track Kekre and Lenel
+(2024, AER) --- hereafter KL --- and its online appendix exactly; where we
+introduce shorthand the table below records the correspondence. Throughout,
+``their eq.~(\(n\))'' refers to the equation numbered \(n\) in the published
+paper, and ``their app.~eq.~(\(n\))'' to the equation numbered \(n\) in the
+online appendix. The macros in \texttt{macros.tex} enforce the symbol choices
+recorded here.
+
+\subsection{Conventions}
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt]
+  \item \textbf{Asterisks denote Foreign / Rest-of-World (RoW).} Any symbol
+  \(x^{*}\) is the Foreign counterpart of the Home object \(x\). Home is the
+  United States and its nominal unit of account is the dollar.
+  \item \textbf{Lower case denotes real variables.} With the sole exceptions of
+  the nominal interest rates \(i_t,i_t^{*}\) (and the ``other-bond'' rate
+  \(\ioth_t\)), lower-case symbols are real, i.e. denominated in (or deflated
+  by) the relevant consumption-good price index. Thus \(\qk_t\equiv Q^k_t/P_t\),
+  \(\divr_t\equiv\Pi_t/P_t\), \(\rw_t\equiv W_t/P_t\), \(b_{Ht,s}\equiv
+  B_{Ht,s}/P_t\), etc. (their app.\ A.5.1).
+  \item \textbf{Hats denote first-order deviations from the deterministic steady
+  state.} \(\dev{x}\) is the log deviation for a strictly positive variable and
+  the level deviation (scaled as in KL) otherwise; all propositions are stated
+  to first order. The macro \(\backslash\)\texttt{dev} and the redefined
+  \(\backslash\)\texttt{hat} both produce \(\widehat{\,\cdot\,}\).
+  \item \textbf{Tildes denote stationarized (re-scaled) variables.} A tilde
+  \(\rs{x}\) divides the corresponding real (or real-deflated nominal) variable
+  by the unit-root global productivity level \(z_t\), \emph{labor excepted}
+  (their app.\ A.6). Lagged stocks carry a double tilde
+  \(\widetilde{\widetilde{x}}_{t-1}\) when a second deflation by the
+  productivity \emph{growth} term \(\exp(\sigma^z\epsilon^z_t+\varphi_t)\) is
+  applied, again following KL.
+  \item \textbf{Timing.} Variables dated \(t\) are end-of-period
+  (their app.\ A.4, fn.~53). In the impulse-response analysis (their app.\ B.1)
+  the economy is in steady state in \emph{period \(0\)}, all shocks hit in
+  \emph{period \(1\)}, and there are no shocks from period \(2\) onward; hence
+  \(\Eone[\cdot]\) is the period-\(1\) (post-shock) conditional expectation and
+  \(\Ezero\) the steady-state expectation.
+  \item \textbf{Difference operator.} \(\D x_{t+1}\equiv x_{t+1}-x_t\) (the
+  macro \(\backslash\)\texttt{D} produces \(\Delta\)); e.g.\
+  \(\D\dev{P}_t\) is the (log) inflation deviation.
+\end{itemize}
+
+\subsection{Symbol table}
+
+The categories below cover every symbol used downstream. The final column gives
+the KL reference (main-paper equation, online-appendix equation, or
+section/page).
+
+\begin{longtable}{@{}p{2.55cm} p{2.0cm} p{7.2cm} p{2.4cm}@{}}
+\toprule
+\textbf{Category} & \textbf{Symbol} & \textbf{Meaning} & \textbf{KL ref.} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Category} & \textbf{Symbol} & \textbf{Meaning} & \textbf{KL ref.} \\
+\midrule
+\endhead
+\midrule \multicolumn{4}{r}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+% --- countries / measures ---
+Countries        & Home, Foreign            & Two countries; Home $=$ US, unit of account $=$ dollar                         & Sec.\ I \\
+                 & $\zs=\zeta^{*}$          & Measure of Foreign households (Home has measure one)                            & Sec.\ I \\
+% --- preference primitives ---
+Preferences      & $\val_t=v_t$             & Recursive (Epstein--Zin) value at Home                                          & eq.\ (1) \\
+                 & $c_t$                    & Home consumption (CES aggregate)                                               & eqs.\ (1)--(2) \\
+                 & $c_{Ht},c_{Ft}$          & Home consumption of Home- and Foreign-produced goods                            & eq.\ (2) \\
+                 & $\ell_t$                 & Home labor (continuum of varieties $j$, $\ell_t=\int_0^1\ell_t(j)\,dj$)         & p.\ 1656 \\
+                 & $\disc=\beta$            & Home discount factor                                                            & eq.\ (1) \\
+                 & $\ies=\psi$              & IES; also governs consumption--labor complementarity                            & eq.\ (1) \\
+                 & $\rra=\gamma$            & Home coefficient of relative risk aversion                                      & eq.\ (1) \\
+                 & $\rraF=\gamma^{*}$       & Foreign coefficient of relative risk aversion                                   & p.\ 1656 \\
+                 & $\Lphi(\ell_t)=\Phi(\ell_t)$ & Labor-disutility multiplier (Shimer 2010; Trabandt--Uhlig 2011)            & eq.\ (3) \\
+                 & $\bondu(B_{Ht,s}/P_t)=\Omega(\cdot)$ & Bond-in-utility (convenience) function                            & eqs.\ (1),(15)--(16) \\
+                 & $\frisch=\nu$            & Frisch-elasticity parameter                                                     & eq.\ (3) \\
+                 & $\labdis=\bar\nu$        & Scale of labor disutility (Foreign: $\bar\nu^{*}$)                              & eq.\ (3) \\
+% --- trade / production parameters ---
+Trade/prod.\     & $\hbias=\varsigma$       & Home-bias parameter                                                             & eq.\ (2) \\
+                 & $\tel=\sigma$            & Trade elasticity (CES across Home/Foreign goods)                                & eq.\ (2) \\
+                 & $\cshare=\alpha$         & Capital share in production                                                      & eq.\ (7) \\
+                 & $\dep=\delta$            & Depreciation rate of capital                                                    & p.\ 1656 \\
+                 & $\lel=\epsilon$          & Elasticity of substitution across labor varieties                               & eq.\ (6) \\
+                 & $\wadj=\chi^{W}$         & Rotemberg wage-adjustment-cost scale                                            & eq.\ (5) \\
+                 & $\kadj=\chi^{x}$         & Capital-adjustment-cost scale (global capital producer)                         & eqs.\ (8)--(9) \\
+% --- assets ---
+Assets (level)   & $B_{Ht,s}$               & Home holding of one-period \emph{safe} dollar bonds (rate $i_t$)                & eq.\ (4) \\
+                 & $B_{Ht,o}$               & Home holding of one-period \emph{other} dollar bonds (rate $\ioth_t$)           & eq.\ (4) \\
+                 & $B_{Ft}$                 & Home holding of one-period Foreign nominal bonds (rate $i_t^{*}$)               & eq.\ (4) \\
+                 & $k_t$                    & Home holding of capital (price $Q^k_t$, dividend $\Pi_{t+1}$, deprec.\ $\delta$)& eq.\ (4) \\
+                 & $B^g_{Ht,s}$             & Government supply of safe dollar bonds ($-B^g_{Ht,s}$ is net borrowing)         & eqs.\ (12)--(13),(16) \\
+                 & $B_{Ht},B_{Ht}^{*}$      & Total Home/Foreign net dollar-bond positions, return $1+\ioth_t$               & p.\ 1661 \\
+% --- convenience yield ---
+Convenience      & $\cy_t=\omega_t$         & Equilibrium convenience yield on safe dollar bonds                              & eqs.\ (14)--(17) \\
+                 & $\cyd_t=\omega^d_t$      & Latent demand (safety) shock driving $\omega_t$                                 & eqs.\ (16)--(17),(20) \\
+                 & $\edem=\epsilon^d$       & Elasticity of bond demand to the nonpecuniary value $\Omega'$                   & eqs.\ (16)--(17) \\
+% --- nominal rates / prices ---
+Nominal rates    & $\inom_t=i_t$            & Nominal rate on safe dollar bonds (Foreign: $i_t^{*}$)                          & eqs.\ (4),(10) \\
+                 & $\ioth_t=\iota_t$        & Nominal rate on other dollar bonds                                              & eqs.\ (4),(14) \\
+Prices (level)   & $P_{Ht},P^{*}_{Ft}$      & Prices of Home-/Foreign-produced goods in their own units of account           & eq.\ (4) \\
+                 & $E_t$                    & Nominal exchange rate (Foreign units of account per dollar)                     & eq.\ (4) \\
+                 & $P_t,P^{*}_t$            & Home / Foreign ideal CPI                                                        & eq.\ (11) \\
+                 & $Q^k_t$                  & Nominal price of capital                                                        & eqs.\ (4),(9) \\
+                 & $\Pi_t$                  & Nominal dividend per unit capital                                               & eqs.\ (4),(7) \\
+                 & $W_t$                    & Nominal wage (variety $j$: $W_t(j)$)                                            & eqs.\ (4)--(6) \\
+                 & $\tot=s_t$               & Terms of trade, $s_t\equiv E_tP_{Ht}/P^{*}_{Ft}$                                & app.\ A.5.1 \\
+                 & $\rer=q_t$               & Real exchange rate, $q_t\equiv E_tP_t/P^{*}_t$                                  & app.\ A.4 \\
+% --- real (lower-case) variables ---
+Real variables   & $b_{Ht,s}$               & Real safe dollar bonds, $B_{Ht,s}/P_t$ (sim.\ $b_{Ht,o},b^g_{Ht,s},b_{Ft}$)    & app.\ A.5.1 \\
+                 & $\qk_t=q^k_t$            & Real price of capital, $Q^k_t/P_t$                                              & app.\ A.5.1 \\
+                 & $\divr_t=\pi_t$          & Real dividend, $\Pi_t/P_t$                                                      & app.\ A.5.1,A.5.3 \\
+                 & $\rw_t=w_t$              & Real wage, $W_t/P_t$                                                            & app.\ A.5.1 \\
+                 & $\kappa_t$               & Capital \emph{used} in Home production (rented internationally)                 & eqs.\ (7),(63) \\
+% --- returns / kernel ---
+Returns          & $\rr_{t+1}=r_{t+1}$      & Real return on dollar (CPI-deflated) bonds, $1+r_{t+1}=(1+i_t)P_t/P_{t+1}$      & app.\ A.4,(67) \\
+                 & $\fr{r}_{t+1}=r^{*}_{t+1}$ & Real return on Foreign bonds, $1+r^{*}_{t+1}=(1+i^{*}_t)P^{*}_t/P^{*}_{t+1}$  & app.\ A.4,(68) \\
+                 & $\rk_{t+1}=r^k_{t+1}$    & Real return on capital, in Home consumption units                              & app.\ A.4,(69) \\
+                 & $\pk_{t,t+1}=m_{t,t+1}$  & Home real (EZ) pricing kernel                                                   & app.\ A.5.1 \\
+                 & $\ce_t=ce_t$            & Home certainty equivalent of continuation value                                & app.\ A.5.1,(34) \\
+% --- aggregates ---
+Aggregates       & $\sav_t=a_t$            & Real value of Home aggregate saving                                            & app.\ A.4 \\
+                 & $\nfa_t$                 & Real Home net foreign assets                                                    & app.\ A.4 \\
+                 & $\wsh_t=\theta_t$        & Home global financial-wealth share (incl.\ seigniorage)                         & app.\ A.6,(51) \\
+                 & $\out_t=y_t$             & Home output, $y_t=(z_t\ell_t)^{1-\alpha}\kappa_t^{\alpha}$                      & app.\ A.4 \\
+% --- rescaled ---
+Rescaled         & $\rs{x}$                 & Stationarized variable, $x/z_t$ (labor excepted)                               & app.\ A.6,(33)--(72) \\
+                 & $\widetilde{\widetilde{x}}_{t-1}$ & Lagged stock, further deflated by growth $\exp(\sigma^z\epsilon^z_t+\varphi_t)$ & app.\ A.6 \\
+% --- driving forces ---
+Driving forces   & $z_t$                    & Global productivity (unit root with disasters), $\log z_t=\log z_{t-1}+\sigma^z\epsilon^z_t+\varphi_t$ & eq.\ (18) \\
+                 & $z_{Ft}$                 & Foreign relative productivity, AR(1) in logs                                   & eq.\ (21) \\
+                 & $p_t$                    & Disaster probability (AR(1) in logs); disaster size $\varphi_t$                 & eqs.\ (18)--(19) \\
+                 & $\varphi_t$              & Realized log disaster ($0$ w.p.\ $1-p_t$, $\underline\varphi<0$ w.p.\ $p_t$)    & eqs.\ (18)--(19) \\
+                 & $\cyd_t=\omega^d_t$      & Safety (convenience-demand) shock, $\omega^d_t=\Delta^\omega+\bar\omega^d_t$    & eq.\ (20) \\
+% --- operators ---
+Operators        & $\dev{x},\widehat{x}$    & First-order deviation from deterministic steady state                           & Sec.\ II \\
+                 & $\D x$                   & First difference, $\D x_{t+1}=x_{t+1}-x_t$                                       & Sec.\ II \\
+                 & $\Et,\Eone,\Ezero$       & Time-$t$ / period-$1$ / steady-state conditional expectation                    & Sec.\ II; app.\ B.1 \\
+% --- composite proof coefficients ---
+Proof coeff.\    & $\atil=\bar\alpha$       & Composite coefficient in the period-$\ge 2$ dynamics                            & app.\ eqs.\ (73)--(78) \\
+                 & $\lwedge=\tau$           & Steady-state labor wedge                                                        & Prop.\ 4--5 (app.\ B) \\
+                 & $\Gam=\Gamma$            & Composite coefficient in the portfolio/risk-premium algebra                     & app.\ B.2 \\
+                 & $\Gamp=\Gamma'$          & Auxiliary composite coefficient (Props.\ 4--5 proof)                            & app.\ B.2 \\
+                 & $\Delta^{\omega}$        & Mean-shift parameter normalizing $\E\omega_t=0$                                 & eq.\ (20) \\
+\end{longtable}
+
+\medskip
+\noindent\textbf{A note on $\bar\alpha$ vs.\ $\bar\nu$ macros.} The macro
+\(\backslash\)\texttt{atil} renders \(\tilde\alpha\) to match KL's online
+appendix (their app.\ eqs.\ (73)--(78), where the composite is written
+\(\bar\alpha\) in some editions and \(\tilde\alpha\) in the macro). We use
+\(\bar\alpha\) in the prose and \(\tilde\alpha\) when the macro is invoked; they
+denote the same object. \gapflag{KL's published appendix writes the composite as
+$\tilde\alpha$ in their eq.\ (74)'s defining display but refers to it as
+$\bar\alpha$ in the text of B.1.1. We treat the two as identical and flag the
+notational drift so the critic can confirm no second coefficient is intended.}

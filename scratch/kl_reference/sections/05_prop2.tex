@@ -1,0 +1,351 @@
+% =====================================================================
+% 05_prop2.tex — Proposition 2: realized and expected excess returns (WP-C)
+% =====================================================================
+\section{Proposition 2: realized and expected excess returns}
+\label{sec:prop2}
+
+This section proves Proposition~2 of KL: how a flight-to-safety shock
+$\dev{\cy}_1>0$ moves the \emph{realized} and \emph{expected} returns on the
+three assets in the simplified economy --- safe dollar bonds, capital, and
+Foreign bonds. The entire derivation reuses the impulse-response engine of
+Section~\ref{sec:engine}; we do \emph{not} re-derive any reduced form. As in
+Proposition~\ref{prop:prices}, we specialize to identical portfolios, no Home
+government safe debt ($b^g_{H,s}=0$), and complete home bias
+$\hbias\to\zs/(1+\zs)$, so that $\dev{\wsh}_1=0$ and $\Eone\dev{\wsh}_2=0$
+(established at \eqref{eq:prop1-wsh0}). The labor responses
+$(\dev{\ell}_1,\fr{\dev{\ell}}_1)$ are exactly those of
+Proposition~\ref{prop:prices}: zero under flexible wages, and
+\eqref{eq:prop1b-impact} under predetermined wages. We treat the two wage
+regimes in turn for each asset.
+
+\subsection{Statement}
+
+\begin{proposition}[Realized and expected excess returns]
+\label{prop:returns}
+Consider the simplified economy of Definition~\ref{def:simplified} with identical
+portfolios across countries and no Home government safe debt ($b^g_{H,s}=0$), so
+that $\dev{\wsh}_1=0$ and $\Eone\dev{\wsh}_2=0$, and consider a flight-to-safety
+shock $\dev{\cy}_1>0$ in period~$1$ with $\widetilde{\widetilde{\dev k}}_1=0$ on
+impact. Then, to first order, on impact of the shock:
+\begin{enumerate}[label=(\alph*),leftmargin=1.8em,itemsep=3pt]
+  \item the realized real return on safe dollar bonds \emph{rises},
+  $\rr_1\propto\dev{\cy}_1$ ($>0$), in both wage regimes;
+  \item the realized real return on capital is \emph{unaffected} if wages are
+  flexible, $\rk_1=0$, but \emph{falls} if wages are set one period in advance,
+  $\rk_1\propto-\dev{\cy}_1$ ($<0$);
+  \item the realized real return on Foreign bonds (in Home consumption units) is
+  \emph{unaffected} if wages are flexible, $\fr{r}_1-\D\dev{\rer}_1=0$, but
+  \emph{falls} if wages are set one period in advance,
+  $\fr{r}_1-\D\dev{\rer}_1\propto-\dev{\cy}_1$ ($<0$);
+  \item the \emph{expected} excess returns on capital and on Foreign bonds over
+  dollar bonds are positive and equal to the convenience yield:
+  \begin{equation}
+  \Eone\bigl[\rk_2-\rr_2\bigr]
+  =\Eone\bigl[\fr{r}_2-\D\dev{\rer}_2-\rr_2\bigr]
+  =\dev{\cy}_1. \label{eq:prop2-wedge}
+  \end{equation}
+\end{enumerate}
+\end{proposition}
+
+\noindent (We transcribe the proposition to match KL's main-paper statement
+(p.~1663). The proportionality constants in (a)--(c) are made explicit in the
+proof; here $\D\dev{\rer}_t\equiv\dev{\rer}_t-\dev{\rer}_{t-1}$ is the change in
+the real exchange rate, and since the economy is at its deterministic steady
+state in period~$0$, $\dev{\rer}_0=0$ so $\D\dev{\rer}_1=\dev{\rer}_1$.)
+
+\subsection{Proof}
+
+\paragraph{Specialization of the engine.} As in the proof of
+Proposition~\ref{prop:prices} (their app.~B.3.1), identical portfolios and
+$b^g_{H,s}=0$ make the realized wealth-share equation~\eqref{eq:wsh-realized}
+vanish, and complete home bias $\hbias\to\zs/(1+\zs)$ gives
+$\Eone\dev{\wsh}_2=0$ \eqref{eq:prop1-wsh0}, so the composite denominator
+collapses to $\Lambda=1/(1-\cshare)$ \eqref{eq:Lambda-cmplt} and the
+relative-labor coefficient is $\hbias/\Lambda=\frac{\zs}{1+\zs}(1-\cshare)$. We
+set $\widetilde{\widetilde{\dev k}}_1=0$ on impact throughout. Recall the labor
+solutions: flexible wages give $\dev{\ell}_1=\fr{\dev{\ell}}_1=0$
+\eqref{eq:flex-labor}, while predetermined wages give \eqref{eq:prop1b-impact}
+\[
+\dev{\ell}_1 = -\frac{1}{\taylor}\,\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\,\dev{\cy}_1 < 0,
+\qquad \fr{\dev{\ell}}_1 = 0.
+\]
+For compactness write
+\begin{equation}
+D \;\equiv\; \cshare+\tfrac{1}{\taylor}(1-\cshare) \;>\;0,
+\qquad
+\dev{\ell}_1 = -\frac{1}{\taylor D}\,\dev{\cy}_1, \label{eq:prop2-Ddef}
+\end{equation}
+so that under predetermined wages $\dev{\ell}_1<0$ for $\dev{\cy}_1>0$. We also
+reuse, from the proof of Proposition~\ref{prop:prices}, the predetermined-wage
+values (eqs.~\eqref{eq:prop1b-Erk}, \eqref{eq:prop1b-q})
+\begin{equation}
+\Eone\rk_2 = -(1-\cshare)\dev{\ell}_1 \;>\;0,
+\qquad
+\dev{\rer}_1 = \dev{\tot}_1 = -(1-\cshare)\dev{\ell}_1 \;>\;0, \label{eq:prop2-reuse}
+\end{equation}
+where the real-exchange-rate value uses $\hbias\frac{1+\zs}{\zs}=1$ at complete
+home bias (so $\dev{\rer}_1=\dev{\tot}_1$) and $\Lambda=1/(1-\cshare)$.
+
+\subparagraph{(a) Realized return on safe dollar bonds.} The realized dollar-bond
+return is minus realized Home inflation, $\rr_1=-\D\dev P_1$
+\eqref{eq:realized-bond}, with $\D\dev P_1$ from the Home Taylor
+rule~\eqref{eq:dP1}, so $\rr_1=\frac{1}{\taylor}(\dev{\cy}_1-\Eone\rk_2)$ by
+\eqref{eq:r1-solved}.
+
+\emph{Flexible wages.} Here $\dev{\ell}_1=\fr{\dev{\ell}}_1=0$, so by
+\eqref{eq:Er2k-solved} $\Eone\rk_2=0$, and
+\begin{equation}
+\rr_1 = -\D\dev P_1 = \frac{1}{\taylor}\dev{\cy}_1 \;>\;0. \label{eq:prop2a-flex}
+\end{equation}
+This is KL's ``$\rr_1=\frac{1}{\phi}\dev{\cy}_1>0$.''
+
+\emph{Predetermined wages.} Now $\Eone\rk_2=-(1-\cshare)\dev{\ell}_1>0$ by
+\eqref{eq:prop2-reuse}, so by \eqref{eq:r1-solved}
+\begin{equation}
+\rr_1 = \frac{1}{\taylor}\bigl(\dev{\cy}_1-\Eone\rk_2\bigr)
+= \frac{1}{\taylor}\bigl(\dev{\cy}_1+(1-\cshare)\dev{\ell}_1\bigr)
+= \frac{1}{\taylor}\dev{\cy}_1\left[1-\frac{1-\cshare}{\taylor D}\right]. \label{eq:prop2a-sticky}
+\end{equation}
+The bracket is
+$1-\frac{1-\cshare}{\taylor D}=\frac{\taylor D-(1-\cshare)}{\taylor D}
+=\frac{\taylor\cshare+(1-\cshare)-(1-\cshare)}{\taylor D}
+=\frac{\taylor\cshare}{\taylor D}=\frac{\cshare}{D}\in(0,1)$, using
+$\taylor D=\taylor\cshare+(1-\cshare)$ from \eqref{eq:prop2-Ddef}. Hence
+\begin{equation}
+\rr_1 = \frac{1}{\taylor}\frac{\cshare}{D}\dev{\cy}_1
+=\frac{\cshare}{\taylor\cshare+(1-\cshare)}\dev{\cy}_1 \;>\;0,
+\qquad\text{i.e.}\quad \rr_1\propto\dev{\cy}_1. \label{eq:prop2a-sticky2}
+\end{equation}
+In both regimes $\rr_1\propto\dev{\cy}_1>0$: the realized real return on dollar
+bonds rises, establishing claim~(a). (Consistently, $\rr_1=-\D\dev P_1$ and
+$\D\dev P_1<0$ in both regimes by Proposition~\ref{prop:prices}: Home deflates,
+so the real return on the predetermined nominal bond rises.)
+
+\subparagraph{(b) Realized return on capital.} We read $\rk_1$ directly from the
+solved engine reduced form~\eqref{eq:rk1-solved}. With $\Eone\dev{\wsh}_2=0$ and
+$\widetilde{\widetilde{\dev k}}_1=0$ the wealth-share and capital terms drop:
+\begin{equation}
+\rk_1 = -\frac{\hbias}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)
++(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr). \label{eq:prop2b-rk}
+\end{equation}
+
+\emph{Flexible wages.} With $\dev{\ell}_1=\fr{\dev{\ell}}_1=0$, both terms vanish:
+\begin{equation}
+\rk_1 = 0. \label{eq:prop2b-flex}
+\end{equation}
+
+\emph{Predetermined wages.} Using $\fr{\dev{\ell}}_1=0$,
+$\hbias/\Lambda=\frac{\zs}{1+\zs}(1-\cshare)$, and
+$\frac{1}{1+\zs}\dev{\ell}_1+\frac{\zs}{1+\zs}\fr{\dev{\ell}}_1
+=\frac{1}{1+\zs}\dev{\ell}_1$,
+\begin{align}
+\rk_1 &= -\frac{\zs}{1+\zs}(1-\cshare)\bigl(0-\dev{\ell}_1\bigr)
++(1-\cshare)\frac{1}{1+\zs}\dev{\ell}_1 \notag\\
+&= (1-\cshare)\dev{\ell}_1\left[\frac{\zs}{1+\zs}+\frac{1}{1+\zs}\right]
+= (1-\cshare)\dev{\ell}_1 \;<\;0, \label{eq:prop2b-sticky}
+\end{align}
+since $\frac{\zs}{1+\zs}+\frac{1}{1+\zs}=1$ and $\dev{\ell}_1<0$. Substituting
+$\dev{\ell}_1=-\frac{1}{\taylor D}\dev{\cy}_1$,
+\begin{equation}
+\rk_1 = -(1-\cshare)\frac{1}{\taylor D}\dev{\cy}_1 \;\propto\; -\dev{\cy}_1. \label{eq:prop2b-sticky2}
+\end{equation}
+This establishes claim~(b): $\rk_1=0$ under flexible wages and
+$\rk_1\propto-\dev{\cy}_1<0$ under predetermined wages. (Note
+$\rk_1=(1-\cshare)\dev{\ell}_1=-\Eone\rk_2$ by \eqref{eq:prop2-reuse}; the
+realized capital return moves \emph{opposite} to the expected capital return on
+impact, a fact we use in the discussion.)
+
+\subparagraph{(c) Realized excess return on Foreign bonds.} The object of
+interest is the realized return on Foreign bonds expressed in Home consumption
+units \emph{relative to} the real-exchange-rate change, $\fr{r}_1-\D\dev{\rer}_1$.
+Since $\dev{\rer}_0=0$ (steady state), $\D\dev{\rer}_1=\dev{\rer}_1$. The Foreign
+realized bond return is $\fr{r}_1=-\D\fr{\dev P}_1$ \eqref{eq:realized-bond}, with
+$\D\fr{\dev P}_1$ from \eqref{eq:dPstar1}:
+\begin{equation}
+\fr{r}_1 = -\D\fr{\dev P}_1
+= -\frac{1}{\taylor}\left(\Eone\rk_2-\frac{1+\zs}{\zs}\frac{\hbias}{\Lambda}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\right). \label{eq:prop2c-rstar}
+\end{equation}
+
+\emph{Flexible wages.} With $\dev{\ell}_1=\fr{\dev{\ell}}_1=0$ we have
+$\Eone\rk_2=0$, so $\fr{r}_1=0$; and $\dev{\rer}_1=\dev{\tot}_1=0$ by
+\eqref{eq:s1-solved} (both labor terms and $\Eone\dev{\wsh}_2$ vanish), so
+$\D\dev{\rer}_1=0$. Hence
+\begin{equation}
+\fr{r}_1-\D\dev{\rer}_1 = 0-0 = 0. \label{eq:prop2c-flex}
+\end{equation}
+
+\emph{Predetermined wages.} Use $\fr{\dev{\ell}}_1=0$, complete home bias
+$\frac{1+\zs}{\zs}\frac{\hbias}{\Lambda}=\frac{\hbias\frac{1+\zs}{\zs}}{\Lambda}
+=\frac{1}{\Lambda}=(1-\cshare)$ (since $\hbias\frac{1+\zs}{\zs}=1$ and
+$\Lambda=1/(1-\cshare)$), and $\Eone\rk_2=-(1-\cshare)\dev{\ell}_1$. Then
+\eqref{eq:prop2c-rstar} becomes
+\begin{align}
+\fr{r}_1 &= -\frac{1}{\taylor}\Bigl(-(1-\cshare)\dev{\ell}_1-(1-\cshare)\bigl(0-\dev{\ell}_1\bigr)\Bigr)
+= -\frac{1}{\taylor}\Bigl(-(1-\cshare)\dev{\ell}_1+(1-\cshare)\dev{\ell}_1\Bigr) \notag\\
+&= 0. \label{eq:prop2c-rstar-val}
+\end{align}
+\gapflag{KL state claim~(c) in the main paper but suppress the algebra. The
+cancellation in \eqref{eq:prop2c-rstar-val} is exact: with $\fr{\dev{\ell}}_1=0$
+the two pieces inside the parenthesis are $\Eone\rk_2=-(1-\cshare)\dev{\ell}_1$
+and $\frac{1+\zs}{\zs}\frac{\hbias}{\Lambda}(\fr{\dev{\ell}}_1-\dev{\ell}_1)
+=(1-\cshare)(-\dev{\ell}_1)=-(1-\cshare)\dev{\ell}_1$, which are equal, so
+$\fr{r}_1=-\D\fr{\dev P}_1=0$. Economically: at complete home bias and
+$\fr{\dev{\ell}}_1=0$, Foreign output and Foreign inflation are unchanged on
+impact (the safety shock hits only the Home Taylor rule), so the Foreign nominal
+bond's realized real return is zero.} Meanwhile, by \eqref{eq:prop2-reuse},
+$\D\dev{\rer}_1=\dev{\rer}_1=-(1-\cshare)\dev{\ell}_1>0$. Therefore
+\begin{equation}
+\fr{r}_1-\D\dev{\rer}_1 = 0-\bigl(-(1-\cshare)\dev{\ell}_1\bigr)
+= (1-\cshare)\dev{\ell}_1 \;<\;0,
+\qquad \fr{r}_1-\D\dev{\rer}_1\propto-\dev{\cy}_1. \label{eq:prop2c-sticky}
+\end{equation}
+This establishes claim~(c): the Home-currency realized return on Foreign bonds is
+zero under flexible wages and falls under predetermined wages. The driver is the
+real \emph{appreciation} of the Home currency ($\D\dev{\rer}_1>0$): a Foreign
+bond loses value in Home consumption units when the dollar appreciates. (Note
+that $\fr{r}_1-\D\dev{\rer}_1=(1-\cshare)\dev{\ell}_1=\rk_1$ by
+\eqref{eq:prop2b-sticky}: the realized excess returns on capital and on Foreign
+bonds coincide on impact under these specializations.)
+
+\subparagraph{(d) Expected excess returns.} The expected wedges are read directly
+from the linearized Euler block of the engine, \eqref{eq:euler-r} and
+\eqref{eq:euler-rstar} (their app.~eqs.~(84)--(85)). The capital wedge
+\eqref{eq:euler-r} is, in difference form,
+\begin{equation}
+\Eone\rk_2 = \Eone\rr_2 + \dev{\cy}_1
+\;\Longrightarrow\;
+\Eone\bigl[\rk_2-\rr_2\bigr] = \dev{\cy}_1, \label{eq:prop2d-cap}
+\end{equation}
+which holds \emph{regardless} of the wage regime (it is the household's
+intertemporal condition, not a function of the labor solution). This is the first
+equality in \eqref{eq:prop2-wedge}.
+
+For the Foreign-bond wedge, the engine's expected Foreign-return relation
+\eqref{eq:euler-rstar} reads
+\begin{equation}
+\Eone\fr{r}_2 = \Eone\rr_2 + \dev{\cy}_1 + \hbias\,\frac{1+\zs}{\zs}\,\D\Eone\dev{\tot}_2. \label{eq:prop2d-rstar-raw}
+\end{equation}
+Here $\D\Eone\dev{\tot}_2\equiv\Eone\dev{\tot}_2-\dev{\tot}_1$ is the expected
+period-$1$-to-$2$ change in the terms of trade. We must show this collapses to
+the clean statement $\Eone[\fr{r}_2-\D\dev{\rer}_2-\rr_2]=\dev{\cy}_1$, i.e.\ that
+the terms-of-trade adjustment exactly accounts for the expected
+real-exchange-rate change $\Eone\D\dev{\rer}_2$. Two facts close this.
+
+By the period-$2$ real-exchange relation~\eqref{eq:Eq2},
+$\Eone\dev{\rer}_2=\hbias\frac{1+\zs}{\zs}\Eone\dev{\tot}_2$, and by the
+period-$1$ relation~\eqref{eq:q1-s1},
+$\dev{\rer}_1=\hbias\frac{1+\zs}{\zs}\dev{\tot}_1$. Differencing the two,
+\begin{equation}
+\Eone\D\dev{\rer}_2 \equiv \Eone\dev{\rer}_2-\dev{\rer}_1
+= \hbias\,\frac{1+\zs}{\zs}\bigl(\Eone\dev{\tot}_2-\dev{\tot}_1\bigr)
+= \hbias\,\frac{1+\zs}{\zs}\,\D\Eone\dev{\tot}_2. \label{eq:prop2d-Dq2}
+\end{equation}
+Substituting \eqref{eq:prop2d-Dq2} into \eqref{eq:prop2d-rstar-raw} gives,
+\emph{identically in all parameters and both wage regimes},
+\begin{equation}
+\Eone\fr{r}_2 = \Eone\rr_2 + \dev{\cy}_1 + \Eone\D\dev{\rer}_2
+\;\Longrightarrow\;
+\Eone\bigl[\fr{r}_2-\D\dev{\rer}_2-\rr_2\bigr] = \dev{\cy}_1, \label{eq:prop2d-rstar}
+\end{equation}
+the second equality in \eqref{eq:prop2-wedge}.
+\gapflag{KL write \eqref{eq:euler-rstar}/(85) as
+$\Eone\fr r_2=\Eone\rr_2+\dev{\cy}_1+\hbias\frac{1+\zs}{\zs}\D\Eone\dev{\tot}_2$
+``where we have used~(76)'' (their \eqref{eq:Eq2}), and state the wedge result
+$\Eone[\fr r_2-\D\dev{\rer}_2-\rr_2]=\dev{\cy}_1$ in Proposition~2 without
+re-displaying the one-line identification of
+$\hbias\frac{1+\zs}{\zs}\D\Eone\dev{\tot}_2$ with $\Eone\D\dev{\rer}_2$. We supply
+that identification: it is just the period-$2$-minus-period-$1$ difference of the
+two real-exchange-rate relations \eqref{eq:q1-s1} and \eqref{eq:Eq2}, both of
+which carry the \emph{same} proportionality constant $\hbias\frac{1+\zs}{\zs}$,
+so the difference is
+$\hbias\frac{1+\zs}{\zs}\D\Eone\dev{\tot}_2=\Eone\D\dev{\rer}_2$ exactly. The
+result therefore holds for general $\hbias$, not only at complete home bias; the
+home-bias specialization is \emph{not} needed for part~(d). Under the
+Proposition's specialization $\Eone\dev{\wsh}_2=0$ one further has
+$\Eone\dev{\tot}_2=0$ \eqref{eq:Es2}, so $\D\Eone\dev{\tot}_2=-\dev{\tot}_1$ and
+$\Eone\D\dev{\rer}_2=-\dev{\rer}_1$; but the wedge identity
+\eqref{eq:prop2d-rstar} does not rely on this, only on the common constant of
+proportionality.}
+
+\medskip
+Combining \eqref{eq:prop2d-cap} and \eqref{eq:prop2d-rstar} yields the displayed
+equation~\eqref{eq:prop2-wedge}:
+\[
+\Eone\bigl[\rk_2-\rr_2\bigr]
+=\Eone\bigl[\fr{r}_2-\D\dev{\rer}_2-\rr_2\bigr]=\dev{\cy}_1>0,
+\]
+the expected excess returns on capital and on Foreign bonds over dollar bonds are
+both positive and equal to the convenience yield, establishing claim~(d). \qed
+(\,Proposition~\ref{prop:returns}\,)
+
+\begin{remark}[Realized vs.\ expected: a sign flip]
+Collecting the predetermined-wage results, on impact
+\[
+\rr_1 = \frac{\cshare}{\taylor\cshare+(1-\cshare)}\dev{\cy}_1 > 0,
+\qquad
+\rk_1 = \fr{r}_1-\D\dev{\rer}_1 = (1-\cshare)\dev{\ell}_1 < 0,
+\]
+so the \emph{realized} excess returns on capital and Foreign bonds are
+\[
+\rk_1-\rr_1 < 0,
+\qquad
+\fr{r}_1-\D\dev{\rer}_1-\rr_1 < 0,
+\]
+both strictly negative, while the \emph{expected} excess returns going forward
+are $\Eone[\rk_2-\rr_2]=\Eone[\fr r_2-\D\dev{\rer}_2-\rr_2]=\dev{\cy}_1>0$. The
+risky assets underperform safe dollar bonds exactly on impact of the flight to
+safety, and are expected to outperform thereafter. This realized-vs-expected sign
+flip is the engine of the dollar's negative risk premium (Proposition~5).
+\end{remark}
+
+\subsection{Discussion}
+
+\paragraph{Realized excess returns are negative on impact.} Proposition~2 says
+that on impact of a positive safety shock the realized excess returns on capital
+and on Foreign bonds are \emph{negative}: both assets pay badly exactly when the
+flight to safety hits. Two distinct forces produce this, with different scope.
+
+\emph{Force 1 (deflation; operative even with flexible wages).} The flight to
+safety forces Home deflation, $\D\dev P_1<0$ (Proposition~\ref{prop:prices}),
+which raises the realized real return on the predetermined nominal dollar bond,
+$\rr_1=-\D\dev P_1>0$. This channel is present \emph{even under flexible wages}:
+in that case $\rk_1=0$ and $\fr{r}_1-\D\dev{\rer}_1=0$, yet $\rr_1>0$, so the
+realized excess returns $\rk_1-\rr_1$ and $\fr{r}_1-\D\dev{\rer}_1-\rr_1$ are
+strictly negative purely because the dollar bond's real return rises. The safe
+bond is a hedge against safety shocks through deflation alone.
+
+\emph{Force 2 (recession and real appreciation; requires nominal rigidity).} With
+wages set in advance, the safety shock additionally causes a Home-concentrated
+recession ($\dev{\ell}_1<0$) and a real dollar appreciation ($\dev{\rer}_1>0$).
+The recession raises the expected marginal product of capital, so the price of
+installed capital falls today ($\dev{\qk}_1<0$), pulling down the realized
+capital return: $\rk_1=(1-\cshare)\dev{\ell}_1<0$. And the real appreciation
+directly lowers the Home-currency realized return on Foreign bonds:
+$\fr{r}_1-\D\dev{\rer}_1=(1-\cshare)\dev{\ell}_1<0$. So under nominal rigidity
+both risky assets fall in \emph{absolute} terms, not merely relative to the
+appreciating dollar bond.
+
+\paragraph{Expected excess returns are positive going forward.} For agents to
+hold capital and Foreign bonds despite their poor impact returns, these assets
+must be \emph{expected} to outperform dollar bonds going forward. This is exactly
+the Euler-equation wedge \eqref{eq:prop2-wedge}: the convenience yield
+$\dev{\cy}_1$ is the compensation, in expected excess return, that safe dollar
+bonds forgo because of the safety/liquidity services they provide. A larger
+safety shock raises both the impact underperformance of risky assets and the
+forward-looking expected excess return that restores indifference.
+
+\paragraph{Connection to the target facts: the dollar as a hedge.} The
+realized-vs-expected sign flip is the model's microfoundation for the empirical
+fact that \emph{safe dollar bonds are a hedge}: they deliver high realized real
+returns precisely in states (flights to safety) when capital and foreign-currency
+bonds deliver low returns. An asset that pays well in bad times commands a
+\emph{negative} risk premium and has a \emph{negative beta} with respect to the
+global risk factor --- the dollar's ``exorbitant privilege'' as a negative-beta
+asset. Proposition~2 supplies the realized covariance structure (dollar bonds up,
+risky assets down, in the same shock) that Proposition~\ref{prop:wealth} and
+Proposition~5 will turn into wealth redistribution and a signed risk premium. In
+the big\_cy reading, a \emph{large absolute} convenience yield $\dev{\cy}_1$
+magnifies the wedge in \eqref{eq:prop2-wedge} and hence the magnitude of the
+dollar's negative risk premium, without requiring any asymmetry in risk tolerance
+across countries --- the convenience yield does the work that KL otherwise load
+onto greater US risk-bearing capacity.

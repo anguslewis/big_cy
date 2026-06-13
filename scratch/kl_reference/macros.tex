@@ -1,0 +1,84 @@
+% =====================================================================
+% macros.tex — notation for the KL analytical-results reference document
+% Notation tracks Kekre & Lenel (2024, AER) and its online appendix
+% exactly. The symbol table in the front matter is the authoritative map;
+% these macros enforce consistency across sections.
+% =====================================================================
+
+% ---- expectation, deviation, difference operators ----
+\newcommand{\E}{\mathbb{E}}                 % expectation
+\newcommand{\Et}{\mathbb{E}_t}              % time-t expectation
+\newcommand{\Eone}{\mathbb{E}_1}            % period-1 expectation (B.1 timing)
+\newcommand{\Ezero}{\mathbb{E}_0}           % period-0 expectation
+\renewcommand{\hat}[1]{\widehat{#1}}        % log/level deviation from det. SS
+\newcommand{\dev}[1]{\widehat{#1}}          % alias for a deviation
+\newcommand{\D}{\Delta}                     % first difference
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\sign}{\operatorname{sign}}
+
+% ---- country / starred convention (asterisk = Foreign / RoW) ----
+\newcommand{\fr}[1]{#1^{*}}                  % Foreign counterpart of #1
+\newcommand{\zs}{\zeta^{*}}                  % Foreign measure of households
+
+% ---- preference primitives ----
+\newcommand{\hbias}{\varsigma}              % home-bias parameter (KL: \varsigma)
+\newcommand{\tel}{\sigma}                    % trade elasticity
+\newcommand{\rra}{\gamma}                     % Home risk aversion
+\newcommand{\rraF}{\gamma^{*}}               % Foreign risk aversion
+\newcommand{\ies}{\psi}                       % IES / labor-comp. parameter
+\newcommand{\disc}{\beta}                     % Home discount factor
+\newcommand{\discF}{\beta^{*}}               % Foreign discount factor
+\newcommand{\frisch}{\nu}                     % Frisch parameter
+\newcommand{\labdis}{\bar{\nu}}              % labor-disutility scale
+\newcommand{\Lphi}{\Phi}                      % labor-disutility function \Phi(\ell)
+\newcommand{\bondu}{\Omega}                   % bond-in-utility function \Omega(B/P)
+
+% ---- production / supply side ----
+\newcommand{\cshare}{\alpha}                 % capital share
+\newcommand{\dep}{\delta}                     % depreciation
+\newcommand{\lel}{\epsilon}                   % labor-variety elasticity
+\newcommand{\wadj}{\chi^{W}}                 % wage adjustment-cost scale
+\newcommand{\kadj}{\chi^{x}}                 % capital adjustment-cost scale
+\newcommand{\taylor}{\phi}                    % Taylor-rule inflation coefficient
+
+% ---- quantities & prices (levels) ----
+\newcommand{\val}{v}                          % recursive value
+\newcommand{\ce}{ce}                          % certainty equivalent
+\newcommand{\pk}{m}                           % real pricing kernel m_{t,t+1}
+\newcommand{\tot}{s}                          % terms of trade s_t = E P_H / P*_F
+\newcommand{\rer}{q}                          % real exchange rate q_t = E P / P*
+\newcommand{\qk}{q^{k}}                       % real price of capital Q^k/P
+\newcommand{\divr}{\pi}                       % real dividend \Pi/P
+\newcommand{\rw}{w}                           % real wage W/P
+
+% ---- bonds, capital, convenience yield ----
+\newcommand{\cy}{\omega}                      % equilibrium convenience yield \omega_t
+\newcommand{\cyd}{\omega^{d}}                % latent demand shock \omega^d_t
+\newcommand{\edem}{\epsilon^{d}}             % elasticity of bond demand to \Omega'
+\newcommand{\inom}{i}                          % nominal rate on safe dollar bonds
+\newcommand{\ioth}{\iota}                      % nominal rate on other dollar bonds
+
+% ---- returns ----
+\newcommand{\rr}{r}                            % real return on dollar bonds
+\newcommand{\rk}{r^{k}}                        % real return on capital
+% Foreign real bond return is \fr{r}; capital-in-Foreign return r^{k*} via \fr{\rk}
+
+% ---- aggregates ----
+\newcommand{\sav}{a}                           % real aggregate saving a_t
+\newcommand{\nfa}{\mathit{nfa}}               % real net foreign assets
+\newcommand{\wsh}{\theta}                      % Home financial wealth share
+\newcommand{\out}{y}                           % output
+
+% ---- rescaled (stationarized) variables: tilde ----
+\newcommand{\rs}[1]{\widetilde{#1}}           % rescaled by z_t
+
+% ---- composite coefficients that recur in the proofs ----
+\newcommand{\atil}{\tilde{\alpha}}            % \tilde\alpha (eq. 75-78)
+\newcommand{\lwedge}{\tau}                     % steady-state labor wedge
+\newcommand{\Gam}{\Gamma}                      % \Gamma (eq. 99)
+\newcommand{\Gamp}{\Gamma'}                    % \Gamma' (Props 4-5 proof)
+
+% ---- helper: a flagged reconstruction / gap note ----
+\newcommand{\gapflag}[1]{\medskip\noindent\textbf{[Reconstruction flag]}\,\emph{#1}\medskip}
