@@ -85,18 +85,24 @@ echo "Activating environment..."
 source $(conda info --base)/etc/profile.d/conda.sh
 conda activate "$ENV_NAME" 2>/dev/null || conda activate "$ENV_PREFIX"
 
-# Install everything via conda (conda first; pip only for genuine conda gaps).
-# PyTorch + CUDA come from the pytorch/nvidia channels (float64-capable on H100).
-# Match pytorch-cuda to the cluster's CUDA toolkit (see PYTORCH_CUDA above).
-echo "Installing core packages + PyTorch (CUDA $PYTORCH_CUDA) via conda..."
-conda install -y -c pytorch -c nvidia -c conda-forge \
+# Core packages via conda (these solve fine). NOTE: PyTorch+CUDA is installed via
+# pip below, NOT conda — conda's classic solver grinds for 40+ min / fails on
+# pytorch-cuda from the pytorch/nvidia/conda-forge channels (job 29442013). This
+# is a genuine "conda can't, use pip" case. The pip CUDA wheel bundles its own
+# CUDA runtime (works on the H100/A100 driver) and is fast + reliable.
+echo "Installing core packages via conda..."
+conda install -y -c conda-forge \
     numpy \
     scipy \
     pandas \
     matplotlib \
-    pytest \
-    pytorch \
-    "pytorch-cuda=${PYTORCH_CUDA}"
+    pytest
+
+# PyTorch with CUDA via pip wheel. cu121 matches the H100/A100 (CUDA 12.x).
+# Override the tag by exporting TORCH_CUDA (e.g. cu124) before running.
+TORCH_CUDA="${TORCH_CUDA:-cu121}"
+echo "Installing PyTorch via pip (CUDA wheel ${TORCH_CUDA})..."
+pip install --no-cache-dir torch --index-url "https://download.pytorch.org/whl/${TORCH_CUDA}"
 
 # Verify installation
 echo ""
