@@ -479,6 +479,43 @@ steps (shared scratch — our `EquilibriumState`).
 These are tightly coupled and only testable once the loop converges; port together,
 then gate on the proactive SS/Table-2 cross-check (§7 step 5).
 
+### 13.4 RESUME NOTE — Sherlock migration (04b), state as of session 5
+
+**DONE + pushed (origin/main 0c4a16b):**
+- `klreplication/run_klrep.py` — Sherlock entry: array index N → param_file_N,
+  full-grid solve (auto-CUDA) + SS validation, writes solution_spec<N>.pt +
+  ss_check_spec<N>.txt to $big_cy/data/output/klreplication. Tested locally
+  (coarse, 8 iters) — works end-to-end.
+- `klreplication/inputs/` — all KL inputs committed (88K: params/sample/data) so
+  the cluster gets them via sync_git (no local→oak data push needed). run_klrep
+  reads params from here.
+- `batch_controller.sh` — `.py` branch env fixed to `big_cy_klrep_env`.
+- `batch_submit.sh` — `specs="${specs:-1}"` + `setup_klrep_env_sherlock` (env
+  build, CPU) + `run_klrep` (GPU array `--array=${specs}`, --gpus=1) blocks.
+- `setup_klrep_env_sherlock.sh` — now bootstraps conda from the group/home
+  miniconda profile (compute nodes lack conda on PATH).
+- Sherlock connectivity confirmed (squeue works).
+
+**⚠ BLOCKER (flagged to Angus) — `sherlock-agent-com` doesn't know `big_cy`:**
+`VALID_PROJECTS=("lx1" "rier" "ecb1")` only (line 13 of
+~/code/claude_scripts/sherlock-agent-com). To submit, Angus must register big_cy:
+add "big_cy" to VALID_PROJECTS; add a project-root case (~line 124-160) →
+`PROJECT_REMOTE_ROOT="/oak/stanford/groups/maggiori/Lab/lewis"` (repo-name
+appended ⇒ /oak/.../lewis/big_cy, matching project_strings.py); ensure a cluster
+git checkout of big_cy exists at the path submit/sync_git expect AND at
+batch_controller's `base_folder=$HOME/big_cy`; optionally
+`SYNC_ALLOWED_big_cy=(data/output/klreplication)` to sync results back. This is
+shared tooling + cluster setup = Angus's domain (convention: ask before using a
+non-listed project).
+
+**NEXT once unblocked:** `sherlock-agent-com big_cy sync_git` →
+`sherlock-agent-com big_cy submit "setup_klrep_env_sherlock run_klrep"` (specs
+defaults to 1 = baseline) → squeue/sacct → read ss_check_spec1.txt, compare to
+KL SS/Table-2 → Phase-1 gate report to Angus. THEN port simulation (mod_results,
+3 clipping regimes) + var_indices/moments for the full Table-2 moment comparison
+(SS-level validation is in run_klrep already; Table-2 moments need simulation).
+calc_bond_prices/calc_valuation needed for the NFA/valuation table rows.
+
 ### 13.3 RESUME NOTE — solver assembled + running (state as of session 4)
 
 **DONE this session:** `model_const.py` (ModelConst bundle + big_weight),
