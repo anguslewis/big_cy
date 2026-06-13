@@ -1,0 +1,18 @@
+management/
+.claude/paths.json
+
+# Data and output live in Dropbox (see project_globals.do / project_strings.py),
+# not in the code repo. Ignore these if a script recreates them locally.
+data/
+logs/
+figtab/
+
+# Python caches
+__pycache__/
+*.pyc
+
+# External reference clone (zerobeta cloned bhebert/TheZeroBetaRate for reading)
+scratch/TheZeroBetaRate/
+
+# Large source PDFs live durably in the papers/ Dropbox, not in git
+scratch/kl_sources/
