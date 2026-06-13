@@ -1,2 +1,624 @@
-% 10_risksharing_specialness — stub (to be filled by theorist)
-\bigskip\noindent\textit{[pending section]}\par
+% =====================================================================
+% 10_risksharing_specialness.tex — efficient risk sharing / LOOP,
+% the specialness of safe dollar bonds (main paper II.D / II.C),
+% Foreign-only demand (App. B.4), distinct capital + sticky prices
+% (App. B.5) (WP-E)
+% =====================================================================
+\section{Efficient risk sharing, the law of one price, and the specialness of safe dollar bonds}
+\label{sec:risksharing-specialness}
+
+The previous sections built the analytical machine: the period-$1$ engine
+(Section~\ref{sec:engine}), Propositions~\ref{prop:prices}--\ref{prop:wealth} on
+prices/returns/wealth, the second-order portfolio engine
+(Section~\ref{sec:portfolio-engine}), and Propositions~\ref{prop:portfolios}--%
+\ref{prop:riskpremium} on portfolios and the risk premium. This section collects
+the three remaining analytical statements of KL's Section~II and the two
+robustness exercises of their online Appendix~B. First, we make explicit the
+\emph{efficient-risk-sharing / law-of-one-price} content of the model: the
+result, stated cleanly in II.C's ``\emph{Efficient Risk Sharing and the Law of
+One Price}'' paragraph (their p.~1667), that the dollar appreciation in bad times
+is a \emph{necessary consequence} of efficient risk sharing plus the law of one
+price, manifested as a tight link between the real exchange rate and relative
+output. Second, we transcribe and explain KL's three ``specialness of safe dollar
+bonds'' arguments (their II.D, p.~1666). Third, we reconstruct the
+Foreign-only-demand robustness (their App.~B.4) and its multiplier result
+$\mu_t=\cy_t$. Fourth, we summarize compactly the distinct-capital-stocks-and-%
+sticky-prices environment (their App.~B.5), stating the analogs of
+Propositions~1--5 and flagging that KL exclude their proofs.
+
+\subsection{The efficient-risk-sharing / law-of-one-price relation}
+\label{sec:loop}
+
+\paragraph{From the kernel relation to a relation in quantities.} The
+local-completeness condition~\eqref{eq:risk-sharing} of
+Section~\ref{sec:local-completeness} is the Backus--Smith / law-of-one-price
+relation in \emph{kernel} form,
+\begin{equation}
+\dev{\pk}_{0,1} - \rra\,\tel^z\dev{\epsilon}^z_1
+= \fr{\dev{\pk}}_{0,1} - \rraF\,\tel^z\dev{\epsilon}^z_1 + \D\dev{\rer}_1.
+\tag{\ref{eq:risk-sharing} revisited}
+\end{equation}
+KL observe (their p.~1667) that this relation has a sharp counterpart in
+\emph{quantities} once one specializes to the unitary-risk-aversion benchmark
+$\rra=\rraF=1$, which --- recalling the maintained unit IES of the simplified
+environment --- makes preferences time-separable. In that benchmark the kernel is
+the pure consumption-growth term, $\dev{\pk}_{0,1}=-\dev{\rs c}_1$ and
+$\fr{\dev{\pk}}_{0,1}=-\fr{\dev{\rs c}}_1$ (the continuation-value term in
+\eqref{eq:m01} carries the factor $1-\rra=0$), and the productivity-loading terms
+$\rra\tel^z\dev{\epsilon}^z_1$, $\rraF\tel^z\dev{\epsilon}^z_1$ are equal. The
+risk-sharing relation~\eqref{eq:risk-sharing} then reduces to the
+\emph{Backus--Smith relation in levels} (their displayed equation, p.~1667,
+``assuming no shocks prior to period $t$''):
+\begin{equation}
+\fr{\dev{\rs c}}_1 - \dev{\rs c}_1 = \dev{\rer}_1, \label{eq:bs-levels}
+\end{equation}
+i.e.\ Home consumption rises relative to Foreign exactly when the Home real
+exchange rate depreciates ($\dev{\rer}_1<0$ raises $\dev{\rs c}_1$ relative to
+$\fr{\dev{\rs c}}_1$). This is the standard complete-markets prediction that
+relative consumption tracks the real exchange rate.
+\gapflag{KL display the benchmark relation~\eqref{eq:bs-levels} as
+``$\hat c^{*}_t-\hat c_t=\hat q_t$'' for the $\rra=\rraF=1$ case (their p.~1667).
+We supply the one-line provenance: it is the local-completeness
+condition~\eqref{eq:risk-sharing} evaluated at $\rra=\rraF=1$, where the
+continuation-value term of the kernel~\eqref{eq:m01} drops (its coefficient
+$1-\rra$ vanishes) and the symmetric productivity loadings cancel, leaving
+$-\dev{\rs c}_1=-\fr{\dev{\rs c}}_1+\dev{\rer}_1$, i.e.\
+$\fr{\dev{\rs c}}_1-\dev{\rs c}_1=\dev{\rer}_1$. KL's sign convention writes
+$\hat q$ as a Home appreciation (Section~\ref{sec:aux-vars},
+eq.~\eqref{eq:rer-def}); their displayed line $\hat c^{*}_t-\hat c_t=\hat q_t$ is
+exactly~\eqref{eq:bs-levels} in our notation.}
+
+\paragraph{Linking the real exchange rate to relative output.} KL then combine
+\eqref{eq:bs-levels} with the engine's relative-goods-market and
+intratemporal-allocation relations to obtain a relation between the real exchange
+rate and \emph{relative output}. The relevant engine inputs are the
+real-exchange-rate--terms-of-trade relation~\eqref{eq:q1-s1},
+$\dev{\rer}_1=\hbias\frac{1+\zs}{\zs}\dev{\tot}_1$, and the cross-country
+goods-market / intratemporal condition. KL's displayed combination (their
+p.~1667, with an \emph{arbitrary} degree of home bias $\hbias$ retained ``to
+emphasize the generality of the result'') reads
+\begin{equation}
+\hbias\,\frac{1+\zs}{\zs}\bigl(\fr{\dev{\rs c}}_1-\dev{\rs c}_1\bigr)
++\Bigl(1+\hbias\,\tfrac{1+\zs}{\zs}\Bigr)
+\Bigl(1-\hbias\,\tfrac{1+\zs}{\zs}\Bigr)
+\frac{1}{\hbias\,\frac{1+\zs}{\zs}}\,\tel\,\dev{\rer}_1
+= \fr{\out}_1 - \out_1, \label{eq:loop-rel-raw}
+\end{equation}
+where $\out_1,\fr{\out}_1$ are Home and Foreign log output deviations. Using the
+Backus--Smith relation~\eqref{eq:bs-levels} to replace
+$\fr{\dev{\rs c}}_1-\dev{\rs c}_1=\dev{\rer}_1$ in the first term, the two
+left-hand terms collapse into a single multiple of $\dev{\rer}_1$, and solving
+for $\dev{\rer}_1$ yields KL's displayed law-of-one-price relation (their
+p.~1667):
+\begin{equation}
+\boxed{\;
+\dev{\rer}_1 = \frac{1}
+{\hbias\,\frac{1+\zs}{\zs}
++\Bigl(1+\hbias\,\frac{1+\zs}{\zs}\Bigr)\Bigl(1-\hbias\,\frac{1+\zs}{\zs}\Bigr)
+\dfrac{1}{\hbias\,\frac{1+\zs}{\zs}}\,\tel}\,
+\bigl(\fr{\out}_1 - \out_1\bigr).\;} \label{eq:loop-solved}
+\end{equation}
+\gapflag{Equations~\eqref{eq:loop-rel-raw}--\eqref{eq:loop-solved} are KL's two
+displayed lines on p.~1667 (the relation in
+$\varsigma\frac{1+\zeta^{*}}{\zeta^{*}}(\hat c^{*}_t-\hat c_t)$ and $\sigma\hat q_t$
+equal to $\hat y^{*}_t-\hat y_t$, and the solved expression for $\hat q_t$). We
+transcribe them in the document's macros (KL's
+$\varsigma\frac{1+\zeta^{*}}{\zeta^{*}}$ is our $\hbias\frac{1+\zs}{\zs}$, the
+recurring relative-price loading of~\eqref{eq:q1-s1}; their $\sigma$ is our
+$\tel$). The first line is the log-linearized statement of ``intratemporal
+optimality between Home- and Foreign-produced goods in each country, together with
+goods market clearing''; it is the same content as the engine's cross-country
+goods-market relation~\eqref{eq:rc-rel}, re-expressed in output rather than
+terms-of-trade units and with the relative-consumption term written using
+$\hbias\frac{1+\zs}{\zs}(\fr{\dev{\rs c}}_1-\dev{\rs c}_1)$. We did not re-derive
+the output-form of~\eqref{eq:rc-rel} from primitives; we transcribe KL's
+displayed relation and verify that substituting~\eqref{eq:bs-levels} collapses
+it to~\eqref{eq:loop-solved}.}
+
+\paragraph{Reading the result.} The denominator of~\eqref{eq:loop-solved} is
+strictly positive whenever there is consumption home bias, $\hbias>0$ (so that
+$0<\hbias\frac{1+\zs}{\zs}<1$ and the middle factor
+$(1-\hbias\frac{1+\zs}{\zs})>0$). Hence~\eqref{eq:loop-solved} delivers KL's
+central qualitative statement (their p.~1667):
+\begin{quote}
+\emph{Given consumption home bias $\hbias>0$, any shock that appreciates the Home
+real exchange rate ($\dev{\rer}_1>0$) must be reflected in a relative fall in
+Home output ($\out_1<\fr{\out}_1$).}
+\end{quote}
+KL identify the two distinct channels behind this link, both visible
+in~\eqref{eq:loop-rel-raw}:
+\begin{enumerate}[leftmargin=1.8em,itemsep=3pt]
+  \item \textbf{Efficient risk sharing.} The Backus--Smith
+  relation~\eqref{eq:bs-levels} forces relative Home \emph{consumption} to fall
+  when the Home real exchange rate appreciates. This is the
+  $\hbias\frac{1+\zs}{\zs}(\fr{\dev{\rs c}}_1-\dev{\rs c}_1)$ term: efficient
+  risk sharing calls for Home consumption to fall relative to Foreign exactly in
+  states of Home appreciation.
+  \item \textbf{The law of one price (expenditure switching).} Under
+  producer-currency pricing (the law of one price), a Home appreciation raises the
+  relative price of Home goods --- the associated improvement in Home's terms of
+  trade triggers a global expenditure switch \emph{away} from Home-produced goods,
+  depressing Home output. This is the $\tel\,\dev{\rer}_1$ term, with the trade
+  elasticity $\tel$ governing its strength.
+\end{enumerate}
+Both channels push Home output down when the dollar appreciates. KL note (their
+p.~1667) that relaxing the law of one price --- e.g.\ under sticky local-currency
+pricing --- can sever the \emph{second} channel by decoupling the consumer-facing
+relative price from the real exchange rate, but the \emph{first} (efficient
+risk-sharing) channel survives as long as risk sharing is efficient. This is why
+the result is ``a natural consequence of efficient risk sharing and the law of
+one price'' rather than of either alone.
+
+\paragraph{Relation to the literature.} KL place this result against three
+alternatives (their p.~1667). \emph{Sauzet (2023)} shows that a fall in relative
+US output in crises can resolve the reserve-currency paradox following exactly
+this logic; KL's contribution is to \emph{identify the shock} --- the flight to
+safe dollar assets --- that produces this output pattern endogenously.
+\emph{Maggiori (2017)} resolves the paradox instead through an expenditure shift
+toward US goods in crises, which operates through the goods-market term
+of~\eqref{eq:loop-rel-raw}, allowing the dollar to appreciate even with relative
+output unchanged. \emph{Dahlquist et al.\ (2023)} generate a dollar appreciation
+from a fall in US output as in Sauzet but augment with deep habits, so the output
+decline also shifts relative demand toward US goods. KL's safety-shock mechanism
+delivers the output channel without an exogenous taste shift.
+
+\paragraph{The unitary-risk-aversion benchmark and constant wealth share.} The
+benchmark $\rra=\rraF=1$ used to derive~\eqref{eq:bs-levels} is the same benchmark
+referenced in Propositions~\ref{prop:wealth}--\ref{prop:portfolios}. KL note
+(their footnote~58, App.~B.5) that
+\begin{quote}
+\emph{consistent with eq.~(99) in the baseline simplified environment, unitary
+risk aversions $\rra=\rraF=1$ imply that equilibrium financial portfolios hedge
+only labor-income risk,}
+\end{quote}
+and, correspondingly, that efficient risk sharing keeps Home's \emph{overall}
+wealth share (inclusive of labor income) constant in response to all shocks. The
+analytical content is visible in the international-portfolio
+equation~\eqref{eq:eq99}: every right-hand-side term carries either
+$(\rraF-\rra)$ or $\bigl(\frac{1}{\zs}(\rraF-1)+(\rra-1)\bigr)$, both of which
+vanish at $\rra=\rraF=1$, so the risk-sharing requirement on $\Eone\dev{\wsh}_2$
+collapses to the labor-income-hedging terms alone. This is the benchmark in which
+``Home's overall wealth share is constant,'' against which Proposition~4's
+comparative statics in $\rraF/\rra$ are taken.
+\gapflag{The connection between the $\rra=\rraF=1$ benchmark and the constant
+overall wealth share is KL's (their footnote~58 and the discussion at p.~1668:
+``in the benchmark with identical risk tolerance across countries, efficient risk
+sharing calls for the Home wealth share to increase upon a flight to safety
+\emph{provided risk aversion exceeds unity}''). We reconstruct the analytical
+reason --- that the $(\rraF-\rra)$ and $\bigl(\frac{1}{\zs}(\rraF-1)+(\rra-1)\bigr)$
+loadings of~\eqref{eq:eq99} both vanish at $\rra=\rraF=1$, leaving only the
+labor-income-hedging terms, so the overall wealth share (financial plus human) is
+constant. Note the distinction KL draw: at $\rra=\rraF=1$ the \emph{overall}
+wealth share is constant, whereas for $\rra=\rraF>1$ the overall wealth share
+\emph{rises} on a flight to safety (the real-exchange-rate-hedging motive of
+relative-supply shocks); the $\rra=\rraF=1$ knife-edge is the one in which the
+financial portfolio hedges labor income exactly. We flag that we supply this
+reading from the structure of~\eqref{eq:eq99} rather than re-deriving the overall
+wealth share from a separate human-wealth accounting.}
+
+\subsection{The specialness of safe dollar bonds}
+\label{sec:specialness}
+
+KL devote their Section~II.D (p.~1666) to three dimensions in which the demand
+for safe dollar bonds is \emph{special} relative to the demand for other assets.
+These are stated as arguments / extensions rather than as formal propositions; we
+transcribe each with the available analytical content and match KL's level of
+detail (expository, with the formal verification deferred to the cited
+extensions).
+
+\subsubsection{Zero net supply}
+\label{sec:zero-net-supply}
+
+Safe dollar bonds are in \emph{zero net supply}: the outstanding stock is the debt
+issued by the Home government (their fiscal rule~\eqref{eq:fiscal-supply}), held
+in positive amounts by private agents, so that private and public positions sum to
+zero. KL's argument (their p.~1666) is that this is precisely what makes a flight
+to safety \emph{contractionary}:
+\begin{quote}
+\emph{The demand for safe dollar bonds triggers a Keynesian recession because
+these assets are in zero net supply.}
+\end{quote}
+The contrast is with a counterfactual in which the heightened demand were instead
+for \emph{capital} (equity). Formally, suppose capital also entered the utility
+function and its nonpecuniary value rose on the margin. Then --- because capital
+is in \emph{positive} net supply and is a produced, priced asset --- the increase
+in its nonpecuniary value would raise the price of capital $\qk_t$, raise
+household wealth (existing capital holders are richer), and thereby \emph{raise}
+consumption demand and aggregate output. A demand shift toward capital is
+\emph{expansionary}. KL note further that relaxing the assumption of a fixed
+global capital stock would reinforce this: the demand for capital would also
+stimulate output through increased \emph{investment}.
+
+The economic content is the bond-vs-equity distinction. A safety shock that raises
+demand for an asset in \emph{zero} net supply cannot be accommodated by a quantity
+expansion (there is no net stock to bid up in aggregate); the only margin is the
+price of \emph{other} assets and, through the convenience-yield
+wedge~\eqref{eq:euler-r} and nominal rigidity, the real interest rate and
+employment. The flight to the safe bond therefore manifests as the inability of
+the real rate to clear the goods market at full employment --- a Keynesian
+recession --- rather than as a wealth-and-investment expansion. KL frame this as
+underscoring the importance of distinguishing convenience yields in \emph{bond}
+versus \emph{equity} markets, as in Koijen and Yogo (2020), for understanding
+their macroeconomic effects.
+\gapflag{The zero-net-supply argument is stated by KL as prose (their p.~1666);
+they do not write out the capital-in-utility counterfactual formally. We supply
+the mechanism --- that a positive-net-supply, priced asset (capital) absorbs a
+demand shift through its price $\qk_t$ and a wealth/investment expansion, whereas
+a zero-net-supply asset (the safe bond) can only transmit the shift through the
+convenience-yield wedge and nominal rigidity, producing the Keynesian recession of
+Proposition~\ref{prop:prices}. This is consistent with, but not a re-derivation
+of, KL's argument; the formal capital-in-utility extension is not carried out by
+KL and we do not carry it out here. We flag that the ``stimulating'' sign of a
+capital-demand shift is asserted, following KL's appeal to Koijen and Yogo (2020).}
+
+\subsubsection{Country size}
+\label{sec:country-size}
+
+The second dimension is the \emph{large size} of the US economy. KL argue (their
+p.~1666) that the demand for safe dollar bonds is special relative to the demand
+for the bonds of \emph{small} issuers. The thought experiment is to augment the
+two-country model with an \emph{infinitesimal} third country --- for concreteness,
+Switzerland --- that is a negligible part of the global economy. An increase in
+the portfolio demand for Swiss-franc bonds would:
+\begin{itemize}[leftmargin=1.8em,itemsep=2pt]
+  \item generate an \emph{appreciation} of the franc;
+  \item cause a \emph{decline} in Swiss production (the same
+  efficient-risk-sharing-plus-LOOP logic of Subsection~\ref{sec:loop}: an
+  appreciation of the small country's real exchange rate is reflected in a
+  relative fall in its output); but
+  \item have \emph{negligible spillovers} on global demand and production, because
+  the country's share of the world economy is infinitesimal.
+\end{itemize}
+By contrast, the US is large enough that a flight to safe dollar bonds moves
+\emph{global} aggregates --- world employment and output --- not merely US relative
+output. KL connect this to the message of Hassan (2013) that the United States'
+relative size in the global economy may be an important contributor to the
+dollar's negative beta: it is precisely because the dollar issuer is large that
+the dollar's appreciation in bad times has aggregate, rather than purely relative,
+consequences and hence commands a sizeable (negative-beta) risk premium.
+\gapflag{The country-size argument is stated by KL as a thought experiment (their
+p.~1666); the infinitesimal-third-country model is described but not formally
+written out. We state it exactly as KL do, noting that the ``appreciation $+$
+relative-output decline $+$ negligible global spillover'' conclusion for the small
+country follows from applying the law-of-one-price / efficient-risk-sharing
+relation~\eqref{eq:loop-solved} to a country of vanishing global weight. We do not
+formalize the three-country extension; KL do not, and we match their expository
+level. The link to Hassan (2013) is KL's.}
+
+\subsubsection{Currency of invoicing}
+\label{sec:invoicing}
+
+The third dimension is the widespread use of the dollar in \emph{pricing}. KL
+argue (their p.~1666) that dollar invoicing renders the demand for safe dollar
+bonds special relative to the currencies of other large countries. The concrete
+example: suppose nominal wages \emph{even in Foreign} are denominated and sticky in
+dollars (rather than in Foreign currency). Then the global decline in employment
+following a positive safety shock is \emph{exacerbated} relative to the baseline
+model. The intuition is that dollar deflation following a positive safety shock
+(the safety shock is deflationary in the dollar bloc,
+Proposition~\ref{prop:prices}) now implies that product wages \emph{in both
+countries} are too high --- the sticky dollar wage does not adjust down with the
+Foreign price level --- generating a more severe and more uniform global recession.
+
+KL note that similar results obtain under dollar pricing of \emph{exports} (the
+dominant-currency-pricing paradigm of Gopinath (2015), Gopinath et al.\ (2020),
+and Mukhin (2022)): dollar invoicing of trade among countries not involving the
+United States is analogous, in the two-country setup, to an internal Foreign price
+(such as the nominal wage) being denominated in dollars. The general message is
+that the dollar's role in goods markets (invoicing) and its role in financial
+markets (safe-asset demand) interact: dollar invoicing amplifies the employment
+consequences of dollar safe-asset demand, suggesting ``potentially rich
+interactions between the dollar's role in financial and goods markets.''
+\gapflag{The currency-of-invoicing argument is stated by KL as prose (their
+p.~1666); the dollar-wage and dollar-export-pricing extensions are described but
+not formally derived. We transcribe KL's argument and its mapping (dollar
+invoicing of trade $\approx$ an internal Foreign price denominated in dollars, in
+the two-country reduction). We do not formalize either extension; KL state them as
+suggestive, citing Gopinath (2015), Gopinath et al.\ (2020), and Mukhin (2022) for
+the dominant-currency-pricing channel. We match their expository level.}
+
+\subsection{Robustness: Foreign-only demand for safe dollar bonds (App.~B.4)}
+\label{sec:foreign-only}
+
+KL's online Appendix~B.4 shows that the analysis is robust to the realistic case
+in which \emph{only Foreign} households have a special (nonpecuniary) demand for
+safe dollar bonds, with a non-negativity constraint preventing private agents from
+\emph{creating} safe dollar assets (only the Home government can). We reconstruct
+the FOC algebra, which is the load-bearing part of B.4.
+
+\paragraph{The augmented household FOCs.} KL augment the model with a
+non-negativity constraint on each household's position in the safe dollar bond,
+reflecting that households cannot manufacture safe assets. This is irrelevant when
+the demand shock is \emph{global} (as in the baseline), since then all agents hold
+a positive share of the government's outstanding safe debt; it binds when the
+demand is \emph{Foreign-only}, because Home households then have no nonpecuniary
+motive to hold the safe bond and would, absent the constraint, want to short it.
+The Home representative agent's FOCs for safe dollar bonds, other dollar bonds,
+Foreign bonds, and capital become (their app.~p.~79)
+\begin{align}
+1 - \mu_t &= \Et\,\pk_{t,t+1}(1+\inom_t)\frac{P_t}{P_{t+1}}, \label{eq:b4-home-safe}\\
+1 &= \Et\,\pk_{t,t+1}(1+\ioth_t)\frac{P_t}{P_{t+1}}, \label{eq:b4-home-other}\\
+1 &= \Et\,\pk_{t,t+1}\frac{\rer_t}{\rer_{t+1}}(1+\fr{r}_{t+1}), \label{eq:b4-home-fbond}\\
+1 &= \Et\,\pk_{t,t+1}(1+\rk_{t+1}), \label{eq:b4-home-cap}
+\end{align}
+where $\mu_t\ge0$ is the (scaled) multiplier on the non-negativity constraint on
+the Home agent's safe-dollar-bond position, and the last three FOCs are exactly as
+in the baseline model. The Foreign representative agent --- who \emph{does} receive
+the nonpecuniary safe-bond utility, with the same functional form $\bondu^{*}_t$ as
+in the baseline --- has FOCs (their app.~p.~79)
+\begin{align}
+1 - \fr c_t\,\frac{\bondu^{*}_t{}'\!\bigl(\fr B_{Ht,s}/(E_t^{-1}\fr P_t)\bigr)}
+{\bondu^{*}_t\!\bigl(\fr B_{Ht,s}/(E_t^{-1}\fr P_t)\bigr)}
+&= \Et\,\fr{\pk}_{t,t+1}\frac{\rer_{t+1}}{\rer_t}(1+\inom_t)\frac{P_t}{P_{t+1}}, \label{eq:b4-foreign-safe}\\
+1 &= \Et\,\fr{\pk}_{t,t+1}\frac{\rer_{t+1}}{\rer_t}(1+\ioth_t)\frac{P_t}{P_{t+1}}, \label{eq:b4-foreign-other}\\
+1 &= \Et\,\fr{\pk}_{t,t+1}(1+\fr{r}_{t+1}), \label{eq:b4-foreign-fbond}\\
+1 &= \Et\,\fr{\pk}_{t,t+1}\frac{\rer_{t+1}}{\rer_t}(1+\rk_{t+1}), \label{eq:b4-foreign-cap}
+\end{align}
+as in the baseline model. Given the same functional form for $\bondu^{*}_t$ as in
+the baseline (eq.~\eqref{eq:Omega-form}, starred), the Foreign marginal
+nonpecuniary value evaluates to
+\begin{equation}
+\fr c_t\,\frac{\bondu^{*}_t{}'\!\bigl(\fr B_{Ht,s}/(E_t^{-1}\fr P_t)\bigr)}
+{\bondu^{*}_t\!\bigl(\fr B_{Ht,s}/(E_t^{-1}\fr P_t)\bigr)}
+= \omega^{d*}_t - \frac{\fr B_{Ht,s}}{E_t^{-1}\fr P_t\,\fr c_t}, \label{eq:b4-foreign-wedge}
+\end{equation}
+where $\omega^{d*}_t$ is the Foreign latent demand shock for safe dollar bonds. KL
+assume for expositional simplicity that the non-negativity constraint for
+\emph{Foreign} agents does not bind, which is the case when $\omega^{d*}_t$ is
+sufficiently high.
+
+\paragraph{The multiplier equals the convenience yield.} The key step. Each
+agent's pair of FOCs for safe and other dollar bonds imply, by dividing the
+safe-bond FOC by the other-bond FOC. For the Home agent,
+\eqref{eq:b4-home-safe}/\eqref{eq:b4-home-other} gives
+\begin{equation}
+\frac{1+\inom_t}{1-\mu_t} = 1+\ioth_t, \label{eq:b4-home-ratio}
+\end{equation}
+and for the Foreign agent,
+\eqref{eq:b4-foreign-safe}/\eqref{eq:b4-foreign-other} gives, using
+\eqref{eq:b4-foreign-wedge},
+\begin{equation}
+1+\ioth_t = \frac{1+\inom_t}{1-\Bigl(\omega^{d*}_t-\dfrac{\fr B_{Ht,s}}{E_t^{-1}\fr P_t\,\fr c_t}\Bigr)}. \label{eq:b4-foreign-ratio}
+\end{equation}
+Both expressions equal the common gross other-dollar-bond return $1+\ioth_t$, so
+their denominators must coincide:
+\begin{equation}
+\frac{1+\inom_t}{1-\mu_t}
+= \frac{1+\inom_t}{1-\Bigl(\omega^{d*}_t-\dfrac{\fr B_{Ht,s}}{E_t^{-1}\fr P_t\,\fr c_t}\Bigr)}
+\;\Longrightarrow\;
+\boxed{\;\mu_t = \omega^{d*}_t - \frac{\fr B_{Ht,s}}{E_t^{-1}\fr P_t\,\fr c_t} \equiv \cy_t.\;} \label{eq:b4-mu-omega}
+\end{equation}
+That is, the Lagrange multiplier on the non-negativity constraint for safe dollar
+bonds faced by Home agents must equal the convenience yield $\cy_t$ perceived by
+Foreign agents on those bonds. Intuitively, the shadow value of being unable to
+short the safe bond (for Home) is exactly the convenience premium that Foreign
+agents attach to it.
+\gapflag{Equations~\eqref{eq:b4-home-ratio}--\eqref{eq:b4-mu-omega} reconstruct
+KL's App.~B.4 result
+$\mu_t=\omega^{d*}_t-\fr B_{Ht,s}/(E_t^{-1}\fr P_t\fr c_t)\equiv\cy_t$ (their
+app.~p.~79--80). KL display the FOCs~\eqref{eq:b4-home-safe}--%
+\eqref{eq:b4-foreign-cap}, the Foreign wedge~\eqref{eq:b4-foreign-wedge}, the
+intermediate identity
+$\frac{1+i_t}{1-\mu_t}=1+\ioth_t=\frac{1+i_t}{1-(\omega^{d*}_t-\fr B_{Ht,s}/(E_t^{-1}\fr P_t\fr c_t))}$,
+and conclude
+$\mu_t=\omega^{d*}_t-\fr B_{Ht,s}/(E_t^{-1}\fr P_t\fr c_t)\equiv\cy_t$. We supply the
+one-line division step (each agent's safe-bond FOC over its other-bond FOC
+produces the gross convenience-adjusted return, and equating the two expressions
+for $1+\ioth_t$ forces the denominators to coincide). The definition
+$\cy_t\equiv\omega^{d*}_t-\fr B_{Ht,s}/(E_t^{-1}\fr P_t\fr c_t)$ is the Foreign-only
+analog of the baseline reduced-form convenience yield~\eqref{eq:omega-reduced},
+now reflecting only the Foreign latent demand $\omega^{d*}_t$ (and the supply of safe
+bonds by the Home government). We reproduce KL's algebra faithfully.}
+
+\paragraph{Consequence: the equilibrium system reduces to the baseline with
+$b_{Ht,s}=0$.} With the multiplier pinned by~\eqref{eq:b4-mu-omega}, the Home
+agent is at the corner --- it holds \emph{zero} safe dollar bonds, $b_{Ht,s}=0$ ---
+and the Home safe-bond FOC~\eqref{eq:b4-home-safe} reads
+$1-\cy_t=\Et\pk_{t,t+1}(1+\inom_t)P_t/P_{t+1}$, which is exactly the baseline
+convenience-adjusted Euler equation~\eqref{eq:euler-safe} with the Home agent
+holding none of the safe asset. KL conclude (their app.~p.~80):
+\begin{quote}
+\emph{The equilibrium system is thus exactly as in the baseline model, except with
+$B_{Ht,s}=0$ (zero holdings of safe dollar bonds by Home agents). It follows that
+the propagation of Foreign demand shocks for safe dollar bonds is exactly like
+global demand shocks for these assets, up to any differences in seigniorage
+because in this case only Foreign agents hold them.}
+\end{quote}
+In particular, when the Home government issues zero net safe debt ($b^g_{H,s}=0$)
+there is no seigniorage, and the propagation of Foreign demand shocks is
+\emph{identical} to that of global demand shocks (their footnote~55). A Foreign
+demand shift propagates exactly like a baseline safety shock: at unchanged policy
+rates, Foreigners seek to borrow in non-safe dollar bonds to hold safe dollar
+bonds (capturing the convenience benefit without changing their currency
+exposure), which raises the other-dollar-bond rate $\ioth_t$ in the absence of a
+decline in the policy rate $\inom_t$, making saving more attractive for Home
+households and inducing the same effects on quantities and relative prices as in
+the baseline model.
+
+\paragraph{The international risk-sharing conditions are unchanged.} KL emphasize
+(their app.~p.~80) that despite only Foreigners having a special demand for safe
+dollar bonds, the \emph{international risk-sharing conditions are unchanged}. The
+three first-order risk-sharing relations remain
+\begin{align}
+\Et\,\pk_{t,t+1}\frac{1+\rr_{t+1}}{1-\cy_t}
+&= \Et\,\fr{\pk}_{t,t+1}\frac{\rer_{t+1}}{\rer_t}\frac{1+\rr_{t+1}}{1-\cy_t}, \label{eq:b4-rs-safe}\\
+\Et\,\pk_{t,t+1}\frac{\rer_t}{\rer_{t+1}}(1+\fr{r}_{t+1})
+&= \Et\,\fr{\pk}_{t,t+1}(1+\fr{r}_{t+1}), \label{eq:b4-rs-fbond}\\
+\Et\,\pk_{t,t+1}(1+\rk_{t+1})
+&= \Et\,\fr{\pk}_{t,t+1}\frac{\rer_{t+1}}{\rer_t}(1+\rk_{t+1}), \label{eq:b4-rs-cap}
+\end{align}
+i.e.\ the same Home/Foreign kernel-equality conditions (up to the
+real-exchange-rate conversion) that underlie the local-completeness
+relation~\eqref{eq:risk-sharing}. With one more asset than shocks, the simplified
+environment remains \emph{locally complete} as in the prior subsections, so
+Propositions~\ref{prop:prices}--\ref{prop:riskpremium} carry over (with
+$b_{Ht,s}=0$ on the Home side and the convenience yield now reflecting Foreign
+demand only).
+\gapflag{Equations~\eqref{eq:b4-rs-safe}--\eqref{eq:b4-rs-cap} transcribe KL's
+displayed ``international risk sharing conditions'' (their app.~p.~80), which they
+note are unchanged from the baseline. We reproduce them and the conclusion that
+local completeness (one more asset than shocks) is preserved. The content
+load-bearing for the big\_cy reading is exactly KL's statement: Foreign-only
+safe-dollar demand propagates like a global safety shock (up to seigniorage), and
+the risk-premium/portfolio results are unchanged --- so the baseline analytical
+results are robust to the more realistic Foreign-only demand structure. We did not
+re-derive the propagation; KL assert it follows from the system reducing to the
+baseline with $B_{Ht,s}=0$, and we transcribe that reduction.}
+
+\subsection{Distinct capital stocks and sticky prices (App.~B.5)}
+\label{sec:b5}
+
+KL's online Appendix~B.5 studies an \emph{alternative} simplified environment with
+(i) \emph{distinct} national capital stocks --- Home agents choose separate
+positions $k_{Ht}$ (capital used at Home) and $k_{Ft}$ (capital used at Foreign),
+which offer distinct payoffs and trade at distinct prices --- and (ii) \emph{sticky
+prices} (one-period-in-advance \emph{price} setting by monopolistically
+competitive retailers) in place of the baseline's sticky \emph{wages}. Because
+there is now trade in one more asset (two distinct capital claims rather than a
+single global capital stock), one more shock is needed to pin down portfolios; KL
+add a fully transitory Foreign productivity shock $z_{Ft}$ (with $\rho^{F}=0$),
+analogous to the safety shock. KL provide analogs of Propositions~1--5 in this
+environment but \emph{exclude the proofs} (``available on request''). We summarize
+the results compactly and flag the omitted proofs.
+
+\gapflag{This entire subsection summarizes KL's App.~B.5, which KL state
+\emph{without proof} (their app.~p.~83: ``We now provide analogs of
+Propositions~1--5 in this environment. We exclude the proofs for brevity but they
+are available on request.''). We therefore state the analog results as KL display
+them and do \emph{not} reconstruct their proofs --- a full re-derivation is out of
+scope for this faithful reference and is not available in the published material.
+Where a result differs qualitatively from the baseline (most importantly the
+ambiguous sign of the Home capital return under sticky prices), we note the
+difference and KL's stated intuition. The big\_cy extension worker should treat
+B.5 as a stated-but-unproved alternative environment.}
+
+\paragraph{Environment (B.5.1).} Relative to the baseline (Section~II): Home
+households hold distinct claims $k_{Ht},k_{Ft}$ to Home- and Foreign-used capital,
+with fixed national stocks $\bar k,\bar k^{*}$. Consumption of each country's
+goods is a CES aggregate across varieties with elasticity $\lel$. Each country has
+monopolistically competitive intermediate-good producers and final-good retailers;
+retailers set prices either flexibly or one period in advance (the sticky-price
+analog of the baseline's sticky wages). Households own a share of all retailers
+from a given country in proportion to their ownership of that country's capital, so
+aggregate profits accrue to capital owners. Capital-market clearing is now
+$k_{Ht}+\zs\fr k_{Ht}=\bar k$ and $k_{Ft}+\zs\fr k_{Ft}=\bar k^{*}$. KL retain the
+maintained simplifications of the baseline (e.g.\ no disaster risk or depreciation
+in the analytical treatment) but \emph{do not} impose the infinite Frisch
+elasticity. Because markets remain \emph{locally complete}, the results are
+independent of which capital owner's stochastic discount factor is used to price
+firms' dynamic decisions.
+
+\paragraph{Proposition~1 analog (prices and quantities).} With
+$\Et\dev{\wsh}_{t+1}=0$ on impact of all shocks (the symmetric-portfolio benchmark
+of Propositions~\ref{prop:prices}--\ref{prop:wealth}), the transmission of a
+positive safety shock is \emph{largely unchanged} from
+Proposition~\ref{prop:prices}. Under flexible prices: the Home CPI declines
+($\D\dev P_t=-\frac{1}{\taylor}\dev{\cy}_t$), the Home real interest rate declines
+($\Et\rr_{t+1}=-\dev{\cy}_t$), and the Home real exchange rate and employment in
+each country are unchanged ($\dev{\rer}_t=\dev{\ell}_t=\fr{\dev{\ell}}_t=0$). Under
+prices set one period in advance: the Home CPI is unchanged ($\D\dev P_t=0$), the
+Home real interest rate is unchanged ($\Et\rr_{t+1}=0$), the Home real exchange
+rate \emph{appreciates} ($\dev{\rer}_t=\dev{\cy}_t$), and global employment falls,
+disproportionately so in Home
+($\frac{1}{1+\zs}\dev{\ell}_t+\frac{\zs}{1+\zs}\fr{\dev{\ell}}_t
+=-\frac{1}{1-\cshare}\dev{\cy}_t$ and
+$\dev{\ell}_t-\fr{\dev{\ell}}_t=-\frac{1}{1-\cshare}\dev{\cy}_t$). KL conclude the
+transmission of safety shocks to prices and quantities is largely unchanged from
+Proposition~\ref{prop:prices}.
+
+\paragraph{Proposition~2 analog (returns), with the ambiguous-sign result.}
+Defining the real returns on the two distinct capital stocks
+$1+\rk_t=(\divr_t+\qk_t)/\qk_{t-1}\cdot P_{t-1}/P_t$ and the Foreign analog
+$1+r^{k*}_t$, the analog of Proposition~\ref{prop:returns} on impact of a
+positive safety shock is: under flexible prices, the dollar-bond real return rises
+($\rr_t=\frac{1}{\taylor}\dev{\cy}_t$) while the Foreign-bond, Home-capital, and
+Foreign-capital returns are unaffected (each zero net of the real-exchange-rate
+change); under prices set one period in advance, the dollar-bond return is
+unchanged ($\rr_t=0$), the Foreign-bond return falls
+($\fr{r}_t-\D\dev{\rer}_t=-\dev{\cy}_t$), the Foreign-capital return falls
+($r^{k*}_t-\dev{\rer}_t=-\dev{\cy}_t$), and --- the key new feature --- the
+\emph{Home}-capital return has an \emph{ambiguous} sign:
+\begin{equation}
+\rk_t = \left[\frac{(1-\disc)(1-\lwedge)\bigl(\tfrac{1}{\frisch}+1\bigr)}{1-(1-\cshare)(1-\lwedge)}-1\right]\dev{\cy}_t. \label{eq:b5-rk-ambiguous}
+\end{equation}
+KL explain (their app.~p.~84) that the ambiguous response of the Home capital
+return owes to \emph{competing effects} of a safety shock under sticky prices: the
+shock \emph{reduces Home output} (pushing the capital return down), but it
+\emph{raises the Home markup} $P_{Ht}/P^{i}_t$ (pushing the capital return up,
+since with sticky output prices and a falling marginal cost the price--cost margin
+widens). What is \emph{definitive}, however, is that the real return on Home
+capital \emph{exceeds} that on Foreign capital:
+\begin{equation}
+\rk_t - r^{k*}_t + \dev{\rer}_t \;\propto\; \dev{\cy}_t \;>\;0 \quad\text{(on a positive safety shock).} \label{eq:b5-rk-gap}
+\end{equation}
+This relative-capital-return result plays the role in B.5 that the
+positive-excess-return results play in the baseline: Home capital outperforms
+Foreign capital on a flight to safety. KL note that the markup-rise channel --- a
+positive safety shock raising relative Home equity returns through higher markups
+under sticky prices --- ``can help to account for the rise in relative US equity
+returns in crises documented in Dahlquist et al.\ (2023).''
+
+\paragraph{Proposition~3 analog (wealth share / portfolios at $\rra=\rraF=1$).}
+With prices set one period in advance and the unitary-risk-aversion benchmark
+$\rra=\rraF=1$, the equilibrium portfolios are
+\begin{equation}
+\frac{\qk k_H}{\sav}=1,\quad \frac{\qk k_F}{\sav}=0,\quad
+\frac{b_F}{\sav}=-\disc\,\frac{\zs}{1+\zs}\,\frac{b^g_{H,s}}{\sav},\quad
+\frac{b_H}{\sav}=\disc\,\frac{\zs}{1+\zs}\,\frac{b^g_{H,s}}{\sav}, \label{eq:b5-prop3-port}
+\end{equation}
+i.e.\ Home fully owns its domestic capital stock and holds none of Foreign capital,
+and the dollar-bond/Foreign-bond positions are the seigniorage-hedging pair. These
+imply that Home's \emph{financial} wealth share $\dev{\wsh}_t$ \emph{rises} on
+impact of a positive safety shock (because, by~\eqref{eq:b5-rk-gap}, Home capital
+outperforms Foreign capital), \emph{falls} on a positive Foreign-productivity
+shock, and is unchanged on a global-productivity shock; while Home's net foreign
+assets $\nfa_t$ and \emph{expected} future wealth share $\Et\dev{\wsh}_{t+1}$ are
+unchanged on impact of all shocks. KL emphasize (their footnote~58 and p.~85) that
+in this $\rra=\rraF=1$ benchmark, efficient risk sharing calls for Home's
+\emph{overall} wealth share (inclusive of labor income) to be \emph{constant} in
+response to all shocks: with full domestic capital ownership, financial returns
+exactly offset labor-income changes in response to safety and Foreign-productivity
+shocks, and wealth does not redistribute across countries in response to
+global-productivity shocks (building on Engel and Matsumoto 2009 and Coeurdacier
+and Gourinchas 2016). A notable implication: even though Home's overall wealth
+share and NFA \emph{fall} on a safety shock (Home is insuring Foreign), its
+\emph{financial} wealth share $\dev{\wsh}_t$ can \emph{rise} on impact, because the
+Home capital return outperforms Foreign capital.
+
+\paragraph{Proposition~4 analog (portfolios around the benchmark).} Around the
+$\rra=\rraF=1$, $b^g_{H,s}<0$ benchmark with a common positive steady-state labor
+wedge, the comparative statics mirror Proposition~\ref{prop:portfolios}: Home's
+portfolio share in Home capital (Foreign capital, dollar bonds) is unaffected
+(unaffected, falls) with $-b^g_{H,s}$; and rises (rises, falls) with $\rraF/\rra$
+holding $\rra+\frac{1}{\zs}\rraF$ fixed. That is, efficient risk sharing calls for
+Home's overall wealth share to \emph{fall} on a positive safety shock as Home gets
+more risk tolerant than Foreign, implemented by Home owning a \emph{levered}
+portfolio of Home \emph{and} Foreign capital financed by dollar bonds.
+
+\paragraph{Proposition~5 analog (risk premium).} KL state that the final result
+characterizes the currency risk premium around the $\rra=\rraF=1$, $b^g_{H,s}<0$
+benchmark and is ``essentially identical to Proposition~\ref{prop:riskpremium}'':
+the covariance $\Cov_t(-\dev{\pk}_{t,t+1},\fr{r}_{t+1}-\D\dev{\rer}_{t+1}-\rr_{t+1})$
+is proportional to $\rra-\rraF$ when $\sigma^{\cy}=0$ and is rising in
+$\sigma^{\cy}$. The reserve-currency-paradox logic of
+Proposition~\ref{prop:riskpremium} therefore survives intact in the
+distinct-capital, sticky-price environment.
+
+\paragraph{Where B.5 differs from the baseline.} Two qualitative differences are
+worth recording for the extension worker. First, under sticky \emph{prices} (B.5)
+the Home capital return responds \emph{ambiguously} to a safety
+shock~\eqref{eq:b5-rk-ambiguous} --- competing output-decline and markup-rise
+effects --- whereas under sticky \emph{wages} (baseline)
+Proposition~\ref{prop:returns} gives a clean realized capital-return response. The
+markup-rise channel is genuinely new and is KL's structural account of rising
+relative US equity returns in crises. Second, KL note (their p.~1669) that with
+sticky wages and distinct capital stocks, ``the returns to capital at Home and
+Foreign are still equated in response to safety shocks'' --- capital is not
+reallocated across borders even if it could be, because any increase in Foreign
+output relative to Home induces a Home real-exchange-rate appreciation that fully
+offsets the increase in the Foreign return to capital --- whereas the
+relative-return result $\rk_t>r^{k*}_t$~\eqref{eq:b5-rk-gap} that drives the
+financial-wealth-share dynamics requires the sticky-\emph{price} environment (and
+holds away from the limit of complete home bias provided $\tel\neq1$). KL present
+these as showing that the baseline's assumptions on capital mobility are ``not
+crucial'' for the results.

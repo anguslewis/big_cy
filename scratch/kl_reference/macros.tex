@@ -63,7 +63,9 @@
 % ---- returns ----
 \newcommand{\rr}{r}                            % real return on dollar bonds
 \newcommand{\rk}{r^{k}}                        % real return on capital
-% Foreign real bond return is \fr{r}; capital-in-Foreign return r^{k*} via \fr{\rk}
+% Foreign real bond return is \fr{r}. For the capital-in-Foreign return r^{k*}
+% do NOT write \fr{\rk} (that double-superscripts to r^{k}^{*}); write r^{k*}
+% directly, e.g.  r^{k*}_{t+1}  or  \rk^{*}_{t+1} only if \rk has no built-in star.
 
 % ---- aggregates ----
 \newcommand{\sav}{a}                           % real aggregate saving a_t

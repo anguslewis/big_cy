@@ -1,2 +1,327 @@
-% 11_synthesis — stub (to be filled by theorist)
-\bigskip\noindent\textit{[pending section]}\par
+% =====================================================================
+% 11_synthesis.tex — load-bearing assumptions, connection to the three
+% target empirical facts, roadmap of reconstruction flags (WP-E)
+% =====================================================================
+\section{Synthesis: what drives each result, and the connection to the empirical facts}
+\label{sec:synthesis}
+
+This closing section does three things. First, it maps each major analytical
+result to the assumption(s) that are \emph{load-bearing} for it --- the conditions
+without which the result fails or changes sign --- and states what breaks if each
+is relaxed. Second, it ties the analytical results to the paper's three target
+empirical facts. Third, it indexes every reconstruction flag in the document, so
+that a reader (or the big\_cy extension worker) can locate exactly where KL's
+published derivation was terse and the algebra had to be filled in.
+
+\subsection{Load-bearing assumptions}
+\label{sec:load-bearing}
+
+Table~\ref{tab:load-bearing} maps the results to their load-bearing assumptions.
+The entries are deliberately conservative: an assumption is listed as load-bearing
+for a result only if relaxing it overturns or qualitatively changes that result,
+not merely if it appears in the proof. Throughout, ``Prop.~$n$'' refers to the
+propositions of this document
+(Propositions~\ref{prop:prices}--\ref{prop:riskpremium}), ``ERS/LOOP'' to the
+efficient-risk-sharing / law-of-one-price relation of
+Subsection~\ref{sec:loop}, and ``Special.'' to the specialness arguments of
+Subsection~\ref{sec:specialness}.
+
+\begin{longtable}{p{0.20\textwidth} p{0.30\textwidth} p{0.42\textwidth}}
+\caption{Load-bearing assumptions, by result.}\label{tab:load-bearing}\\
+\toprule
+\textbf{Assumption} & \textbf{Results it is load-bearing for} & \textbf{What breaks if relaxed}\\
+\midrule
+\endfirsthead
+\multicolumn{3}{c}{\emph{(Table~\ref{tab:load-bearing}, continued)}}\\
+\toprule
+\textbf{Assumption} & \textbf{Results it is load-bearing for} & \textbf{What breaks if relaxed}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\textbf{Nominal rigidity} (sticky wages, or sticky prices in B.5)
+& Prop.~\ref{prop:prices} (recession), Prop.~\ref{prop:returns}
+(realized-return responses), Prop.~\ref{prop:wealth} (revaluation),
+Special.~(zero net supply)
+& Without it, a safety shock moves only \emph{prices}, not quantities: under
+flexible wages/prices the Home CPI and real rate fall but employment, the real
+exchange rate, and output are unchanged (Prop.~\ref{prop:prices}, flexible-wage
+branch~\eqref{eq:flex-labor}). No Keynesian recession; the dollar's real
+appreciation in bad times and the whole propagation mechanism vanish.\\
+
+\textbf{Taylor rule does not cut rates one-for-one with $\cy$}
+(finite $\taylor$, no seigniorage offset)
+& Prop.~\ref{prop:prices}, Prop.~\ref{prop:returns}
+& The nonneutrality of safety shocks requires that monetary policy not undo the
+convenience-yield wedge~\eqref{eq:euler-r}. If the central bank cut $\inom$
+one-for-one with $\cy$ (and ignored seigniorage, with flexible-wage efficiency),
+it would fully neutralize the safety shock --- no real-rate wedge, no recession
+(KL p.~1668, ``Monetary Policy Response''). Any rule that does not respond with a
+\emph{unitary} coefficient on the safety shock preserves the result; this holds
+for conventional Taylor rules in the US/G10.\\
+
+\textbf{Complete home bias} $\hbias\to\zs/(1+\zs)$
+& Clean statements of Props.~\ref{prop:prices}--\ref{prop:wealth} (the
+$\dev{\wsh}_1=0$, $\Eone\dev{\wsh}_2=0$ benchmark) and of
+Props.~\ref{prop:portfolios}--\ref{prop:riskpremium} (symmetric-portfolio point)
+& At complete home bias $\hbias\frac{1+\zs}{\zs}=1$, so the relative-price loading
+is unity and $\theta$-feedback terms collapse, giving $\dev{\wsh}_1=0$ and a clean
+$\theta$-benchmark. Away from it, Foreign output also responds (the
+$(\tel-1)(1-(\hbias\frac{1+\zs}{\zs})^2)$ terms in~\eqref{eq:Ewsh-solved} and
+\eqref{eq:eq99} reactivate), the wealth share moves even at $\rra=\rraF$, and the
+propositions hold only ``at least around'' the benchmark.\\
+
+\textbf{Risk-tolerance heterogeneity} $\rra\neq\rraF$
+& Prop.~\ref{prop:portfolios}(b) (equity tilt), Prop.~\ref{prop:riskpremium}(a)
+(productivity component of the premium)
+& Needed for the \emph{levered, equity-tilted} US portfolio
+($dk/d[\rraF/\rra]>0$) and for the $\rra-\rraF$ component of the Foreign-bond
+premium. \emph{Not} needed for the asset-price propagation of
+Props.~\ref{prop:prices}--\ref{prop:returns}, nor for the \emph{positive}
+Foreign-bond premium from volatile safety shocks (Prop.~\ref{prop:riskpremium}(b),
+the $(\sigma^{\cy})^2$ coefficient, which is positive independent of
+$\rra$ vs.~$\rraF$). This separation --- safety-shock propagation and the
+Foreign-bond risk premium do not require risk-tolerance heterogeneity, whereas
+the levered, equity-tilted US portfolio does --- is one of KL's central
+analytical findings.\\
+
+\textbf{Zero net supply of safe bonds} (bond, not equity, convenience)
+& Special.~(zero net supply), and implicitly the contractionary sign in
+Prop.~\ref{prop:prices}
+& If the convenience demand were for capital (positive net supply, priced asset),
+a flight to safety would \emph{stimulate} output --- raising $\qk$, wealth,
+consumption, and (with variable capital) investment. The Keynesian-recession sign
+is specific to the demanded asset being in zero net supply (KL p.~1666; the
+bond-vs-equity distinction of Koijen--Yogo 2020).\\
+
+\textbf{Trade elasticity} $\tel$ (size, and $\tel\neq1$)
+& ERS/LOOP (magnitude of the $\dev{\rer}$ response,~\eqref{eq:loop-solved}),
+Prop.~\ref{prop:wealth} (the $(\tel-1)$ wealth-share channel)
+& $\tel$ governs the size of the real-exchange-rate / terms-of-trade response to a
+given relative-output gap. At $\tel=1$ (Cobb--Douglas trade) the wealth-share
+revaluation channel through expenditure switching vanishes
+(the $(\tel-1)$ factor in~\eqref{eq:Ewsh-solved}); the ERS/LOOP relation still
+holds but with a different (smaller) exchange-rate sensitivity.\\
+
+\textbf{Positive steady-state labor wedge} $\lwedge>0$
+& Prop.~\ref{prop:portfolios}(b) sign of $db_H/d[\rraF/\rra]$,
+Prop.~\ref{prop:riskpremium} (the employment channel in the kernel)
+& With $\lwedge=0$, employment drops out of the pricing kernel (the
+$\lwedge(1-\disc)(1-\cshare)\dev{\ell}_1$ term in~\eqref{eq:v1}/\eqref{eq:m01-home}
+vanishes), so aggregate employment is no longer a priced state. The
+risk-tolerance comparative static $db_H/d[\rraF/\rra]<0$ relies on $\lwedge>0$
+(KL state ``assumes $\lwedge>0$''), and the mechanism by which risk-tolerant
+agents insure risk-averse agents against low-employment states requires the wedge
+(KL footnote~13: ``only in this case will risk-tolerant agents insure risk-averse
+agents against states of the world in which labor falls'').\\
+
+\textbf{Local completeness} (one more asset than shocks)
+& Prop.~\ref{prop:portfolios}, Prop.~\ref{prop:riskpremium}, ERS/LOOP, the
+Foreign-only robustness (B.4)
+& The Devereux--Sutherland portfolio is the efficient one, and the risk-sharing
+condition~\eqref{eq:risk-sharing} holds, only because three assets span the two
+shocks plus the redistributive margin. With incomplete markets the portfolio is
+not pinned down by efficient risk sharing and the kernel-equality relation fails;
+the risk-premium decomposition of Prop.~\ref{prop:riskpremium} would no longer be
+covariance-with-any-agent's-kernel.\\
+
+\end{longtable}
+
+\paragraph{Reading the table.} Two groupings are worth emphasizing. (i) The
+\emph{propagation} results (Props.~\ref{prop:prices}--\ref{prop:returns}: the
+recession, the real-rate wedge, the dollar's real appreciation in bad times) rest
+on \emph{nominal rigidity}, the \emph{non-neutralizing Taylor rule}, and \emph{zero
+net supply}; they do \emph{not} require any risk-tolerance asymmetry. (ii) The
+\emph{portfolio and premium} results split: the levered, equity-tilted US balance
+sheet (Prop.~\ref{prop:portfolios}(b)) and the $\rra-\rraF$ component of the
+premium (Prop.~\ref{prop:riskpremium}(a)) \emph{do} require $\rra\neq\rraF$,
+whereas the positive premium from volatile safety shocks
+(Prop.~\ref{prop:riskpremium}(b)) does \emph{not}. This is the precise sense in
+which, in KL's own structure, the dollar's negative beta can be delivered by the
+safety channel \emph{alone}, while the equity tilt requires risk-tolerance
+heterogeneity.
+
+\subsection{Connection to the three target empirical facts}
+\label{sec:empirical-facts}
+
+KL organize their analytical results around three facts about the international
+financial system. We state KL's account faithfully.
+
+\paragraph{Fact 1: the dollar's negative beta / negative risk premium.} The dollar
+is an endogenous \emph{hedge}: safe dollar bonds pay well exactly in bad times.
+This is the joint content of Propositions~\ref{prop:returns} and
+\ref{prop:riskpremium}. By Proposition~\ref{prop:returns}, a positive safety shock
+(a flight to safety, a ``bad'' state with a global employment contraction) makes
+the Home real exchange rate appreciate and lowers the Foreign-bond return relative
+to the dollar bond. By Proposition~\ref{prop:riskpremium}(b), with sufficiently
+volatile safety shocks the dollar therefore appreciates in high-marginal-utility
+states, giving safe dollar bonds a \emph{negative} beta and Foreign bonds a
+\emph{positive} risk premium. This resolves the reserve-currency paradox of
+Maggiori (2017): absent safety shocks (Prop.~\ref{prop:riskpremium}(a)) the dollar
+counterfactually appreciates in \emph{good} times whenever Home is more
+risk-tolerant, but safety shocks flip the sign, and --- crucially --- they do so
+\emph{without} requiring a risk-tolerance asymmetry. The efficient-risk-sharing /
+law-of-one-price relation of Subsection~\ref{sec:loop} is the structural reason the
+dollar appreciation in bad times must coincide with a relative fall in US output.
+
+\paragraph{Fact 2: the US as the world's insurer.} The US loses wealth in a flight
+to safety, transferring resources to the rest of the world. This is
+Proposition~\ref{prop:wealth}: Home's overall wealth share and net foreign assets
+\emph{fall} on a positive safety shock, because Home holds a levered-long-risky,
+short-dollar portfolio and the dollar (its liability) appreciates while risky
+assets (its assets) underperform. The loss is \emph{partially offset by
+seigniorage}: Home, as the issuer of the safe asset whose convenience value
+spikes, earns the seigniorage term $-\disc\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}\dev{\cy}_1$
+in the revaluation identity~\eqref{eq:wsh-realized}. Proposition~\ref{prop:portfolios}
+adds that \emph{greater US risk tolerance} rationalizes the \emph{disproportionate
+equity exposure} of the US external balance sheet ($dk/d[\rraF/\rra]>0$): a
+more-risk-tolerant US optimally bears more of the world's equity risk. KL
+emphasize (their p.~1665) that ``it is in this sense that greater risk tolerance is
+necessary to explain why the United States takes a disproportionate exposure to
+equity returns.''
+
+\paragraph{Fact 3: the US external balance sheet / carry.} The US borrows in
+dollars to hold capital and Foreign bonds --- a levered position. This is the
+content of Proposition~\ref{prop:portfolios}: the equilibrium Home portfolio is
+levered long the world-equity claim (capital) and long Foreign bonds, financed by
+issuing dollar bonds ($\frac{\qk k}{\sav}>1$, $\frac{b_H}{\sav}<0$). Because safety
+shocks induce a negative beta of dollar bonds, the US \emph{borrows more} in dollar
+bonds as it grows more risk-tolerant ($db_H/d[\rraF/\rra]<0$), using the dollar's
+hedge property to finance its risky, equity-tilted asset position. Two margins are
+separated in Proposition~\ref{prop:portfolios}: the supply of safe dollar debt
+moves the dollar-bond margin without touching the equity margin
+($dk/db^g_{H,s}=0$, $db_H/db^g_{H,s}>0$), while relative risk tolerance moves both.
+KL's account ties the carry/balance-sheet facts to the same two risk factors
+(productivity and safety) that drive the premium in
+Proposition~\ref{prop:riskpremium}.
+
+\subsection{Roadmap of reconstruction flags}
+\label{sec:flag-roadmap}
+
+The document contains \texttt{\textbackslash gapflag} reconstruction notes
+wherever KL's published derivation is terse and the algebra (or provenance, or
+interpretation) had to be supplied. The list below indexes them by section, with a
+one-line note on what was reconstructed. The flags mark places where the
+derivation goes \emph{beyond} transcription; in every case the displayed result
+matches KL's, and the flag records what was filled in.
+
+\begin{itemize}[leftmargin=1.6em,itemsep=2pt]
+  \item \textbf{Section~\ref{sec:notation} (notation), 1 flag.} The composite
+  coefficient $\atil$ is KL's $\tilde\alpha$ in their eq.~(74) display but
+  $\bar\alpha$ in the B.1.1 text; we treat the two as identical and flag the
+  naming.
+
+  \item \textbf{Section~\ref{sec:setup} (setup), 1 flag.} KL assert the
+  Devereux--Sutherland-selected portfolio coincides with the efficient one in the
+  three-asset / two-shock setting (citing Coeurdacier--Gourinchas 2016) without
+  proving the span covers the shocks; we state the equivalence as KL assert it and
+  flag the explicit verification as belonging to the portfolio engine.
+
+  \item \textbf{Section~\ref{sec:engine} (impulse engine, App.~B.1), 5 flags.}
+  (i) The intermediate terms-of-trade form~\eqref{eq:s1-intermediate} (we expand
+  the $\fr{\dev{\rs c}}_1$-elimination algebra); (ii) the period-1 consumption
+  closed form~\eqref{eq:c1-solved} (we supply the Euler-substitution chain and
+  verify the recurring denominator $\Lambda$); (iii) the expected wealth
+  share~\eqref{eq:Ewsh-solved} (we supply the $\atil$-cancellation and the
+  $(\tel-1)$ channel, flagging the lengthy term-by-term collection); (iv) the
+  Foreign inflation reduced form~\eqref{eq:dPstar1} (we fill the one-line
+  forward-substitution of $\Eone\dev{\tot}_2$); (v) the realized capital
+  return~\eqref{eq:rk1-solved} (we combine the profit and capital-pricing
+  linearizations, flagging the $\disc$ vs.~$(1-\disc)$ weight cancellation).
+
+  \item \textbf{Section~\ref{sec:prop1} (Prop.~1), 2 flags.} The
+  $\Eone\dev{\wsh}_2=0$ benchmark (two facts: $\dev{\wsh}_1=0$ at identical
+  portfolios, and the relative-labor term of~\eqref{eq:Ewsh-solved} vanishing at
+  complete home bias); and the labor-block solution
+  \eqref{eq:firm-H}--\eqref{eq:firm-F} (we supply the elimination at
+  $\hbias\frac{1+\zs}{\zs}=1$).
+
+  \item \textbf{Section~\ref{sec:prop2} (Prop.~2), 2 flags.} The Foreign-bond
+  excess-return cancellation (with $\fr{\dev{\ell}}_1=0$, the exact collapse of the
+  two pieces); and the use of~\eqref{eq:Eq2}/(76) in the Foreign Euler to obtain
+  the wedge result.
+
+  \item \textbf{Section~\ref{sec:prop3} (Prop.~3), 3 flags.} The term-by-term
+  linearization of the realized wealth-share law of motion (51) into (92)
+  (standard schema supplied); the seigniorage coefficient
+  $-\disc\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}$ interpretation (the RoW
+  population share / fraction of safe debt held abroad); and the
+  ``portfolios close to the symmetric benchmark'' qualifier (we make explicit why
+  it is needed to decouple the realized-return inputs).
+
+  \item \textbf{Section~\ref{sec:portfolio-engine} (portfolio engine, App.~B.2),
+  7 flags.} (i) The log-kernel provenance~\eqref{eq:m01} (unit-IES recursive
+  kernel); (ii) the value linearization~\eqref{eq:v1} labor coefficient
+  $(1-\lwedge)(1-\cshare)$; (iii) the combined value
+  line~\eqref{eq:v1-combined} (the tersest collection step in B.2); (iv) the Home
+  risk-adjusted kernel~\eqref{eq:m01-home} (mechanical but with the LHS
+  $\rra\tel^z\dev{\epsilon}^z_1$ grouping); (v) the Foreign risk-adjusted
+  kernel~\eqref{eq:m01-foreign} (Foreign relabeling, $1/\zs$ weights); (vi) the
+  local-completeness / risk-sharing condition~\eqref{eq:risk-sharing}
+  (Backus--Smith interpretation, why it pins the portfolio); (vii) the
+  international-portfolio equation~\eqref{eq:eq99} and $\Gam$~\eqref{eq:Gamma-def}
+  (the densest derivation in B.2 --- a genuine reconstruction of the
+  kernel-difference algebra and the identification of the $\Gam$ bracket).
+
+  \item \textbf{Section~\ref{sec:prop4} (Prop.~4), 6 flags.} The
+  arbitrary-portfolio labor solutions~\eqref{eq:lab-sym}--\eqref{eq:lab-rel}
+  (transcribed); the eq.~(99)-with-$\Gamp$
+  identity~\eqref{eq:eq99-prime}--\eqref{eq:Gamma-prime-def} (substitution and the
+  $\Gamp$ augmentation); the symmetric-portfolio wealth-share
+  expression~\eqref{eq:wsh-final}--\eqref{eq:Delta-def} (the $\Delta$
+  normalization); the Prop.~4 statement (transcribed from the brief, main paper
+  not held locally); and the two undetermined-coefficients comparative-static
+  blocks (the $b^g_{H,s}$ block triangularity giving $dk/db^g_{H,s}=0$, and the
+  $\rraF/\rra$ block with the $\lwedge>0$ requirement).
+
+  \item \textbf{Section~\ref{sec:prop5} (Prop.~5), 3 flags.} The Prop.~5 statement
+  (transcribed from the brief); the sign of the productivity coefficient
+  $\propto\rra-\rraF$ (we supply the mechanism via the kernel-difference); and the
+  sign of the safety coefficient $>0$ (we supply the comovement sign-chasing).
+
+  \item \textbf{Section~\ref{sec:risksharing-specialness} (this WP), 9 flags.}
+  (i) The Backus--Smith levels relation~\eqref{eq:bs-levels} (provenance from
+  \eqref{eq:risk-sharing} at $\rra=\rraF=1$); (ii) the ERS/LOOP
+  relation~\eqref{eq:loop-rel-raw}--\eqref{eq:loop-solved} (transcribed with the
+  Backus--Smith substitution verified); (iii) the constant-overall-wealth-share
+  reading at the $\rra=\rraF=1$ benchmark (supplied from the structure
+  of~\eqref{eq:eq99}); (iv)--(vi) the three specialness arguments
+  (zero net supply, country size, currency of invoicing --- all transcribed at KL's
+  expository level, with mechanisms supplied but the extensions not formalized);
+  (vii) the Foreign-only-demand multiplier
+  result~\eqref{eq:b4-home-ratio}--\eqref{eq:b4-mu-omega} (we supply the
+  FOC-division step giving $\mu_t=\cy_t$); (viii) the unchanged international
+  risk-sharing conditions~\eqref{eq:b4-rs-safe}--\eqref{eq:b4-rs-cap} (transcribed);
+  (ix) the entire B.5 distinct-capital / sticky-price summary (stated
+  \emph{without proof}, as KL do).
+\end{itemize}
+
+\paragraph{Where the analytical content is thinnest.} Two places deserve explicit
+warning for the extension worker. First, \textbf{App.~B.5} (distinct capital
+stocks and sticky prices, Subsection~\ref{sec:b5}) is stated by KL \emph{without
+proof}; we transcribe the analog Propositions~1--5 and the key new result --- the
+ambiguous sign of the Home capital return~\eqref{eq:b5-rk-ambiguous} and the
+definitive relative-return gap~\eqref{eq:b5-rk-gap} --- but a full re-derivation is
+not available in the published material and is not attempted here. Second, the
+\textbf{international-portfolio equation~\eqref{eq:eq99}} and its
+$\Gamp$-augmented form~\eqref{eq:eq99-prime} are the densest collected results in
+the appendix; KL display only the final form, and while every coefficient is
+matched, the intermediate kernel-difference algebra is a genuine reconstruction.
+The Propositions~4--5 conclusions depend only on the \emph{structure}
+of~\eqref{eq:eq99} (which terms load on which shock, and the signs of their
+coefficients), which is robust to any residual algebra in the exact magnitudes.
+
+\subsection{Closing note}
+\label{sec:closing}
+
+This document is a faithful re-derivation of the analytical section of Kekre and
+Lenel (2024, AER) --- their Section~II and online Appendix~B --- assembled as the
+reference backbone for the big\_cy extension. It states KL's assumptions, results,
+and intuition, fills in the algebra that the published appendix suppresses (flagged
+throughout with \texttt{\textbackslash gapflag}), and indexes exactly where those
+reconstructions occur. It takes \emph{no position} on the big\_cy extension itself:
+the comparative-static reading of Propositions~4--5 around the risk-tolerance
+asymmetry, and the separation of the safety channel from the risk-tolerance channel
+in Proposition~\ref{prop:riskpremium}, are recorded here as KL's own results, to be
+used as the starting point --- not the conclusion --- of the extension work.
