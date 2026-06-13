@@ -479,6 +479,35 @@ steps (shared scratch — our `EquilibriumState`).
 These are tightly coupled and only testable once the loop converges; port together,
 then gate on the proactive SS/Table-2 cross-check (§7 step 5).
 
+### 13.3 RESUME NOTE — solver assembled + running (state as of session 4)
+
+**DONE this session:** `model_const.py` (ModelConst bundle + big_weight),
+`model/equilibrium_step.py` (the full 10-step batched equilibrium update incl.
+nested batched Brent bond clearing), `solve/solve_model.py` (outer fit/eval/damp/
+rebuild loop with the §13.2 damping + staged activation). **The solver RUNS and
+CONVERGES stably on a coarse grid** (mus_dims=[1]*6+[0,0,1], 15 states): diff
+decreases monotonically, bond clearing activates at iter 11 (shares 0→0.7, finite),
+foreign trading at 100; q≈1.004/s≈0.99 sit at SS. 49 tests pass + smoke test.
+
+**Timing gate (coarse-grid):** coarse 0.7s/iter (15 states); full grid (589
+states) 3.1s/iter pre-bond-clearing (more once Brent active). Convergence to 1e-8
+needs ~thousands of dampened iters → benchmark solve ~hours on CPU, all 9 calibs
+~a day. Tensor-native ⇒ GPU later cuts this to minutes. Flagged to Angus.
+
+**NEXT (remaining):** (a) run benchmark to convergence (background/next session;
+consider a 1e-5/1e-6 tolerance for a first pass) + finish the SS/Table-2 gate;
+(b) port calc_bond_prices (3101-3501) + calc_valuation (3503-3774) — the post-solve
+n_bond ladder + valuation terms (NFA decomposition etc.); (c) simulate (3 clipping
+regimes, mod_results.f90) + generalized IRFs; (d) post-processing
+(var_indices/read_series + de-trending, moments, figures, tables) + closeness note.
+A `run/solve_calibration.py` entry point + saving the solved SolverState to disk
+would let the long solve run once and post-processing iterate cheaply.
+
+Possible refinements to check if convergence stalls: (i) the foreign-bond leverage
+bound sign (calc_excess_foreign_bond_nom temp_r branch); (ii) whether the
+bracket_expand step sizes (1e-2 home, 1e-3 spread) need widening for some states;
+(iii) the w_choice log-damp only affects diagnostics here (w recomputed each step).
+
 ### 13.1 RESUME NOTE — equilibrium-step assembly (state as of session 3)
 
 **Built + tested (47 tests green)** under `src/klrep/`: config; grid (Smolyak
