@@ -121,13 +121,15 @@ folder="klreplication"
 logs="${big_cy}/logs/${folder}"
 mkdir -p "${logs}"
 
-# --- one-time conda env build (CPU node w/ internet) ---------------------
+# --- one-time conda env build (maggiori GPU node) ------------------------
+# Run on the maggiori GPU nodes (sh04-06n05 H100/80G etc., ~1000G RAM) so the big
+# conda pytorch+cuda solve has ample memory (16G OOM'd at job 29440076), AND so
+# the build's `torch.cuda.is_available()` verification actually exercises the GPU
+# (confirms the CUDA build + float64 on the H100 at build time).
 file="setup_klrep_env_sherlock"
 depend_run_klrep=""                       # reset; set only if env build fires
 if [[ ${to_run} == *" $file "* ]]; then
-    # conda solving pytorch+cuda is memory-heavy (16G OOM'd at job 29440076);
-    # give it 64G. 8 cpus -> 8GB/core so it still fits normal/gsb/owners/maggiori.
-    job_id=`sbatch ${shared_settings} --time=0-2:00:00 --ntasks=1 --cpus-per-task=8 --mem=64G \
+    job_id=`sbatch ${shared_settings_gpu} --gpus=1 --time=0-2:00:00 --ntasks=1 --cpus-per-task=8 --mem=96G \
                 --job-name=$file --output="${logs}/${file}_%A.out" --error="${logs}/${file}_%A.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
     echo "Submitted $folder/$file: ${job_id}"
@@ -136,10 +138,11 @@ if [[ ${to_run} == *" $file "* ]]; then
 fi
 
 # --- GPU array solve: one array index per specification ------------------
+# maggiori 80G GPU (--gpus=1); the node has ~1000G RAM so mem is generous.
 file="run_klrep"
 if [[ ${to_run} == *" $file "* ]]; then
     job_id=`sbatch ${shared_settings_gpu} ${depend_run_klrep} --gpus=1 --array=${specs} \
-                --time=0-04:00:00 --ntasks=1 --cpus-per-task=4 --mem=32G \
+                --time=0-04:00:00 --ntasks=1 --cpus-per-task=8 --mem=96G \
                 --job-name=$file --output="${logs}/${file}_%A_%a.out" --error="${logs}/${file}_%A_%a.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
     echo "Submitted $folder/$file (array=${specs}): ${job_id}"
