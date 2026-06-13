@@ -125,7 +125,9 @@ mkdir -p "${logs}"
 file="setup_klrep_env_sherlock"
 depend_run_klrep=""                       # reset; set only if env build fires
 if [[ ${to_run} == *" $file "* ]]; then
-    job_id=`sbatch ${shared_settings} --time=0-1:00:00 --ntasks=1 --cpus-per-task=4 --mem=16G \
+    # conda solving pytorch+cuda is memory-heavy (16G OOM'd at job 29440076);
+    # give it 64G. 8 cpus -> 8GB/core so it still fits normal/gsb/owners/maggiori.
+    job_id=`sbatch ${shared_settings} --time=0-2:00:00 --ntasks=1 --cpus-per-task=8 --mem=64G \
                 --job-name=$file --output="${logs}/${file}_%A.out" --error="${logs}/${file}_%A.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
     echo "Submitted $folder/$file: ${job_id}"
