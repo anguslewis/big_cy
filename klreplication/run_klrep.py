@@ -33,6 +33,36 @@ from klrep.config import get_device                 # noqa: E402
 from klrep.params import (IDX_K, IDX_THH, IDX_ZF, IDX_OMG)  # noqa: E402
 
 
+def gpu_diagnostics(device):
+    """Log that PyTorch sees + actually uses the GPU (or flag if it fell back to
+    CPU). Prints CUDA build/runtime, device name/capability/memory, and runs a
+    real float64 matmul on the device to confirm it executes there."""
+    print("--- GPU diagnostics ---", flush=True)
+    print(f"torch {torch.__version__} | torch.version.cuda={torch.version.cuda} "
+          f"| cuda.is_available={torch.cuda.is_available()} "
+          f"| device_count={torch.cuda.device_count()}", flush=True)
+    print(f"CUDA_VISIBLE_DEVICES={os.environ.get('CUDA_VISIBLE_DEVICES', '<unset>')}",
+          flush=True)
+    if torch.cuda.is_available():
+        idx = torch.cuda.current_device()
+        props = torch.cuda.get_device_properties(idx)
+        print(f"GPU[{idx}]: {props.name} | cc {props.major}.{props.minor} "
+              f"| {props.total_memory / 1e9:.1f} GB", flush=True)
+    else:
+        print("WARNING: CUDA not available — solve will run on CPU (slow).", flush=True)
+    # Real op on the target device, in float64 (the dtype the solve uses).
+    a = torch.randn(512, 512, dtype=torch.float64, device=device)
+    b = torch.randn(512, 512, dtype=torch.float64, device=device)
+    c = a @ b
+    if device.type == "cuda":
+        torch.cuda.synchronize()
+        print(f"float64 matmul on {c.device} OK | "
+              f"GPU mem allocated {torch.cuda.memory_allocated()/1e6:.0f} MB", flush=True)
+    else:
+        print(f"float64 matmul on {c.device} OK", flush=True)
+    print("-----------------------", flush=True)
+
+
 def main():
     spec = int(os.environ.get("KLREP_SPEC", sys.argv[2] if len(sys.argv) > 2 else 1))
     job_id = sys.argv[1] if len(sys.argv) > 1 else "local"
@@ -40,6 +70,7 @@ def main():
     device = get_device()
     print(f"=== run_klrep: spec={spec} job={job_id} device={device} max_iter={max_iter} ===",
           flush=True)
+    gpu_diagnostics(device)
 
     params_dir = HERE / "inputs" / "params"   # tracked in-repo (reaches cluster via sync_git)
     p = load_param_file(spec, params_dir=params_dir)
@@ -52,7 +83,10 @@ def main():
     t0 = time.time()
     st, diff, it = solve_model(p, max_iter=max_iter, device=device, verbose=True)
     elapsed = time.time() - t0
-    print(f"solve done: {it} iters, diff={diff:.3e}, {elapsed:.1f}s", flush=True)
+    print(f"solve done: {it} iters, diff={diff:.3e}, {elapsed:.1f}s | "
+          f"solver tensors on {st.g.q.device}", flush=True)
+    if device.type == "cuda":
+        print(f"peak GPU mem {torch.cuda.max_memory_allocated()/1e6:.0f} MB", flush=True)
 
     # --- outputs ---
     outdir = Path(output) / "klreplication"
