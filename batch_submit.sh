@@ -23,11 +23,11 @@
 #   The wrapper sets `to_run` for that one invocation via the environment.
 ############################################################################
 
-# Per-user parameters (paths, mail settings, partition) — sets $big_cy,
-# $big_cy_code, $mailuser, $mailtype, $system_part, etc.
-source ~/shell_profile.sh
+# Project path + SLURM globals — sets $big_cy, $big_cy_code, $mailuser,
+# $mailtype, $system_part, etc. (self-contained; no ~/shell_profile.sh).
+source "$HOME/big_cy/project_variables.sh"
 
-# Sanity check: the project-root variable must be set by shell_profile.
+# Sanity check: the project-root variable must be set by project_variables.sh.
 if [[ -z "$big_cy" ]]; then
    echo "Empty big_cy variable: Exiting..."
    exit 1

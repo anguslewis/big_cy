@@ -8,13 +8,14 @@
 # checks the log for errors so a failed step fails the SLURM job.
 ############################################################################
 
+# Project path + SLURM globals (self-contained; no ~/shell_profile.sh). Must be
+# sourced before using $big_cy below.
+source "$HOME/big_cy/project_variables.sh"
+
 # Repo code root and log root. These two lines are the only repo-specific
 # edits needed if you reuse this controller elsewhere.
 base_folder="${HOME}/big_cy"
 logs="${big_cy}/logs"
-
-# Per-user parameters (paths, env names).
-source ~/shell_profile.sh
 
 # SLURM context
 echo "SLURM_JOB_ID="$SLURM_JOB_ID
