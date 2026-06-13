@@ -478,3 +478,75 @@ steps (shared scratch — our `EquilibriumState`).
 
 These are tightly coupled and only testable once the loop converges; port together,
 then gate on the proactive SS/Table-2 cross-check (§7 step 5).
+
+### 13.1 RESUME NOTE — equilibrium-step assembly (state as of session 3)
+
+**Built + tested (47 tests green)** under `src/klrep/`: config; grid (Smolyak
+elem/grid/basis/interp); quad (GH); params; setup (shock_grid, smolyak_setup,
+state_grid); solve/steady_state; model/{calc_bundle, util_fun, portfolio
+(portfolio_return + portfolio_foc), period_block (compute_current_period,
+compute_q_new)}; solve/brent (batched_brent + batched_bracket_expand). The whole
+SETUP pipeline + the equilibrium step's static algebra + the root-find machinery
+are validated. **All the LEGO pieces for the equilibrium step now exist and are
+tested.**
+
+**Remaining = assemble `model/equilibrium_step.py` + `solve/solve_model.py`** from
+those pieces, following the exact Fortran (now fully read; key facts below).
+
+**Equilibrium step data shapes** (batch S=n_states, Q=n_quad, n_I=2):
+- `big_weight_vec` (S,Q): `[:, :Q-1] = quad_weight_vec*(1-p_dis)`, `[:, Q-1] = p_dis`,
+  `p_dis = exp(state_grid[:,IDX_DIS])`. NOTE the no-shock node already has
+  quad_weight 0, so it gets weight 0 in expectations (it's only for the stochastic
+  SS in simulation). Sum over Q = 1.
+- STEP 2 next-period (mod_calc.f90:2316-2396), all (S,Q,·): unpack nxt_mat columns
+  `[v_h,v_f,mc_h,mc_f,s,q,l1,l2,infl1,infl2,csp1,csp2]`; `ch/cf_spending_nxt =
+  nxt_mat[...,10/11]*exp(dz_vec)`; `k_nxt=nxt_mat_2[...,0]`, `next_k=k_nxt[:,0]`;
+  `zf_nxt2=zeta*exp(nxt_mat_2[...,1])`; `omg_nxt=exp(nxt_mat_2[...,2])+omg_shift-
+  b_lmbd*shock_nxt`; `homegood_infl_nxt` (2349-2350); `kappa_nxt`; `y_next`,
+  `w_next_choice`, `pi_nxt` (2361-2372); **`rk_vec=((1-δ)q_nxt+pi_nxt)/q_current`
+  then `rk_vec[:,Q-1]*=exp(dz_vec[Q-1])`** (disaster node); `P_div_P_h_nxt`;
+  `rf_vec[...,0]=nom_i1/homegood_infl_nxt[...,0]`, `rf_vec[...,1]=(nom_i1+nom_i2)/
+  homegood_infl_nxt[...,1]`; seigniorage (2390-2396): if bg_yss>0,
+  `seig=cf_spending_nxt*(bg_yss+shock_nxt)*omg_nxt` (the (ch+cf) cancels), transfer
+  `[+seig,-seig]`.
+- STEP 4 home bond clearing (outer_iter>10): batched Brent over S on `nom_i[:,0]`
+  to zero `excess_b = sum_agent savings*share`. Residual `calc_excess_bond_nom`:
+  per agent `savings=wealth+w_choice*l-c_spend` (c_spend clamped to
+  [min_cons_sav, wealth+w*l-min_cons_sav], min_cons_sav=1e-8); natural-leverage
+  bounds (3826-3842, note numerator uses RAW rf_vec cols, denom uses
+  rf_home=rf_vec0/(1-omg)); `share` via batched Brent on `portfolio_foc` with
+  r1=rf_home, r2=rk, `next_period_share=(savings*r_alpha+exp(dz_vec)*q_l_ss+seig)/
+  tot_wealth_ss`, `r_alpha=portfolio_return(share,bF_share,rf_home,rf_foreign,rk)`;
+  constraint-binding -> clamp to bound. `b_temp=savings*share`.
+- STEP 5 foreign clearing (foreign_trading & outer_iter>100): batched Brent on the
+  SPREAD `nom_i[:,1]` to zero `-sum bh_temp`; inner `calc_bond_portfolio_share`
+  solves `bF_share` (Brent on portfolio_foc, r1=rf_foreign, r2=rf_home);
+  `bf_temp=savings*bF_share`, `bh_temp=(share-bF_share)*savings`.
+- STEP 6 value/θ (2818-2867): per agent `r_alpha` (with /(1-omg) on home),
+  `next_period_share`, `EV=(Σ w·(v_temp·nps)^(1-γ))^(1/(1-γ))`, `labor_part`,
+  `objf=(v_norm·labor_part^(1/ies)·c^((ies-1)/ies)+β·EV^((ies-1)/ies))^(ies/(ies-1))`,
+  `v_new=objf·((wealth+q_l_ss)/tot_wealth_ss)^(-1)`; `θ_nxt=nxt_wealth1/Σ`;
+  `k_next_new=Σ savings*(1-share)/q_current`. β includes `bbeta_adj`.
+- STEP 7 terms of trade (2873-2903): damped (0.1) fixed point on s_new.
+- STEP 8 consumption (2909-3000): damped (0.5) Euler per agent; updates
+  `M_vec_mat[:,iii]=β·mc_temp/util_c_deriv·(v_temp/EV)^(1/ies-γ)·nps^(-γ)`,
+  `cons_update=c/temp^ies`, `temp=Σ M·r_alpha_omg·c_cost/c_cost_nxt·w`; if phi_w==0
+  also update labor (2974-2978).
+- STEP 9 labor (3006-3064): if phi_w>0, damped (0.005) wage Phillips curve
+  (3024-3037) then `l=kappa·((zf^(1-α)(1-α)/w/s_vec)^(1/α))`.
+- STEP 10 inflation (3072-3074): Taylor-rule inversion using `nom_i_vec_in`
+  (the INCOMING nom_i, saved at entry) + `ih_last/if_last`, rho_i, phi_h/f, phi_yh/f,
+  tayl_ic.
+- outer_iter<=10 fallback (3079-3097): share=0, nom_i from M_vec_mat averages.
+- Outer loop `solve_model` (PLAN §13): fit coeffs (interp_factor/solve on
+  smol_polynom), per-iteration build nxt via Smolyak basis @ coeffs, call
+  equilibrium_step (batched over ALL states at once), damp each object, rebuild
+  next_state_mat (clamp [-1,1]), recompute diff, until <1e-8 or max_iter=5000.
+  Per-object damping weights: read from the update section of calc_sol (lines
+  ~1100-1937 — not yet transcribed; CHECK there for the exact relaxation weights).
+- Then `calc_bond_prices` (3101-3501), `calc_valuation` (3503-3774), then simulate
+  (3 clipping regimes) + IRFs + post-proc.
+
+**Next action:** transcribe the per-object damping weights from calc_sol's update
+block (mod_calc.f90 ~1100-1937), then write equilibrium_step.py + solve_model.py,
+run a COARSE-grid solve (reduce mus_dims), gate on SS/Table-2, then scale.
