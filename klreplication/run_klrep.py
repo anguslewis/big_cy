@@ -67,9 +67,14 @@ def main():
     spec = int(os.environ.get("KLREP_SPEC", sys.argv[2] if len(sys.argv) > 2 else 1))
     job_id = sys.argv[1] if len(sys.argv) > 1 else "local"
     max_iter = int(os.environ.get("KLREP_MAXITER", 5000))
+    # Outer convergence tolerance. Default 1e-6 = the Phase-1 GATE tolerance:
+    # ample for the SS/Table-2 comparison (policies ~6 sig figs) and finishes well
+    # under the wall (the 1e-8 linear tail is slow). Set KLREP_CONV=1e-8 for the
+    # final high-fidelity run (7h wall handles it).
+    conv = float(os.environ.get("KLREP_CONV", "1e-6"))
     device = get_device()
-    print(f"=== run_klrep: spec={spec} job={job_id} device={device} max_iter={max_iter} ===",
-          flush=True)
+    print(f"=== run_klrep: spec={spec} job={job_id} device={device} "
+          f"max_iter={max_iter} conv={conv:.0e} ===", flush=True)
     gpu_diagnostics(device)
 
     params_dir = HERE / "inputs" / "params"   # tracked in-repo (reaches cluster via sync_git)
@@ -81,7 +86,7 @@ def main():
 
     ss = calc_steady(p)
     t0 = time.time()
-    st, diff, it = solve_model(p, max_iter=max_iter, device=device, verbose=True)
+    st, diff, it = solve_model(p, max_iter=max_iter, conv=conv, device=device, verbose=True)
     elapsed = time.time() - t0
     print(f"solve done: {it} iters, diff={diff:.3e}, {elapsed:.1f}s | "
           f"solver tensors on {st.g.q.device}", flush=True)

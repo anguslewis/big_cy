@@ -197,11 +197,14 @@ def solve_step(st: SolverState, outer_iter: int):
     return st2, diff
 
 
-def solve_model(p: Params, *, max_iter=5000, device=None, verbose=False):
+def solve_model(p: Params, *, max_iter=5000, conv=_CONV, device=None, verbose=False):
+    # `conv` is the OUTER convergence tolerance (the inner step fixed points stay
+    # tight at _CONV=1e-8). 1e-8 is KL's; 1e-6 is ample for SS/Table-2 validation
+    # and converges much sooner (the linear tail is slow).
     st = init_solver(p, device=device)
     diff = 1.0
     it = 0
-    while diff > _CONV and it < max_iter:
+    while diff > conv and it < max_iter:
         it += 1
         st, diff = solve_step(st, it)
         if verbose and (it <= 12 or it % 50 == 0):
