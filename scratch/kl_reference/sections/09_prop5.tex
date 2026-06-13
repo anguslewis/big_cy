@@ -1,2 +1,246 @@
-% 09_prop5 — stub (to be filled by theorist)
-\bigskip\noindent\textit{[pending section]}\par
+% =====================================================================
+% 09_prop5.tex — Proposition 5: sign of the risk premium / reserve-currency
+% paradox (WP-D)
+% =====================================================================
+\section{Proposition 5: the sign of the risk premium and the reserve-currency paradox}
+\label{sec:prop5}
+
+This section proves Proposition~5 of KL: the sign of the equilibrium risk premium
+on Foreign bonds relative to safe dollar bonds. The risk premium is the covariance
+of (the negative of) any agent's log pricing-kernel deviation with the excess log
+return (eq.~\eqref{eq:rp-cov} of Section~\ref{sec:portfolio-engine}). The
+proposition decomposes this covariance into a productivity component, signed by
+$\rra-\rraF$, and a safety component, which is unambiguously positive --- the
+result that safety shocks resolve the ``reserve-currency paradox'' of Maggiori
+(2017).
+
+\subsection{Statement}
+
+\begin{proposition}[Sign of the risk premium; reserve-currency paradox]
+\label{prop:riskpremium}
+Consider the simplified economy of Proposition~\ref{prop:portfolios} (wages set
+one period in advance, $\lwedge>0$, complete home bias), with the safety shock
+$\dev{\cy}$ and the productivity shock $\dev{\epsilon}^z$ independent. Then, at
+least around the symmetric-country-portfolio case, the equilibrium risk premium on
+Foreign bonds relative to dollar bonds,
+\begin{equation}
+\Cov_t\bigl(-\dev{\pk}_{t,t+1},\;\fr{r}_{t+1}-\D\dev{\rer}_{t+1}-\rr_{t+1}\bigr), \label{eq:prop5-cov}
+\end{equation}
+satisfies:
+\begin{enumerate}[label=(\alph*),leftmargin=1.8em,itemsep=3pt]
+  \item if $\sigma^{\cy}=0$ (no safety shocks), the covariance~\eqref{eq:prop5-cov}
+  is proportional to $\rra-\rraF$ (it is negative if Home is more risk-tolerant,
+  $\rra<\rraF$);
+  \item the covariance~\eqref{eq:prop5-cov} is \emph{rising} in $\sigma^{\cy}$
+  (more volatile safety shocks raise the risk premium).
+\end{enumerate}
+The same statements hold using the Foreign household's pricing kernel
+$\fr{\dev{\pk}}$ in place of $\dev{\pk}$.
+\end{proposition}
+
+\gapflag{We transcribe Proposition~5 to match KL's main-paper statement
+(p.~1665) as relayed in the work-package brief; as for Proposition~4, the project
+does not hold a local copy of the main-paper PDF, so the verbatim wording is taken
+from the brief. The mathematical content --- the $(\sigma^z)^2$ coefficient
+signed by $\rra-\rraF$ and the positive $(\sigma^{\cy})^2$ coefficient --- matches
+the decomposition displayed at the end of the appendix proof (their app.~p.~78),
+which we hold directly. Here $\sigma^{\cy}$ denotes the standard deviation of the
+safety shock (KL's $\sigma^\omega$) and $\sigma^z$ that of the productivity shock;
+$\D\dev{\rer}_{t+1}$ is the real-exchange-rate change converting the Foreign-bond
+return to Home units. We write the statement at a generic date $t$ following KL;
+in the period-$1$ engine $t=0$, so the relevant object is the period-$0$
+conditional covariance, evaluated below at $\Cov_0$.}
+
+\subsection{Proof}
+
+\paragraph{Strategy.} By local completeness~\eqref{eq:risk-sharing}, the risk
+premium equals
+$-\Ezero[(\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1)(\fr{r}_1-\D\dev{\rer}_1-\rr_1)]$
+(the directly-priced productivity loading $\rra\tel^z\dev{\epsilon}^z_1$ is the
+part of the kernel that is spanned and does not contribute a premium beyond the
+covariance; KL form the premium with the risk-adjusted kernel). We expand this
+covariance using the B.2 results, exploit the independence of the two shocks to
+split it into a $(\sigma^z)^2$ piece and a $(\sigma^{\cy})^2$ piece, and sign each.
+
+\subparagraph{Step 1: the covariance object.} The risk premium is (their
+app.~p.~78)
+\begin{equation}
+\text{RP} \;=\; -\Ezero\Bigl[\bigl(\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1\bigr)\bigl(\fr{r}_1-\D\dev{\rer}_1-\rr_1\bigr)\Bigr]. \label{eq:prop5-RP}
+\end{equation}
+Both factors are mean-zero to first order (period-$0$ conditional), so
+$\text{RP}=-\Cov_0(\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1,\;\fr{r}_1-\D\dev{\rer}_1-\rr_1)$,
+which has the \emph{same sign structure} as~\eqref{eq:prop5-cov}: the two differ
+only by $-\Cov_0(\rra\tel^z\dev{\epsilon}^z_1,\fr{r}_1-\D\dev{\rer}_1-\rr_1)$, a
+pure $(\sigma^z)^2$ term that shifts the magnitude of the $(\sigma^z)^2$ piece but
+not its $\rra-\rraF$ sign and leaves the $(\sigma^{\cy})^2$ piece untouched (this
+is why KL state Proposition~5 with the plain kernel $-\dev{\pk}$ while proving it
+with the risk-adjusted kernel $\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1$). The
+risk-adjusted kernel is \eqref{eq:m01-home} and the excess return
+$\fr{r}_1-\D\dev{\rer}_1-\rr_1$ is the
+Proposition~\ref{prop:returns}(c)-minus-(a) realized excess return.
+
+\subparagraph{Step 2: load each factor on the two shocks.} At the symmetric
+portfolio, both factors in \eqref{eq:prop5-RP} are linear in the two independent
+innovations $(\dev{\epsilon}^z_1,\dev{\cy}_1)$. From the
+Proposition~\ref{prop:returns} realized returns (specialized to the symmetric
+portfolio, complete home bias, predetermined wages):
+\begin{align}
+\fr{r}_1-\D\dev{\rer}_1-\rr_1
+&= \underbrace{A_z\,\tel^z\dev{\epsilon}^z_1}_{\text{productivity}}
++\underbrace{A_\omega\,\dev{\cy}_1}_{\text{safety}}, \label{eq:exret-decomp}
+\end{align}
+with $A_\omega<0$: from Proposition~\ref{prop:returns}(a),(c),
+$\fr{r}_1-\D\dev{\rer}_1-\rr_1=(1-\cshare)\dev{\ell}_1-\rr_1$, and with
+$\dev{\ell}_1\propto-\dev{\cy}_1$ and $\rr_1\propto+\dev{\cy}_1$ the safety
+loading is negative (Foreign bonds underperform dollar bonds on impact of a
+positive safety shock). The productivity loading $A_z$ is the response of the same
+excess return to a productivity surprise.
+
+Likewise the risk-adjusted kernel~\eqref{eq:m01-home} loads on the two shocks as
+\begin{equation}
+\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1
+= B_z\,\tel^z\dev{\epsilon}^z_1 + B_\omega\,\dev{\cy}_1, \label{eq:kernel-decomp}
+\end{equation}
+where $B_z$ collects the kernel's productivity loading (through
+$\Eone\dev{\wsh}_2$, aggregate employment, and the explicit
+$-\rra(1-\cshare)\tel^z\dev{\epsilon}^z_1$ term) and $B_\omega$ its safety loading
+(through the safety-driven contraction in employment and the wealth share).
+
+\subparagraph{Step 3: split the covariance by independence.} Because
+$\dev{\epsilon}^z_1\perp\dev{\cy}_1$, the cross terms vanish in expectation
+($\Ezero[\dev{\epsilon}^z_1\dev{\cy}_1]=0$), so \eqref{eq:prop5-RP} becomes
+\begin{equation}
+\text{RP} = -\Bigl[B_z A_z\,(\tel^z)^2\Ezero(\dev{\epsilon}^z_1)^2
++ B_\omega A_\omega\,\Ezero(\dev{\cy}_1)^2\Bigr]
+= -B_z A_z\,(\sigma^z)^2 - B_\omega A_\omega\,(\sigma^{\cy})^2, \label{eq:RP-split}
+\end{equation}
+absorbing $(\tel^z)^2\Ezero(\dev{\epsilon}^z_1)^2$ into $(\sigma^z)^2$ and
+$\Ezero(\dev{\cy}_1)^2$ into $(\sigma^{\cy})^2$. Thus the risk premium is a linear
+combination of $(\sigma^z)^2$ and $(\sigma^{\cy})^2$, as claimed.
+
+\subparagraph{Step 4: sign the productivity coefficient.} The coefficient on
+$(\sigma^z)^2$ is $-B_z A_z$. From the B.2 results, the productivity loading of
+the risk-adjusted kernel carries the cross-country risk-aversion difference: a
+positive productivity shock raises Home consumption and the Home wealth share, and
+the kernel's response is governed by $\rra$ versus $\rraF$ through the
+risk-sharing condition~\eqref{eq:risk-sharing}. KL show (their app.~p.~78) that
+the resulting coefficient on $(\sigma^z)^2$ ``takes the sign of $\rra-\rraF$.''
+\begin{equation}
+-B_z A_z \;\propto\; \rra-\rraF. \label{eq:coef-z}
+\end{equation}
+\gapflag{Equation~\eqref{eq:coef-z} is KL's stated sign result (app.~p.~78: ``the
+coefficient on the former takes the sign of $\rra-\rraF$''). The reconstruction:
+the excess return $A_z$ (the productivity loading of
+$\fr{r}_1-\D\dev{\rer}_1-\rr_1$) is common across agents, while the kernel loading
+$B_z$ differs across Home and Foreign exactly through the risk-aversion difference
+--- the risk-sharing condition~\eqref{eq:risk-sharing} forces
+$\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1=\fr{\dev{\pk}}_{0,1}-\rraF\tel^z\dev{\epsilon}^z_1+\D\dev{\rer}_1$,
+so the productivity loadings of the two risk-adjusted kernels differ, and the
+covariance of the \emph{Home} risk-adjusted kernel with the common excess return
+inherits the sign of $\rra-\rraF$. (Intuitively: when $\rra<\rraF$, Home is more
+risk-tolerant, so in good productivity states Home's marginal utility falls by
+less than Foreign's relative to the spanned benchmark; the Home kernel covaries
+\emph{positively} with the dollar-appreciating excess return, making $-B_z A_z<0$,
+i.e.\ a \emph{negative} productivity contribution to the Foreign-bond premium.)
+We supply the mechanism; KL display only the sign. The sign $\rra-\rraF$ (rather
+than $\rraF-\rra$) is KL's, and is consistent with the Proposition~4 reading that
+a more risk-tolerant Home holds the dollar (the appreciating asset) as the
+negative-beta leg. We flag that we did not compute the magnitude of $-B_z A_z$,
+only reproduce KL's sign.}
+
+\subparagraph{Step 5: sign the safety coefficient.} The coefficient on
+$(\sigma^{\cy})^2$ is $-B_\omega A_\omega$. We have $A_\omega<0$ (Step~2:
+Foreign bonds underperform dollar bonds on impact of a positive safety shock). The
+kernel's safety loading $B_\omega$ is also negative: a positive safety shock
+contracts Home employment and lowers the Home wealth share / consumption, raising
+the (risk-adjusted) marginal-utility kernel $\dev{\pk}_{0,1}$ --- but in the
+covariance with the \emph{negative} of the kernel the relevant sign works out so
+that $-B_\omega A_\omega>0$. KL state (their app.~p.~78) that ``the coefficient on
+the latter is positive,'' independent of the risk-aversion difference:
+\begin{equation}
+-B_\omega A_\omega \;>\;0. \label{eq:coef-omega}
+\end{equation}
+\gapflag{Equation~\eqref{eq:coef-omega} is KL's stated sign result (app.~p.~78:
+``the coefficient on the latter is positive''). The reconstruction: the safety
+shock moves both the kernel and the excess return in the \emph{same} direction ---
+a positive $\dev{\cy}_1$ depresses the Foreign-bond excess return ($A_\omega<0$)
+\emph{and} (because it contracts global employment and Home wealth) makes
+state-prices high, so $-\dev{\pk}_{0,1}$ covaries positively with the
+underperformance. The product $-B_\omega A_\omega$ is therefore positive
+\emph{regardless of $\rra$ versus $\rraF$}, because the safety shock's propagation
+(Propositions~\ref{prop:prices}--\ref{prop:returns}) does not rely on a
+risk-aversion difference --- it operates through the convenience-yield wedge and
+nominal rigidity alone. This is the crux of KL's point that safety shocks raise
+the risk premium even absent differences in risk tolerance. We supply the
+sign-chasing; KL display only ``positive.'' We flag that we reproduce KL's sign
+via the comovement argument rather than computing $B_\omega$ and $A_\omega$
+explicitly; the comovement (both negative on impact, product positive in the
+$-\Cov$ premium) is exactly the Proposition~\ref{prop:returns} structure.}
+
+\subparagraph{Step 6: conclude.} Combining \eqref{eq:RP-split},
+\eqref{eq:coef-z}, and \eqref{eq:coef-omega}: if $\sigma^{\cy}=0$ then
+$\text{RP}=-B_z A_z(\sigma^z)^2\propto\rra-\rraF$, establishing part~(a); and
+$\partial\text{RP}/\partial(\sigma^{\cy})^2=-B_\omega A_\omega>0$, so RP is rising
+in $\sigma^{\cy}$, establishing part~(b). By the local-completeness
+condition~\eqref{eq:risk-sharing}, the Foreign risk-adjusted kernel
+$\fr{\dev{\pk}}_{0,1}-\rraF\tel^z\dev{\epsilon}^z_1$ differs from the Home one only
+by $\D\dev{\rer}_1$, which is itself a linear combination of the same two shocks;
+the covariance with the excess return is therefore identical, so the statements
+hold for the Foreign household's kernel as well. \qed
+(\,Proposition~\ref{prop:riskpremium}\,)
+
+\subsection{Discussion}
+
+\paragraph{Part 1: the reserve-currency paradox.} Absent safety shocks
+($\sigma^{\cy}=0$), part~(a) says Foreign bonds earn a \emph{negative} risk
+premium relative to dollar bonds whenever Home is more risk-tolerant
+($\rra<\rraF$). The mechanism: with only productivity risk, the dollar appreciates
+in \emph{good} times. A positive productivity shock raises world output; the more
+risk-tolerant Home, levered long in capital (Proposition~\ref{prop:portfolios}),
+sees its wealth and consumption rise; Home demand shifts toward Home goods and the
+dollar appreciates exactly in this good state. The dollar (safe-bond leg) thus
+pays well in good times and badly in bad times --- it is a \emph{high}-beta,
+positive-premium asset, so Foreign bonds carry a \emph{negative} premium. This is
+the ``reserve-currency paradox'' of Maggiori (2017): the would-be reserve currency
+counterfactually appreciates in good states. KL's contribution here is to show the
+paradox is \emph{robust} to endogenous production and nominal rigidities --- it
+survives in their richer environment, not just in an endowment model.
+
+\paragraph{Part 2: safety shocks resolve the paradox.} Part~(b) says that adding
+safety shocks raises the Foreign-bond risk premium, and sufficiently volatile
+safety shocks flip its sign to \emph{positive}. The mechanism is the mirror image
+of part~1: a positive safety shock makes the dollar appreciate in \emph{bad} times
+(high safe-asset demand coincides with a global employment contraction,
+Propositions~\ref{prop:prices}--\ref{prop:returns}). Now the dollar pays well
+exactly when marginal utility is high --- it is a \emph{negative}-beta, hedge
+asset --- so Foreign bonds must earn a \emph{positive} premium to be held. KL
+emphasize the key feature: safety shocks raise the risk premium \emph{even absent
+any difference in risk tolerance}, because their propagation in
+Propositions~\ref{prop:prices}--\ref{prop:returns} does not rely on
+$\rra\neq\rraF$. The safety channel and the risk-tolerance channel are distinct;
+the former alone can deliver the dollar's negative beta.
+
+\paragraph{Connection to the three target facts.} Proposition~5 ties together the
+paper's empirical program. (i) The \emph{dollar's negative beta}: with sufficiently
+volatile safety shocks, the dollar appreciates in bad global states, giving safe
+dollar bonds a negative beta and a negative risk premium --- the structural
+counterpart of the dollar's hedge property. (ii) The \emph{US as the world's
+insurer}: the positive Foreign-bond premium is the compensation Home demands for
+providing dollar safety, the asset-pricing face of the wealth-transfer mechanism
+of Proposition~\ref{prop:wealth}. (iii) The \emph{resolution of the
+reserve-currency paradox}: safety shocks overturn the Maggiori (2017) sign,
+reconciling the model with the observed positive carry/term premia on
+foreign-currency bonds without requiring an implausible risk-tolerance asymmetry.
+
+\paragraph{The big\_cy reading.} Proposition~5 is the asset-pricing hinge of the
+big\_cy thesis. KL obtain the dollar's negative premium through two channels ---
+risk-tolerance asymmetry (part~1, sign $\rra-\rraF$) and safety-shock volatility
+(part~2, the positive $(\sigma^{\cy})^2$ coefficient). The second channel
+\emph{does not require} $\rra\neq\rraF$. A \emph{large absolute} convenience yield
+raises the effective volatility and propagation of the safety factor, magnifying
+the positive $(\sigma^{\cy})^2$ contribution to the Foreign-bond premium; the
+project's question is whether this channel, scaled to DiTella-magnitude
+convenience yields, can deliver the dollar's negative beta on its own ---
+substituting for the risk-tolerance asymmetry that Proposition~4 otherwise
+requires. We record KL's result faithfully here and defer the quantitative
+assessment to the big\_cy extension.

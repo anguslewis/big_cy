@@ -1,2 +1,393 @@
-% 07_portfolio_engine — stub (to be filled by theorist)
-\bigskip\noindent\textit{[pending section]}\par
+% =====================================================================
+% 07_portfolio_engine.tex — Appendix B.2: pricing kernels, portfolios,
+% risk premia (second-order portfolio engine) (WP-D)
+% =====================================================================
+\section{The portfolio and risk-premium engine (second-order)}
+\label{sec:portfolio-engine}
+
+The first-order engine of Section~\ref{sec:engine} determines prices, returns,
+and the realized wealth-share revaluation \emph{given} the steady-state
+portfolio $(\qk k,b_F,b^g_{H,s})$. It does not pin that portfolio down: to first
+order, all assets are perfect substitutes and the portfolio is indeterminate.
+KL close the model with the Devereux--Sutherland (2011) device: the
+\emph{equilibrium} portfolio is the one that makes the \emph{second-order}
+optimal-portfolio (excess-return) conditions hold, and to leading order it is
+determined by a first-order risk-sharing condition. This section reconstructs
+KL's online Appendix~B.2 (their app.~pp.~73--75). The outputs are: (i) the
+second-order portfolio-Euler conditions; (ii) the log pricing-kernel deviation
+$\dev{\pk}_{0,1}$ and its Home and Foreign ``risk-adjusted'' forms
+$\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1$ and
+$\fr{\dev{\pk}}_{0,1}-\rraF\tel^z\dev{\epsilon}^z_1$; (iii) the
+local-completeness (efficient-risk-sharing) condition; and (iv) the
+international-portfolio equation, KL's eq.~(99), with its composite coefficient
+$\Gam$. These feed directly into Propositions~\ref{prop:portfolios}
+and~\ref{prop:riskpremium}.
+
+Throughout we follow KL's app.~B.2 in writing $\tel^z$ for the loading of the
+productivity surprise (their $\sigma^z$; macro \texttt{\textbackslash tel}$^z$ in
+the engine), $\dev{\epsilon}^z_1$ for the period-$1$ productivity innovation, and
+$\lwedge$ for the steady-state \emph{labor wedge}. As in the engine we keep
+$\hbias$ general until completeness is imposed.
+
+\subsection{The Devereux--Sutherland portfolio-Euler conditions}
+\label{sec:portfolio-euler}
+
+A second-order approximation of the period-$0$ optimal portfolio-choice
+conditions (their app.~p.~73) gives, for the excess return of capital over the
+safe dollar bond and for the excess return of the Foreign bond over the safe
+dollar bond,
+\begin{align}
+\Ezero\bigl[\rk_1-\rr_1\bigr] + \text{Jensen terms}
+&= \dev{\cy}_0 - \Ezero\Bigl[\bigl(\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1\bigr)\bigl(\rk_1-\rr_1\bigr)\Bigr], \label{eq:ds-capital}\\
+\Ezero\bigl[\fr{r}_1-\D\dev{\rer}_1-\rr_1\bigr] + \text{Jensen terms}
+&= \dev{\cy}_0 - \Ezero\Bigl[\bigl(\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1\bigr)\bigl(\fr{r}_1-\D\dev{\rer}_1-\rr_1\bigr)\Bigr], \label{eq:ds-fbond}
+\end{align}
+and analogously for the Foreign household (with $\fr{\dev{\pk}}_{0,1}$ and
+$\rraF$ in place of $\dev{\pk}_{0,1}$ and $\rra$). Here $\dev{\pk}_{0,1}$ is the
+log deviation of the Home household's real pricing kernel (period~$0$ to
+period~$1$), defined in Subsection~\ref{sec:log-kernel} below, and
+$\dev{\cy}_0$ is the period-$0$ (steady-state) convenience yield on the safe
+dollar bond, which appears because the dollar bond yields liquidity services that
+capital and Foreign bonds do not.
+
+\paragraph{Reading the conditions.} The left-hand side of each equation is an
+expected excess return plus a \emph{Jensen} (variance-of-returns) correction. KL
+note (their app.~p.~73) that ``\emph{Jensen terms} reflect the component of
+excess returns which do not reflect safety shocks nor the covariance with agents'
+pricing kernels (and instead reflect the variance of returns).'' The
+economically active part of each condition is therefore the right-hand side: the
+convenience premium $\dev{\cy}_0$ that the safe bond commands, net of the
+covariance of the (risk-adjusted) pricing kernel with the excess return. The
+equilibrium portfolio is the one that makes these covariances take the values
+required for \eqref{eq:ds-capital}--\eqref{eq:ds-fbond} to hold. Because the
+Jensen terms are pure second moments of returns that are common across the
+household problems and do not load on the safety shock or on the kernel
+covariance, KL's strategy is to read the equilibrium holdings off the
+\emph{first-order} risk-sharing condition that the covariance terms encode; the
+Jensen terms then determine only the (common, second-order) level of expected
+excess returns, not the cross-sectional portfolio. We make this precise via the
+local-completeness condition of Subsection~\ref{sec:local-completeness}.
+
+\subsection{The log pricing kernel}
+\label{sec:log-kernel}
+
+In period~$1$, the log deviation of the representative Home household's pricing
+kernel is (their app.~p.~73)
+\begin{equation}
+\dev{\pk}_{0,1} = -\dev{\rs c}_1 + (1-\rra)\,\dev{\rs \val}_1, \label{eq:m01}
+\end{equation}
+which is the log-linearization of the Epstein--Zin/recursive stochastic discount
+factor: with unit IES (the simplified environment), the kernel is
+$m_{0,1}\propto (c_1)^{-1}(v_1/ce_0)^{1-\rra}$, whose log deviation is
+$-\dev{\rs c}_1$ plus $(1-\rra)$ times the (re-scaled) value deviation
+$\dev{\rs\val}_1$ (the certainty-equivalent normalizer $ce_0$ is non-stochastic
+as of period~$0$ and drops from the period-$0$-to-$1$ innovation).
+\gapflag{KL display \eqref{eq:m01} directly as ``the log deviation in the
+representative Home household's pricing kernel is given by
+$\dev{\pk}_{0,1}=-\dev{\rs c}_1+(1-\rra)\dev{\rs\val}_1$.'' We supply the
+one-line provenance: under unit IES the recursive kernel is the product of the
+consumption-growth term (exponent $-1$ on $c$, since $1/\text{IES}=1$) and the
+continuation-value/certainty-equivalent term carrying the risk-aversion exponent
+$1-\rra$. The macro renders $\dev{\rs c}_1=\hat{\tilde c}_1$ and
+$\dev{\rs\val}_1=\hat{\tilde v}_1$, the period-$1$ re-scaled (stationarized)
+consumption and value deviations of Section~\ref{sec:setup}.}
+
+\paragraph{The value linearization.} The (re-scaled) recursive value linearizes
+to (their app.~p.~73)
+\begin{equation}
+\dev{\rs \val}_1 = (1-\disc)\dev{\rs c}_1 - (1-\disc)(1-\lwedge)(1-\cshare)\dev{\ell}_1 + \disc\,\dev{\rs{ce}}_1, \label{eq:v1}
+\end{equation}
+where $\lwedge$ is the labor wedge in the deterministic steady state and
+$\dev{\rs{ce}}_1$ is the log deviation of the certainty equivalent of the
+period-$2$ continuation value. The term
+$-(1-\disc)(1-\lwedge)(1-\cshare)\dev{\ell}_1$ is the flow disutility of labor,
+valued at the steady-state \emph{after-wedge} marginal rate; the factor
+$(1-\lwedge)$ scales the labor term down by the wedge because, with a positive
+labor wedge, the private marginal disutility of work is below the social marginal
+product, so a unit of employment contributes
+$(1-\lwedge)(1-\cshare)$ to flow utility (in consumption units) rather than the
+full $(1-\cshare)$.
+\gapflag{KL display \eqref{eq:v1} as
+$\dev{\rs\val}_1=(1-\disc)\dev{\rs c}_1-(1-\disc)(1-\lwedge)(1-\cshare)\dev{\ell}_1+\disc\dev{\rs{ce}}_1$.
+The labor coefficient $(1-\lwedge)(1-\cshare)$ is KL's; we supply the reading.
+Note this is the only place the steady-state labor wedge $\lwedge$ enters the
+kernel, and it is precisely the channel that makes \emph{employment} (not only
+productivity and wealth) a priced state variable in Props~4--5; it vanishes if
+$\lwedge=0$.}
+
+\paragraph{The certainty equivalent.} Because there is no uncertainty after
+period~$1$, the period-$1$ certainty equivalent equals the period-$2$ expected
+value (their app.~p.~74),
+\begin{equation}
+\dev{\rs{ce}}_1 = \Eone\dev{\rs \val}_2 = \atil\,\Eone\dev{\wsh}_2 + \cshare\,\widetilde{\widetilde{\dev k}}_1, \label{eq:ce1}
+\end{equation}
+where the second equality is the engine's period-$2$ value
+relation~\eqref{eq:Ev2} (their app.~eq.~(77)). To first order the
+certainty-equivalent operator is the identity here, since the only remaining
+randomness (the period-$1$ innovations) is already realized at the point where
+$\dev{\rs{ce}}_1$ is evaluated.
+
+\paragraph{Assembling $\dev{\rs c}_1$ from the engine.} The period-$1$ Home
+consumption is the engine's reduced form~\eqref{eq:c1-solved}, which we restate
+here in the app.~B.2 notation (writing the recurring denominator from the engine
+explicitly rather than as $\Lambda$, to match KL's displayed lines):
+\begin{equation}
+\dev{\rs c}_1 = \atil\,\Eone\dev{\wsh}_2
++(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)
++\cshare\,\widetilde{\widetilde{\dev k}}_1
+-\frac{\hbias}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr). \label{eq:c1-b2}
+\end{equation}
+Equation~\eqref{eq:c1-b2} is identically \eqref{eq:c1-solved} with the
+denominator $\Lambda$ \eqref{eq:Lambda-def} written out; KL display it in this
+expanded form on app.~p.~73.
+
+\paragraph{The combined value deviation.} Substituting \eqref{eq:c1-b2} and
+\eqref{eq:ce1} into the value linearization~\eqref{eq:v1} and collecting terms,
+KL obtain (their app.~p.~74)
+\begin{multline}
+\dev{\rs \val}_1 = \atil\,\Eone\dev{\wsh}_2 - \cshare\,\tel^z\dev{\epsilon}^z_1
++\lwedge(1-\disc)(1-\cshare)\dev{\ell}_1\\
++(1-\disc)\left((1-\cshare)\frac{\zs}{1+\zs}
+-\frac{\hbias}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\right)\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr). \label{eq:v1-combined}
+\end{multline}
+\gapflag{\eqref{eq:v1-combined} is KL's displayed combined value line (app.~p.~74).
+The reconstruction: write \eqref{eq:v1} as
+$\dev{\rs\val}_1=(1-\disc)\dev{\rs c}_1-(1-\disc)(1-\lwedge)(1-\cshare)\dev{\ell}_1+\disc\dev{\rs{ce}}_1$.
+The $\disc\dev{\rs{ce}}_1=\disc[\atil\Eone\dev{\wsh}_2+\cshare\widetilde{\widetilde{\dev k}}_1]$
+piece and the $(1-\disc)\atil\Eone\dev{\wsh}_2$ piece inside $(1-\disc)\dev{\rs c}_1$
+combine to the full $\atil\Eone\dev{\wsh}_2$ (coefficients $\disc+(1-\disc)=1$);
+likewise the two $\cshare\widetilde{\widetilde{\dev k}}_1$ pieces combine to
+$\cshare\widetilde{\widetilde{\dev k}}_1$. KL then \emph{re-express} the symmetric
+employment piece using the impact wage-setting relation
+\eqref{eq:predet-wage}: under wages set one period in advance the common labor
+movement satisfies $(1-\cshare)(\frac{1}{1+\zs}\dev{\ell}_1+\frac{\zs}{1+\zs}\fr{\dev{\ell}}_1)+\cshare\widetilde{\widetilde{\dev k}}_1$
+contributes a $-\cshare\tel^z\dev{\epsilon}^z_1$ term once the productivity
+surprise is substituted (the same $\tel^z\dev{\epsilon}^z_1$ that loads the wage
+equation), so the aggregate-employment + capital block collapses into the
+$-\cshare\tel^z\dev{\epsilon}^z_1$ displayed term. The labor coefficient
+collects as follows: $(1-\disc)\dev{\rs c}_1$ contributes
+$+(1-\disc)(1-\cshare)\frac{1}{1+\zs}$ to $\dev{\ell}_1$ and the relative-labor
+$-\hbias/[\cdots]$ term; the explicit disutility term contributes
+$-(1-\disc)(1-\lwedge)(1-\cshare)\dev{\ell}_1$. Adding the
+$+(1-\disc)(1-\cshare)\dev{\ell}_1$ implicit in the symmetric piece, the
+$\dev{\ell}_1$ coefficient nets to $+\lwedge(1-\disc)(1-\cshare)$ (the
+$-(1-\lwedge)$ and $+1$ combine to $+\lwedge$), which is the displayed
+$\lwedge(1-\disc)(1-\cshare)\dev{\ell}_1$ wedge term; the residual relative-labor
+piece collects into the displayed
+$(1-\disc)\bigl((1-\cshare)\frac{\zs}{1+\zs}-\hbias/[\cdots]\bigr)(\fr{\dev{\ell}}_1-\dev{\ell}_1)$
+coefficient. This collection is the single tersest algebra step in B.2; we have
+reproduced KL's displayed coefficients and flag that we filled the term-by-term
+collection rather than re-deriving each cancellation from the primitive Euler
+block.}
+
+\paragraph{The Home risk-adjusted kernel.} Substituting \eqref{eq:c1-b2} and
+\eqref{eq:v1-combined} into the kernel definition~\eqref{eq:m01}, and grouping the
+productivity loading on the kernel as $\rra\tel^z\dev{\epsilon}^z_1$, KL obtain
+the central B.2 expression (their app.~p.~74)
+\begin{multline}
+\dev{\pk}_{0,1} - \rra\,\tel^z\dev{\epsilon}^z_1
+= -\rra\Bigl[\atil\,\Eone\dev{\wsh}_2 + (1-\cshare)\tel^z\dev{\epsilon}^z_1\Bigr]
+- (1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)\\
++\frac{\hbias}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\\
++(1-\rra)(1-\disc)\left[\lwedge(1-\cshare)\dev{\ell}_1
++\left((1-\cshare)\frac{\zs}{1+\zs}-\frac{\hbias}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\right)\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\right]. \label{eq:m01-home}
+\end{multline}
+\gapflag{\eqref{eq:m01-home} is KL's displayed Home risk-adjusted-kernel line
+(app.~p.~74). The reconstruction is purely mechanical given \eqref{eq:m01},
+\eqref{eq:c1-b2}, \eqref{eq:v1-combined}: $\dev{\pk}_{0,1}=-\dev{\rs c}_1+(1-\rra)\dev{\rs\val}_1$.
+The first bracketed group $-\rra[\atil\Eone\dev{\wsh}_2+(1-\cshare)\tel^z\dev{\epsilon}^z_1]$
+arises because the $\atil\Eone\dev{\wsh}_2$ term appears in $\dev{\rs c}_1$ with
+coefficient $-1$ and in $(1-\rra)\dev{\rs\val}_1$ with coefficient $(1-\rra)$,
+netting to $-\rra\atil\Eone\dev{\wsh}_2$; we then \emph{move} the
+$\rra\tel^z\dev{\epsilon}^z_1$ loading to the left-hand side (KL's convention,
+isolating the part of the kernel orthogonal to the directly-priced productivity
+risk), which converts the $-\cshare\tel^z\dev{\epsilon}^z_1$ pieces of
+$\dev{\rs c}_1$ and $\dev{\rs\val}_1$ into the displayed
+$-\rra(1-\cshare)\tel^z\dev{\epsilon}^z_1$ (using $-(-\cshare)-(1-\rra)\cshare+\rra=\rra(1-\cshare)$
+on the $\tel^z\dev{\epsilon}^z_1$ coefficient). The symmetric-employment and
+relative-labor terms from $-\dev{\rs c}_1$ appear with the signs shown, and the
+$(1-\rra)(1-\disc)[\cdots]$ block is exactly $(1-\rra)$ times the
+wedge-and-relative-labor part of \eqref{eq:v1-combined}. We reproduce KL's line
+term-for-term; the only judgement call is the left-hand-side grouping of
+$\rra\tel^z\dev{\epsilon}^z_1$, which is KL's own (it is the quantity that enters
+the Devereux--Sutherland conditions \eqref{eq:ds-capital}--\eqref{eq:ds-fbond}).}
+
+\paragraph{The Foreign risk-adjusted kernel.} Analogous steps in Foreign
+(replacing $\rra\to\rraF$, the wealth-share loading $\atil\to-\frac{1}{\zs}\atil$
+from the period-$2$ Foreign value~\eqref{eq:Ev2-star}, and the symmetric-labor
+weight as appropriate) yield (their app.~p.~74)
+\begin{multline}
+\fr{\dev{\pk}}_{0,1} - \rraF\,\tel^z\dev{\epsilon}^z_1
+= -\rraF\Bigl[-\tfrac{1}{\zs}\atil\,\Eone\dev{\wsh}_2 + (1-\cshare)\tel^z\dev{\epsilon}^z_1\Bigr]
+- (1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)\\
+-\frac{1}{\zs}\frac{\hbias}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\\
++(1-\rraF)(1-\disc)\left[\lwedge(1-\cshare)\fr{\dev{\ell}}_1
+-\left((1-\cshare)\frac{1}{1+\zs}-\frac{1}{\zs}\frac{\hbias}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\right)\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\right]. \label{eq:m01-foreign}
+\end{multline}
+\gapflag{\eqref{eq:m01-foreign} is KL's displayed Foreign risk-adjusted-kernel
+line (app.~p.~74). The reconstruction mirrors the Home case under the Foreign
+relabeling: the Foreign household's period-$2$ value carries
+$-\frac{1}{\zs}\atil\Eone\dev{\wsh}_2$ (\eqref{eq:Ev2-star}), so its
+wealth-share loading flips sign and scales by $1/\zs$; the relative-labor
+coefficient picks up the $1/\zs$ that distinguishes the Foreign cross-country
+weight; the wedge term carries $\fr{\dev{\ell}}_1$ rather than $\dev{\ell}_1$.
+We reproduce KL's displayed signs; the structural mirror to \eqref{eq:m01-home}
+is exact, and we flag that we transcribed the Foreign weights ($1/\zs$ factors,
+$\frac{1}{1+\zs}$ vs.\ $\frac{\zs}{1+\zs}$) from KL's line rather than
+re-deriving the Foreign value linearization from scratch.}
+
+\subsection{Local completeness and the risk-sharing condition}
+\label{sec:local-completeness}
+
+KL observe (their app.~p.~74) that the simplified environment is \emph{locally
+complete} in the sense of Coeurdacier and Gourinchas (2016): with three traded
+assets (safe dollar bond, capital, Foreign bond) and two shocks (safety
+$\dev{\cy}$, productivity $\dev{\epsilon}^z$), the asset span is rich enough that
+the equilibrium portfolios implement constrained-efficient risk sharing to first
+order. The implication is the \emph{risk-sharing condition}
+\begin{equation}
+\boxed{\;\dev{\pk}_{0,1} - \rra\,\tel^z\dev{\epsilon}^z_1
+= \fr{\dev{\pk}}_{0,1} - \rraF\,\tel^z\dev{\epsilon}^z_1 + \D\dev{\rer}_1.\;} \label{eq:risk-sharing}
+\end{equation}
+This is the open-economy Backus--Smith / law-of-one-price relation for stochastic
+discount factors: the Home and Foreign risk-adjusted kernels must agree up to the
+real-exchange-rate change $\D\dev{\rer}_1$, which converts Foreign marginal
+utility into Home units. Equivalently, the two countries' marginal valuations of
+state-contingent wealth coincide once expressed in a common numeraire --- the
+hallmark of (locally) complete markets.
+
+\paragraph{Why this pins the portfolio.} The kernels \eqref{eq:m01-home} and
+\eqref{eq:m01-foreign} are functions of the endogenous outcomes
+$(\Eone\dev{\wsh}_2,\dev{\ell}_1,\fr{\dev{\ell}}_1)$, which in turn depend on the
+portfolio through the realized wealth-share identity \eqref{eq:wsh-realized}
+(their eq.~(92)) and the labor block. Imposing \eqref{eq:risk-sharing} therefore
+delivers one scalar equation linking the portfolio weights to the shocks; this is
+the equation that the international-portfolio relation below makes explicit. The
+Jensen terms of \eqref{eq:ds-capital}--\eqref{eq:ds-fbond} do not enter
+\eqref{eq:risk-sharing} because they are common across the Home and Foreign
+conditions and cancel in the difference --- which is precisely why KL can read the
+equilibrium portfolio off the first-order risk-sharing condition rather than the
+full second-order excess-return level.
+\gapflag{KL state \eqref{eq:risk-sharing} as the local-completeness implication
+``$\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1=\fr{\dev{\pk}}_{0,1}-\rraF\tel^z\dev{\epsilon}^z_1+\D\dev{\rer}_1$''
+citing Coeurdacier and Gourinchas (2016) for the local-completeness notion. We
+supply the interpretation (Backus--Smith with $\D\dev{\rer}_1$ as the numeraire
+conversion) and the explanation of why imposing it pins the portfolio while the
+Jensen terms drop. We do not re-derive the Coeurdacier--Gourinchas completeness
+result; we take it as KL do, namely as the statement that three assets span the
+two shocks plus the redistributive (wealth-share) margin.}
+
+\subsection{The international-portfolio equation (their eq.~99)}
+\label{sec:eq99}
+
+Imposing the risk-sharing condition~\eqref{eq:risk-sharing} --- i.e.\ subtracting
+\eqref{eq:m01-foreign} from \eqref{eq:m01-home} and setting the difference equal
+to $\D\dev{\rer}_1$ --- and substituting the realized wealth-share
+identity~\eqref{eq:wsh-realized} for $\Eone\dev{\wsh}_2$ via $\dev{\wsh}_1$
+(their app.~eq.~(92)), KL collect terms to obtain the
+\emph{international-portfolio equation} (their app.~eq.~(99)):
+\begin{multline}
+\Bigl(\frac{\qk k}{\sav}-1\Bigr)\bigl(\rk_1-\rr_1\bigr)
++\frac{b_F}{\sav}\bigl(\fr{r}_1-\dev{\rer}_1-\rr_1\bigr)
+-\disc\,\frac{\zs}{1+\zs}\,\frac{b^g_{H,s}}{\sav}\,\dev{\cy}_1
+=\\
+\frac{1}{\Gam}(\rraF-\rra)(1-\cshare)\tel^z\dev{\epsilon}^z_1
++\frac{1}{\Gam}(\rraF-\rra)\lwedge(1-\disc)(1-\cshare)\Bigl(\tfrac{1}{1+\zs}\dev{\ell}_1+\tfrac{\zs}{1+\zs}\fr{\dev{\ell}}_1\Bigr)\\
++(1-\disc)\frac{\zs}{1+\zs}(\tel-1)\frac{1-\cshare}{\cshare}
+\frac{1-\left(\hbias\frac{1+\zs}{\zs}\right)^2}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\\
+-\frac{1}{\Gam}\Bigl(\tfrac{1}{\zs}(\rraF-1)+(\rra-1)\Bigr)(1-\disc)(1-\lwedge)(1-\cshare)\frac{\zs}{1+\zs}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr)\\
++\frac{1}{\Gam}\Bigl(\tfrac{1}{\zs}(\rraF-1)+(\rra-1)\Bigr)(1-\disc)
+\frac{\hbias}{\frac{\cshare}{1-\cshare}+\tel+(1-\tel)\left(\hbias\frac{1+\zs}{\zs}\right)^2}\bigl(\fr{\dev{\ell}}_1-\dev{\ell}_1\bigr), \label{eq:eq99}
+\end{multline}
+where the composite coefficient is
+\begin{equation}
+\Gam \;\equiv\; \left[\rra + \frac{1}{\zs}\rraF
++\frac{\hbias^2\left(\frac{1+\zs}{\zs}\right)^3}{\frac{\cshare}{1-\cshare}+\tel\left(1-\left(\hbias\frac{1+\zs}{\zs}\right)^2\right)}\right]\atil. \label{eq:Gamma-def}
+\end{equation}
+\gapflag{Equations~\eqref{eq:eq99}--\eqref{eq:Gamma-def} are KL's displayed
+eq.~(99) and the definition of $\Gam$ (their app.~p.~75). This is the single
+densest derivation in B.2 and KL display only the final collected form
+(``Substituting in using the above results and those of the previous section and
+collecting terms, we obtain''). We reconstruct the structure as follows. (i) The
+\emph{left-hand side} is exactly the realized wealth-share
+identity~\eqref{eq:wsh-realized}/(92): the three portfolio-weighted excess-return
+terms (leverage, Foreign bond, seigniorage) equal $\dev{\wsh}_1=\Eone\dev{\wsh}_2$
+on impact (recall \eqref{eq:Ewsh-solved} sets
+$\Eone\dev{\wsh}_2=\dev{\wsh}_1+(\text{relative-labor})$). KL move all of
+\eqref{eq:wsh-realized} to the LHS so the RHS is the risk-sharing
+\emph{requirement} on $\Eone\dev{\wsh}_2$. (ii) The \emph{right-hand side} is the
+difference of the two risk-adjusted kernels~\eqref{eq:m01-home}$-$\eqref{eq:m01-foreign}
+minus $\D\dev{\rer}_1$, solved for $\Eone\dev{\wsh}_2$. The
+$\Eone\dev{\wsh}_2$ coefficient on that difference is
+$-\rra\atil-(-\rraF(-\frac{1}{\zs}\atil))=-(\rra+\frac{1}{\zs}\rraF)\atil$
+\emph{plus} the $\D\dev{\rer}_1$ contribution: $\D\dev{\rer}_1=\dev{\rer}_1$
+carries an $\Eone\dev{\wsh}_2$ loading through \eqref{eq:q1-solved}, namely
+$\hbias\frac{1+\zs}{\zs}\cdot\frac{\hbias(\frac{1+\zs}{\zs})^2}{\frac{\cshare}{1-\cshare}+\tel(1-(\hbias\frac{1+\zs}{\zs})^2)}\atil
+=\frac{\hbias^2(\frac{1+\zs}{\zs})^3}{\frac{\cshare}{1-\cshare}+\tel(1-(\hbias\frac{1+\zs}{\zs})^2)}\atil$,
+which is the third term inside the bracket of $\Gam$. Collecting,
+$\Gam=[\rra+\frac{1}{\zs}\rraF+\frac{\hbias^2(\frac{1+\zs}{\zs})^3}{\frac{\cshare}{1-\cshare}+\tel(1-(\hbias\frac{1+\zs}{\zs})^2)}]\atil$
+is exactly the coefficient multiplying $\Eone\dev{\wsh}_2$ in the
+kernel-difference; dividing through by it gives the $1/\Gam$ on the RHS terms.
+(iii) The RHS \emph{numerators} are the remaining (non-$\Eone\dev{\wsh}_2$) terms
+of \eqref{eq:m01-home}$-$\eqref{eq:m01-foreign}: the
+$(\rraF-\rra)(1-\cshare)\tel^z\dev{\epsilon}^z_1$ productivity term (from the
+$-\rra(1-\cshare)$ vs.\ $-\rraF(1-\cshare)$ loadings on $\tel^z\dev{\epsilon}^z_1$);
+the $(\rraF-\rra)\lwedge(1-\disc)(1-\cshare)(\cdots)$ aggregate-employment term
+(from the wedge terms, which carry $(1-\rra)$ vs.\ $(1-\rraF)$ and net to
+$(\rraF-\rra)\lwedge$ on the symmetric-employment piece); and the
+relative-labor $(\fr{\dev{\ell}}_1-\dev{\ell}_1)$ terms, which split into the
+$(\tel-1)$ ``terms-of-trade revaluation'' piece (matching the $\Eone\dev{\wsh}_2$
+relative-labor coefficient of \eqref{eq:Ewsh-solved}, carried over because the
+LHS used \eqref{eq:wsh-realized} while the RHS prices $\Eone\dev{\wsh}_2$) and the
+$(\frac{1}{\zs}(\rraF-1)+(\rra-1))$ pieces from the $(1-\rra)$/$(1-\rraF)$
+relative-labor coefficients. We have matched KL's displayed eq.~(99)
+term-by-term: the five RHS lines correspond, in order, to the productivity term,
+the aggregate-employment term, the $(\tel-1)$ terms-of-trade-revaluation term,
+and the two relative-labor wedge/home-bias terms. We flag this as a \emph{genuine
+reconstruction}: KL display only the collected result, and while every
+coefficient below matches their eq.~(99), we filled the intermediate
+kernel-difference algebra and the identification of the $\Gam$ bracket with the
+$\Eone\dev{\wsh}_2$ loading on $\dev{\rer}_1$. The Props~4--5 proofs use only the
+\emph{structure} of \eqref{eq:eq99} (which RHS terms vary with $\dev{\epsilon}^z$
+vs.\ $\dev{\cy}$, and the signs of their coefficients), not the exact algebra of
+every term.}
+
+\paragraph{The three drivers of Home wealth.} The left-hand side of
+\eqref{eq:eq99} is the realized revaluation of Home's wealth share
+(Proposition~\ref{prop:wealth}); the right-hand side is what efficient risk
+sharing \emph{requires} that revaluation to be. KL read off three economic
+drivers (their app.~p.~75); international risk sharing calls for Home wealth (the
+LHS) to rise with:
+\begin{itemize}[leftmargin=1.6em,itemsep=3pt]
+  \item \textbf{productivity, provided $\rraF>\rra$}: a positive TFP shock
+  $\dev{\epsilon}^z_1>0$ raises aggregate production and hence world consumption;
+  the more risk-tolerant country (lower risk aversion) should bear more of this
+  aggregate risk, so if Home is more risk-tolerant ($\rra<\rraF$) Home wealth
+  should rise in good productivity states. This is the
+  $\frac{1}{\Gam}(\rraF-\rra)(1-\cshare)\tel^z\dev{\epsilon}^z_1$ term, positive
+  when $\rraF>\rra$.
+  \item \textbf{aggregate employment, provided $\lwedge(\rraF-\rra)>0$}: with a
+  positive labor wedge, an increase in employment raises welfare (the marginal
+  product exceeds the private marginal disutility), and again the more
+  risk-tolerant country should be exposed to this welfare gain. This is the
+  $\frac{1}{\Gam}(\rraF-\rra)\lwedge(1-\disc)(1-\cshare)(\cdots)$ term.
+  \item \textbf{Foreign employment less Home employment}, i.e.\ the relative-labor
+  gap $\fr{\dev{\ell}}_1-\dev{\ell}_1$, under either of two stated sign
+  conditions (their app.~p.~75): (a)
+  $(\tel-1)\bigl(1-(\hbias\frac{1+\zs}{\zs})^2\bigr)>0$, ``since this implies that
+  Foreign labor income rises relative to Home labor income''; or (b)
+  $-\bigl(\frac{1}{\zs}(\rraF-1)+(\rra-1)\bigr)\bigl(\frac{\hbias/[\cdots]}{1}-(1-\lwedge)(1-\cshare)\frac{\zs}{1+\zs}\bigr)>0$,
+  ``since this implies that Home requires more wealth when its real exchange rate
+  appreciates, despite the larger disutility of labor in Foreign.''
+\end{itemize}
+KL close B.2 with the statement that the equilibrium risk premium on Foreign
+bonds relative to dollar bonds is ``the covariance of (the negative of) the log
+deviation in any agent's pricing kernel with the excess log return,'' i.e.\
+\begin{equation}
+\text{risk premium on Foreign vs.\ dollar bonds}
+\;=\; -\Cov_0\bigl(\dev{\pk}_{0,1}-\rra\tel^z\dev{\epsilon}^z_1,\;\fr{r}_1-\D\dev{\rer}_1-\rr_1\bigr), \label{eq:rp-cov}
+\end{equation}
+which is the object Proposition~\ref{prop:riskpremium} signs. (By local
+completeness~\eqref{eq:risk-sharing} the same covariance obtains using the
+Foreign household's kernel, so the risk premium is well-defined independent of
+whose kernel one prices with.)

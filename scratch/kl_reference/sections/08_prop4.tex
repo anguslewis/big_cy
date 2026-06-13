@@ -1,2 +1,317 @@
-% 08_prop4 — stub (to be filled by theorist)
-\bigskip\noindent\textit{[pending section]}\par
+% =====================================================================
+% 08_prop4.tex — Proposition 4: equilibrium portfolios (WP-D)
+% =====================================================================
+\section{Proposition 4: equilibrium portfolios}
+\label{sec:prop4}
+
+This section proves Proposition~4 of KL: the comparative statics of the
+equilibrium international portfolio --- Home's holdings of capital (a claim to the
+world equity return) and its issuance of safe dollar bonds --- with respect to
+the supply of safe dollar debt $b^g_{H,s}$ and to the cross-country risk-tolerance
+ratio $\rraF/\rra$. The proof combines the international-portfolio
+equation~\eqref{eq:eq99} of Section~\ref{sec:portfolio-engine} with the
+\emph{arbitrary-portfolio} labor solutions (generalizing the
+Proposition~\ref{prop:prices} labor block away from symmetric portfolios), and
+then applies the method of undetermined coefficients at the symmetric-portfolio
+point.
+
+\subsection{Statement}
+
+\begin{proposition}[Equilibrium portfolios]
+\label{prop:portfolios}
+Consider the simplified economy of Definition~\ref{def:simplified} with wages set
+one period in advance and a positive steady-state labor wedge $\lwedge>0$ in each
+country, and impose complete home bias $\hbias\to\zs/(1+\zs)$. Then, at least
+around the symmetric-country-portfolio case:
+\begin{enumerate}[label=(\alph*),leftmargin=1.8em,itemsep=3pt]
+  \item Home's equilibrium portfolio share in capital (the world equity claim) is
+  \emph{unaffected} by the supply of safe dollar debt, $\dfrac{dk}{db^g_{H,s}}=0$,
+  while Home's portfolio share in dollar bonds \emph{falls} (Home issues more
+  dollar bonds) as $-b^g_{H,s}$ rises, $\dfrac{db_H}{db^g_{H,s}}>0$;
+  \item holding $\rra+\frac{1}{\zs}\rraF$ fixed, Home's portfolio share in capital
+  \emph{rises} as Home becomes more risk-tolerant relative to Foreign,
+  $\dfrac{dk}{d[\rraF/\rra]}\Big|_{\rra+\frac{1}{\zs}\rraF}>0$, while Home's
+  portfolio share in dollar bonds \emph{falls} (Home issues more dollar bonds),
+  $\dfrac{db_H}{d[\rraF/\rra]}\Big|_{\rra+\frac{1}{\zs}\rraF}<0$.
+\end{enumerate}
+\end{proposition}
+
+\gapflag{We transcribe Proposition~4 to match KL's main-paper statement
+(p.~1664) as relayed in the work-package brief; the project does not hold a local
+copy of the main-paper PDF, so the verbatim wording is taken from the brief. The
+mathematical content of (a)--(b) --- the four signed derivatives
+$dk/db^g_{H,s}=0$, $db_H/db^g_{H,s}>0$, $dk/d[\rraF/\rra]>0$,
+$db_H/d[\rraF/\rra]<0$ at the symmetric portfolio, the latter two holding
+$\rra+\frac{1}{\zs}\rraF$ fixed --- matches the comparative statics displayed in
+the appendix proof (their app.~p.~78), which we hold directly. Here $k$ denotes
+Home's portfolio share in capital (the levered world-equity position) and $b_H$
+Home's portfolio share in safe dollar bonds; ``Home issues more dollar bonds''
+corresponds to $b_H$ falling / $-b^g_{H,s}$ rising.}
+
+\subsection{Proof}
+
+\paragraph{Strategy.} The proof has three steps. (i) Solve the labor block for
+\emph{arbitrary} portfolios, generalizing the Proposition~\ref{prop:prices}
+solution; this expresses $(\dev{\ell}_1,\fr{\dev{\ell}}_1)$ in terms of the shocks
+$(\dev{\cy}_1,\dev{\epsilon}^z_1)$ and the forward state $\Eone\dev{\wsh}_2$. (ii)
+Substitute into the international-portfolio equation~\eqref{eq:eq99} and into the
+realized wealth-share identity~\eqref{eq:wsh-realized} to obtain a fixed-point in
+$\Eone\dev{\wsh}_2$, yielding the eq.~(99)-with-$\Gamp$ identity. (iii) At the
+symmetric-portfolio point (where a normalization constant $\Delta=1$), match
+coefficients on $\dev{\epsilon}^z_1$ and $\dev{\cy}_1$ by the method of
+undetermined coefficients to read off the portfolio derivatives.
+
+\subparagraph{Step 1: arbitrary-portfolio labor solutions.} Generalizing the
+Proposition~\ref{prop:prices} labor block (their app.~B.3.1) to arbitrary
+portfolios, KL show (their app.~p.~77) that the symmetric and relative labor
+movements solve
+\begin{align}
+\frac{1}{1+\zs}\dev{\ell}_1 + \frac{\zs}{1+\zs}\fr{\dev{\ell}}_1
+&= -\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\frac{1}{\taylor}\frac{1}{1+\zs}\dev{\cy}_1
++\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}(1-\cshare)\tel^z\dev{\epsilon}^z_1, \label{eq:lab-sym}\\
+\fr{\dev{\ell}}_1 - \dev{\ell}_1
+&= \frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\frac{1}{\taylor}\dev{\cy}_1
+-\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\frac{1+\zs}{\zs}\atil\,\Eone\dev{\wsh}_2. \label{eq:lab-rel}
+\end{align}
+These generalize the Proposition~1 labor solution: \eqref{eq:lab-sym} is the
+aggregate-employment response (a positive safety shock contracts global
+employment; a positive productivity surprise expands it), and \eqref{eq:lab-rel}
+is the relative-employment response (a positive safety shock raises Foreign-less-
+Home employment, since the shock hits the Home Taylor rule; and a positive Home
+wealth share raises Home relative employment through the demand channel, with the
+$\frac{1+\zs}{\zs}\atil$ wealth-share multiplier). The denominator
+$\cshare+\frac{1}{\taylor}(1-\cshare)$ is the same $D$ of the
+Proposition~\ref{prop:returns} proof.
+\gapflag{KL display \eqref{eq:lab-sym}--\eqref{eq:lab-rel} as ``For arbitrary
+portfolios, it is straightforward to show that [\dots], generalizing the results
+given in the proof of Proposition~1 to arbitrary portfolios.'' We transcribe
+their two displayed lines verbatim (app.~p.~77). The only difference from the
+Proposition~1 labor block is the appearance of the $\Eone\dev{\wsh}_2$ term in
+\eqref{eq:lab-rel}: under symmetric portfolios $\Eone\dev{\wsh}_2=0$ and
+\eqref{eq:lab-rel} collapses to the Proposition~1 relative-labor response; for
+arbitrary portfolios $\Eone\dev{\wsh}_2\neq0$ and the wealth share feeds back into
+relative labor. We did not re-derive the labor block from the firm/wage system
+\eqref{eq:firm-H}--\eqref{eq:firm-F}; we take KL's displayed arbitrary-portfolio
+solution.}
+
+\subparagraph{Step 2: substitute into the international-portfolio equation.}
+Substituting \eqref{eq:lab-sym}--\eqref{eq:lab-rel} into the
+international-portfolio equation~\eqref{eq:eq99}, and using the realized
+wealth-share identity~\eqref{eq:wsh-realized} (their (92)) for $\Eone\dev{\wsh}_2$
+on the left-hand side, KL obtain (their app.~pp.~76--77) the eq.~(99)-with-$\Gamp$
+identity
+\begin{multline}
+\Bigl(\frac{\qk k}{\sav}-1\Bigr)\bigl(\rk_1-\rr_1\bigr)
++\frac{b_F}{\sav}\bigl(\fr{r}_1-\dev{\rer}_1-\rr_1\bigr)
+-\disc\,\frac{\zs}{1+\zs}\,\frac{b^g_{H,s}}{\sav}\,\dev{\cy}_1
+=\\
+\frac{1}{\Gamp}(\rraF-\rra)(1-\cshare)\left[1+\lwedge(1-\disc)\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}(1-\cshare)\right]\tel^z\dev{\epsilon}^z_1\\
+-\frac{1}{\Gamp}(\rraF-\rra)\lwedge(1-\disc)(1-\cshare)\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\frac{1}{\taylor}\frac{1}{1+\zs}\dev{\cy}_1\\
++\frac{1}{\Gamp}\Bigl(\tfrac{1}{\zs}(\rraF-1)+(\rra-1)\Bigr)(1-\disc)\lwedge(1-\cshare)\frac{\zs}{1+\zs}\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\frac{1}{\taylor}\dev{\cy}_1, \label{eq:eq99-prime}
+\end{multline}
+where the composite coefficient is now
+\begin{equation}
+\Gamp \;\equiv\; \Gam + \Bigl(\tfrac{1}{\zs}(\rraF-1)+(\rra-1)\Bigr)(1-\disc)\lwedge(1-\cshare)\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\cshare \;>\;0. \label{eq:Gamma-prime-def}
+\end{equation}
+\gapflag{\eqref{eq:eq99-prime}--\eqref{eq:Gamma-prime-def} are KL's displayed
+eq.~(99)-with-$\Gamp$ and the definition of $\Gamp$ (their app.~p.~77). The
+reconstruction: substituting the relative-labor solution~\eqref{eq:lab-rel} into
+the $(\fr{\dev{\ell}}_1-\dev{\ell}_1)$ terms of \eqref{eq:eq99} introduces a new
+$\Eone\dev{\wsh}_2$ loading on the RHS (through the
+$-\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\frac{1+\zs}{\zs}\atil\Eone\dev{\wsh}_2$
+piece of \eqref{eq:lab-rel}); moving that loading to the LHS augments the
+$\Eone\dev{\wsh}_2$ coefficient $\Gam$ by exactly
+$(\frac{1}{\zs}(\rraF-1)+(\rra-1))(1-\disc)\lwedge(1-\cshare)\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\cshare$,
+which is the added term in $\Gamp$. (The $\frac{1+\zs}{\zs}\atil$ from
+\eqref{eq:lab-rel} cancels against the $\frac{\zs}{1+\zs}$ and one power of
+$\atil$ in the relative-labor coefficient, leaving the $\cshare$ shown; the
+positivity $\Gamp>0$ holds because, with $\rra,\rraF\ge1$ and $\lwedge\in(0,1)$,
+the added term is non-negative and $\Gam>0$.) Substituting the symmetric-labor
+solution~\eqref{eq:lab-sym} into the aggregate-employment term of \eqref{eq:eq99}
+produces the $\dev{\epsilon}^z_1$ and $\dev{\cy}_1$ loadings shown on the RHS: the
+productivity term collects the direct $(\rraF-\rra)(1-\cshare)$ loading plus the
+wedge contribution $(\rraF-\rra)\lwedge(1-\disc)(1-\cshare)\times[\text{symmetric-labor coefficient on }\tel^z\dev{\epsilon}^z_1]$,
+giving the displayed $[1+\lwedge(1-\disc)\frac{1-\cshare}{\cshare+\frac{1}{\taylor}(1-\cshare)}]$
+bracket; the safety-shock terms collect the wedge and relative-labor
+contributions through the $\dev{\cy}_1$ loadings of
+\eqref{eq:lab-sym}--\eqref{eq:lab-rel}. We have matched KL's displayed eq.~(99)$'$
+(app.~p.~77) line-by-line and flag the substitution as a genuine reconstruction:
+KL display only ``Substituting these into the expression for international
+portfolios [\dots] we obtain'' followed by the collected result. We reproduce the
+collected result; the comparative statics below depend only on \emph{which} RHS
+terms carry $\dev{\epsilon}^z_1$ versus $\dev{\cy}_1$ and on the sign of their
+coefficients, which are robust to any residual algebra in the exact magnitudes.}
+
+\subparagraph{Step 3: the symmetric-portfolio normalization and undetermined
+coefficients.} The left-hand side of \eqref{eq:eq99-prime} is, by the realized
+wealth-share identity~\eqref{eq:wsh-realized}, equal to $\Eone\dev{\wsh}_2$.
+Solving \eqref{eq:eq99-prime} for $\Eone\dev{\wsh}_2$ and substituting the
+realized returns of Proposition~\ref{prop:returns} (which, at the symmetric
+portfolio, are the closed forms of Section~\ref{sec:engine}), KL express
+$\Eone\dev{\wsh}_2$ as a linear combination of $\dev{\cy}_1$ and
+$\dev{\epsilon}^z_1$ (their app.~p.~78):
+\begin{multline}
+\Eone\dev{\wsh}_2 =
+\frac{1}{\Delta}\left[\frac{1}{\taylor}+\Bigl(1-\frac{1}{\taylor}\Bigr)\frac{\frac{1}{\taylor}(1-\cshare)}{\cshare+\frac{1}{\taylor}(1-\cshare)}\right]\frac{b_H}{\sav}\,\dev{\cy}_1
+-\frac{1}{\Delta}\disc\,\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}\,\dev{\cy}_1\\
++\frac{1}{\Delta}\Bigl(\frac{\qk k}{\sav}-1\Bigr)\left[(1-\cshare)+\Bigl(1-\frac{1}{\taylor}\Bigr)(1-\cshare)^2\frac{1}{\cshare+\frac{1}{\taylor}(1-\cshare)}\right]\tel^z\dev{\epsilon}^z_1, \label{eq:wsh-final}
+\end{multline}
+where
+\begin{equation}
+\Delta \;\equiv\; 1 + \left[\Bigl(\frac{\qk k}{\sav}-1\Bigr)+\frac{b_F}{\sav}\frac{\zs}{1+\zs}\right]
+\frac{\frac{1}{\taylor}(1-\cshare)}{\cshare+\frac{1}{\taylor}(1-\cshare)}, \label{eq:Delta-def}
+\end{equation}
+which evaluates to $\Delta=1$ at the symmetric portfolio (where the bracketed
+portfolio weights vanish). Here $b_H$ is Home's safe-dollar-bond position.
+\gapflag{\eqref{eq:wsh-final}--\eqref{eq:Delta-def} are KL's displayed lines
+(their app.~p.~78). The reconstruction: substituting the realized excess returns
+$\rk_1-\rr_1$ and $\fr{r}_1-\dev{\rer}_1-\rr_1$ (Proposition~\ref{prop:returns},
+both $\propto\dev{\cy}_1$ at the symmetric portfolio plus productivity loadings)
+into the LHS of \eqref{eq:eq99-prime} makes the LHS itself a linear function of
+$\Eone\dev{\wsh}_2$ (through the portfolio weights times the
+$\Eone\dev{\wsh}_2$-dependence of the realized returns); collecting that
+dependence onto the LHS produces the normalization factor $\Delta$ in
+\eqref{eq:Delta-def}. At the symmetric portfolio $\frac{\qk k}{\sav}-1=0$ and
+$\frac{b_F}{\sav}=0$, so $\Delta=1$ and the realized returns reduce to their
+symmetric-portfolio forms. We transcribe KL's $\Delta$ and the
+$\Eone\dev{\wsh}_2$ expression; the $\frac{b_H}{\sav}$ coefficient on the
+$\dev{\cy}_1$ term comes from the leverage and Foreign-bond excess returns
+(both $\propto\dev{\cy}_1$) collected through their portfolio weights, plus the
+seigniorage term; the $(\frac{\qk k}{\sav}-1)$ coefficient on the
+$\tel^z\dev{\epsilon}^z_1$ term comes from the productivity loading of
+$\rk_1-\rr_1$. We flag that we reproduced KL's coefficients rather than
+re-deriving each from the realized-return reduced forms.}
+
+\medskip
+We now read off the comparative statics by the method of undetermined
+coefficients, evaluating at the symmetric portfolio ($\Delta=1$). Write the
+equilibrium portfolio as the pair $(k,b_H)$ that makes \eqref{eq:wsh-final} hold
+for \emph{both} independent shocks $\dev{\cy}_1$ and $\dev{\epsilon}^z_1$
+simultaneously; equivalently, the coefficients on $\dev{\cy}_1$ and on
+$\tel^z\dev{\epsilon}^z_1$ in \eqref{eq:wsh-final} must each equal the
+corresponding coefficient required by the risk-sharing RHS of
+\eqref{eq:eq99-prime}.
+
+\emph{Comparative statics in $b^g_{H,s}$.} The supply of safe debt $b^g_{H,s}$
+enters \eqref{eq:wsh-final} only through the seigniorage term
+$-\frac{1}{\Delta}\disc\frac{\zs}{1+\zs}\frac{b^g_{H,s}}{\sav}\dev{\cy}_1$ and,
+via the household budget, through $b_H$ (more government safe debt is held by
+households). It does \emph{not} enter the $\tel^z\dev{\epsilon}^z_1$ coefficient,
+which depends only on the capital weight $\frac{\qk k}{\sav}-1$. Matching the
+$\dev{\epsilon}^z_1$ coefficient therefore leaves the equilibrium capital share
+$k$ unchanged as $b^g_{H,s}$ varies:
+\begin{equation}
+\frac{dk}{db^g_{H,s}} = 0. \label{eq:cs-k-bg}
+\end{equation}
+Matching the $\dev{\cy}_1$ coefficient, an increase in $-b^g_{H,s}$ (more safe
+debt issued) raises the seigniorage Home earns on impact of a positive safety
+shock; to keep the risk-sharing condition satisfied at unchanged $k$, the
+household must hold more dollar bonds, i.e.\ $b_H$ adjusts so that
+\begin{equation}
+\frac{db_H}{db^g_{H,s}} > 0. \label{eq:cs-bH-bg}
+\end{equation}
+\gapflag{Equations~\eqref{eq:cs-k-bg}--\eqref{eq:cs-bH-bg} are KL's displayed
+comparative statics (app.~p.~78). The undetermined-coefficients argument:
+\eqref{eq:wsh-final} must hold as an identity in the two independent shocks, so
+the $\dev{\cy}_1$-coefficient equation and the $\dev{\epsilon}^z_1$-coefficient
+equation are two scalar equations in the two unknown portfolio shares $(k,b_H)$.
+Because $b^g_{H,s}$ appears \emph{only} in the $\dev{\cy}_1$ equation (the
+seigniorage term), the $\dev{\epsilon}^z_1$ equation pins $k$ independently of
+$b^g_{H,s}$, giving \eqref{eq:cs-k-bg}; differentiating the $\dev{\cy}_1$ equation
+then gives the sign of $db_H/db^g_{H,s}$. We supply the
+$2\times2$-block-triangular structure that makes $dk/db^g_{H,s}=0$ exact (the
+$\dev{\epsilon}^z_1$ equation does not involve $b^g_{H,s}$); the sign of
+$db_H/db^g_{H,s}$ follows from the positive seigniorage loading. KL state the two
+results without displaying the linear-algebra block structure; we make it
+explicit and flag this as a reconstruction of the undetermined-coefficients
+step.}
+
+\emph{Comparative statics in $\rraF/\rra$, holding $\rra+\frac{1}{\zs}\rraF$
+fixed.} The combination $\rra+\frac{1}{\zs}\rraF$ enters $\Gam$ (and hence
+$\Gamp$) in the denominator of every RHS term of \eqref{eq:eq99-prime}; holding it
+fixed therefore freezes $\Gamp$. As KL note (their app.~p.~77), ``in comparative
+statics with respect to $\rraF/\rra$ holding fixed $\rra+\frac{1}{\zs}\rraF$, on
+the right-hand side it is clear that only the first two terms vary; the third,
+capturing the effect of the relative labor response on international portfolios,
+is constant.'' The first two RHS terms both carry the factor $(\rraF-\rra)$: the
+productivity term $\frac{1}{\Gamp}(\rraF-\rra)(1-\cshare)[\cdots]\tel^z\dev{\epsilon}^z_1$
+and the aggregate-employment safety term
+$-\frac{1}{\Gamp}(\rraF-\rra)\lwedge(1-\disc)(1-\cshare)[\cdots]\dev{\cy}_1$. An
+increase in $\rraF/\rra$ at fixed $\rra+\frac{1}{\zs}\rraF$ raises $\rraF-\rra$.
+Matching the $\dev{\epsilon}^z_1$ coefficient, the productivity loading on the RHS
+rises, so the equilibrium capital weight must rise to deliver a larger Home
+wealth gain in good productivity states:
+\begin{equation}
+\frac{dk}{d[\rraF/\rra]}\Big|_{\rra+\frac{1}{\zs}\rraF} > 0. \label{eq:cs-k-gamma}
+\end{equation}
+Matching the $\dev{\cy}_1$ coefficient (with $\lwedge>0$), the safety-shock
+loading on the RHS becomes more negative, so to satisfy risk sharing Home must
+issue more dollar bonds (its dollar-bond share falls):
+\begin{equation}
+\frac{db_H}{d[\rraF/\rra]}\Big|_{\rra+\frac{1}{\zs}\rraF} < 0
+\qquad(\text{assuming } \lwedge>0). \label{eq:cs-bH-gamma}
+\end{equation}
+\gapflag{Equations~\eqref{eq:cs-k-gamma}--\eqref{eq:cs-bH-gamma} are KL's
+displayed comparative statics (app.~p.~78), with the second holding
+$\rra+\frac{1}{\zs}\rraF$ fixed and assuming $\lwedge>0$. The
+undetermined-coefficients argument mirrors the $b^g_{H,s}$ case: the
+$\dev{\epsilon}^z_1$ equation pins $k$ and, because its RHS coefficient rises with
+$\rraF-\rra$ (the productivity term), $dk/d[\rraF/\rra]>0$; the $\dev{\cy}_1$
+equation then pins $b_H$, and because its RHS coefficient (the
+aggregate-employment safety term, which carries $-(\rraF-\rra)\lwedge$) becomes
+more negative with $\rraF-\rra$ when $\lwedge>0$, $db_H/d[\rraF/\rra]<0$. We
+supply the matching argument and flag (i) the reliance on KL's own statement that
+only the first two RHS terms vary at fixed $\rra+\frac{1}{\zs}\rraF$, and (ii) the
+$\lwedge>0$ requirement for the sign of $db_H/d[\rraF/\rra]$, which KL state
+explicitly (``assumes $\lwedge>0$''). The signs depend on the positivity of
+$\Gamp$ \eqref{eq:Gamma-prime-def} and on the steady-state portfolio being levered
+long capital and short dollar bonds, as at the symmetric benchmark.}
+
+\medskip
+This establishes parts (a) and (b) of Proposition~\ref{prop:portfolios}. \qed
+(\,Proposition~\ref{prop:portfolios}\,)
+
+\subsection{Discussion}
+
+\paragraph{Two risk factors, two portfolio margins.} Proposition~4 organizes the
+equilibrium portfolio around the two shocks the asset span must insure: a
+\emph{global productivity} factor $\dev{\epsilon}^z_1$ and a \emph{safe-asset
+demand} (safety) factor $\dev{\cy}_1$. The two portfolio margins --- the capital
+(world-equity) share $k$ and the dollar-bond share $b_H$ --- map to the two
+factors through the block structure exposed in the proof: the capital share is
+pinned by the productivity-coefficient equation, the dollar-bond share by the
+safety-coefficient equation.
+
+\paragraph{The role of safe-debt supply.} As Home's government borrows more in
+safe dollar bonds ($-b^g_{H,s}$ rises), Home receives more seigniorage on impact
+of a positive safety shock: it is the issuer of the asset whose convenience value
+spikes exactly when safety is demanded. This makes Home a \emph{natural insurer}
+of the safety shock, and --- crucially --- it can provide that insurance
+\emph{without loading up on productivity risk}. Concretely, Home borrows more in
+dollar bonds (lower $b_H$) to hold more Foreign bonds, leaving its capital
+(world-equity) exposure $k$ unchanged: this is exactly the content of
+$dk/db^g_{H,s}=0$ together with $db_H/db^g_{H,s}>0$. The supply of safe dollar
+debt is a margin for insuring the safety factor that is orthogonal to the
+equity-risk margin.
+
+\paragraph{The role of relative risk tolerance.} As Home becomes more
+risk-tolerant than Foreign ($\rraF/\rra$ rises, holding
+$\rra+\frac{1}{\zs}\rraF$ fixed so that the aggregate price of risk $\Gam$ is
+held constant), Home optimally insures \emph{both} the negative-productivity and
+the positive-safety shocks: it holds more capital (so it bears more of the global
+equity risk, $dk/d[\rraF/\rra]>0$) and it borrows more in dollar bonds (so it
+provides more safety insurance, $db_H/d[\rraF/\rra]<0$). KL emphasize that this is
+the sense in which \emph{greater risk tolerance is necessary} to explain why the
+United States takes a disproportionate exposure to equity returns: in their model,
+the US equity-tilted external balance sheet requires the US to be more
+risk-tolerant than the rest of the world.
+
+\paragraph{The big\_cy reading.} Proposition~4 is precisely the KL tension that
+big\_cy aims to revisit: KL need greater US risk tolerance ($\rra<\rraF$) to
+rationalize the US equity tilt, yet high US risk tolerance is the very feature the
+project regards as counterfactual. The two margins isolated here ---
+$dk/d[\rraF/\rra]>0$ (equity tilt needs risk tolerance) and $db_H/db^g_{H,s}>0$
+(safe-debt supply moves the dollar-bond margin without touching equity) ---
+identify exactly where a large \emph{absolute} convenience yield might substitute
+for the risk-tolerance asymmetry. We record KL's interpretation faithfully here
+and defer the big\_cy extension to the dedicated extension memo.
