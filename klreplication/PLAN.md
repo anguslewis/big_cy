@@ -479,6 +479,56 @@ steps (shared scratch — our `EquilibriumState`).
 These are tightly coupled and only testable once the loop converges; port together,
 then gate on the proactive SS/Table-2 cross-check (§7 step 5).
 
+### 13.6 RESUME NOTE — simulation/moments for KL Table-2 (session 7, in progress)
+
+**Goal (Angus): port simulation/moments → validate KL Table-2 on the solved
+spec-1 → THEN Phase-2.** Do NOT launch the 9-spec array until Table-2 validates.
+
+**DONE + committed:**
+- `reference/table2_var_spec.md` — exact definition of every Table-2 series
+  (column map jx=13+results_col, calc_bond_prices formula, extract_series
+  de-trending). KEY: Table-2 uses REALIZED rates (consecutive periods); only
+  `nfa` + `uip_pvt` use next-period info; only **moment 8** (div-price/carry corr)
+  needs the recursive bond ladder; de-trend levels by `× exp(cumsum(z_shock))`.
+- `src/klrep/simulate/simulate.py` (committed d955e81) — the SIMULATION ENGINE:
+  `build_sim_coeffs` (fits Smolyak coeffs to the solved per-node transition,
+  9 economic states, and 14 policies [s,q,l_h,l_f,c_h,c_f,nom_ih,spread,infl_h,
+  infl_f,share_h,share_f,bF_h,bF_f]); `stochastic_ss`; `burn_in` (disaster ON);
+  `simulate_ensemble` (no-disaster: product nodes only + clip [-1,1]; disaster:
+  big_weight_vec + no clip). Validated on a coarse local solve (stoch-SS
+  converges, states in bounds, policies sane). RNG ≠ NAG → moments statistical.
+
+**REMAINING (next session) — 3 pieces:**
+1. `src/klrep/post/results_path.py` — from `sim` output (state_series 9, pol_series
+   14, z_shock_series) compute the Table-2 economic vars per `table2_var_spec.md`:
+   production (yh,yf,c_h,c_f,inv,w,pi) via the period_block formulas; qx =
+   P_div_P_h(1)/P_div_P_h(2); portfolio (savings = wealth+w·l−c, h_kap =
+   sav·(1−share)/q, h_bh_sav, h_bf_sav, h_sav); **nfa = h_sav_t −
+   h_kap_{t+1}·exp(−dis_{t+1})·q_t**; realized returns from consecutive periods
+   (rfh = home real bond return = (nom_ih_{t-1})/infl_h_t·…; rff_h; rA = capital
+   return (pi_t+(1−δ)q_t)/q_{t-1}·exp corrections; exc_retA = rA−rfh; exc_rf);
+   yields (1-period ≈ nominal); y_growth; infl_h/f. De-trend levels by
+   exp(cumsum(z_shock)). (Reuse model/period_block.py + portfolio logic.)
+2. `src/klrep/post/moments.py` — the 15 Table-2 moments + 3 regressions (see
+   calc_moments.m, transcribed in table2_var_spec.md), averaged over n_sims
+   (collect_moments). **Moment 8 needs div_price_smoothed (20-period bond ladder
+   = calc_bond_prices port) — defer/flag; deliver the other 14 first.**
+3. Cluster entry `run_klrep_moments.py` (or extend run_klrep): load
+   `solution_spec1.pt` from oak, rebuild `const` from load_param_file(1) +
+   calc_steady + build_* (deterministic), assemble SolverState, build_sim_coeffs,
+   simulate (n_burn=10000, n_sims=100, n_sim_periods=400, both disaster regimes),
+   compute Table-2, PRINT the table to stdout (so it returns via the synced .out
+   log — no SYNC_ALLOWED needed). Add a `run_klrep_moments` block to batch_submit
+   (CPU or GPU). cc-merge → sync_git → submit → read .out → compare to KL Table-2
+   "Model" column (table_2.tex) → write Table-2 closeness note.
+   **GATE: if Table-2 aligns → Phase-2 (specs=1-9, KLREP_CONV=1e-8, 7h). If a
+   MATERIAL discrepancy → STOP + flag Angus before spending GPU on all 9.**
+
+KL Table-2 "Model" targets (from table_2.tex, the bar to hit): ζ* 1.6; σ(Δlogc)
+0.5%; σ(Δlogy*) 0.8%; ρ(y*/y) 0.5; σ(Δlogx) 1.6%; 4·Er 2.0%; nfa/4y −23%;
+ρ_{-1}(r^e, r*+Δq−r) 0.5; 4·E[r^e−r] 5.2%; β(Δnfa/y, r^e−r) 0.6; b*_Hs/4y 3.8%;
+ℓ 1.0; ℓ* 1.0; logP/P_{-1} 0.0%; logP*/P*_{-1} 0.0%.
+
 ### 13.5 PHASE-1 GATE PASSED — baseline solved on Sherlock GPU (2026-06-13)
 
 `run_klrep` job 29449338_1 (spec 1, benchmark) on an **A100-80GB**: full grid
