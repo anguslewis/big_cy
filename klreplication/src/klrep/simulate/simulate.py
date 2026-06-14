@@ -169,6 +169,7 @@ def simulate_ensemble(sc: SimCoeffs, pool, *, n_sims=100, n_periods=400,
 
     state_series = torch.empty((n_sims, n_periods, 9), dtype=DTYPE, device=sc.state.device)
     pol_series = torch.empty((n_sims, n_periods, sc.pol.shape[1]), dtype=DTYPE, device=sc.state.device)
+    std_series = torch.empty((n_sims, n_periods, sc.d), dtype=DTYPE, device=sc.state.device)
     z_shock = torch.zeros((n_sims, n_periods), dtype=DTYPE, device=sc.state.device)
 
     u_all = torch.rand((n_periods, n_sims), generator=g, dtype=DTYPE)
@@ -178,6 +179,7 @@ def simulate_ensemble(sc: SimCoeffs, pool, *, n_sims=100, n_periods=400,
         pol = b @ sc.pol                                          # (n_sims, n_pol)
         state_series[:, t, :] = econ
         pol_series[:, t, :] = pol
+        std_series[:, t, :] = state                               # standardized state (for grid interp)
         w = _weight_matrix(econ, sc, disaster=disaster)
         q = _draw_nodes(w.cumsum(dim=1), u_all[t])
         if t < n_periods - 1:
@@ -186,4 +188,4 @@ def simulate_ensemble(sc: SimCoeffs, pool, *, n_sims=100, n_periods=400,
         if not disaster:
             state = state.clamp(-1.0, 1.0)
     return {"state_series": state_series, "pol_series": pol_series,
-            "z_shock_series": z_shock}
+            "std_series": std_series, "z_shock_series": z_shock}

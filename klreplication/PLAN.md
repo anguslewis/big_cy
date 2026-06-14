@@ -498,8 +498,30 @@ spec-1 → THEN Phase-2.** Do NOT launch the 9-spec array until Table-2 validate
   big_weight_vec + no clip). Validated on a coarse local solve (stoch-SS
   converges, states in bounds, policies sane). RNG ≠ NAG → moments statistical.
 
-**REMAINING (next session) — 3 pieces:**
-1. `src/klrep/post/results_path.py` — from `sim` output (state_series 9, pol_series
+**⚠ REFINEMENTS discovered session 7b (read before coding):**
+- **Moments 8, 9, AND 10 need the bond ladder** (not just 8). `rA` (levered equity
+  return) = `(1+d2e)·exp(rk) − d2e·exp(rfh_lev)` where `rfh_lev` blends the
+  **20-period** bond realized returns (`rq20_h/rq20_fh` from `q19/q20`). So
+  `exc_retA` (→ moments 8,9,10) needs the bond ladder. **Deliverable WITHOUT bonds:
+  the 12 moments {1,2,3,4,5,6,7,11,12,13,14,15}.** Defer 8/9/10 until calc_bond_prices
+  (recursive bond pricing over maturities [1,2,3,4,19,20]) is ported.
+- **Architecture decision (do it this way):** compute `results_vec` ON THE GRID via a
+  new `compute_results_vec(const, g)` (per grid point: y_h,y_f,l,c_h,c_f, **inv =
+  k_next_new−(1−δ)k**, s, q_real=q/P1, pi=pi_cur0/P1, P1,P2, qx=P1/P2, kappa_h,
+  savings_h, h_sav=savings_h/P1, h_kap=kappa_h, nom_ih, nom_if, infl_h, infl_f) —
+  reuse period_block + the converged g (k_next_new = Σ savings·(1−share)/q is clean
+  on the grid). Then fit Smolyak coeffs and **interpolate along the simulated
+  STANDARDIZED state path** (`sim['std_series']`, now stored). This matches KL
+  (interpolate results_mat) and AVOIDS the de-trending bugs of computing inv/nfa
+  from consecutive economic states. `nfa_t = h_sav_t − h_kap_{t+1}·exp(−dis_{t+1})·
+  q_t` uses the next period's interpolated h_kap. De-trend levels by
+  `× exp(cumsum(z_shock))`; rfh = log(nom_ih_{t-1}/infl_h_t) realized.
+
+**REMAINING (next session) — pieces:**
+0. `src/klrep/model/compute_results_vec.py` — grid-level Table-2 vars (see refinement
+   above). Then in post: fit coeffs (interp_factor/solve on smol_polynom) +
+   interpolate at `sim['std_series']` (basis@coeffs) → de-trended series.
+1. (superseded by §0 + interpolation) `src/klrep/post/results_path.py` — from `sim` output (state_series 9, pol_series
    14, z_shock_series) compute the Table-2 economic vars per `table2_var_spec.md`:
    production (yh,yf,c_h,c_f,inv,w,pi) via the period_block formulas; qx =
    P_div_P_h(1)/P_div_P_h(2); portfolio (savings = wealth+w·l−c, h_kap =
