@@ -41,7 +41,8 @@ from klrep.solve.solve_model import SolverState      # noqa: E402
 from klrep.simulate.simulate import (build_sim_coeffs, stochastic_ss,  # noqa: E402
                                      burn_in, simulate_ensemble)
 from klrep.post.table2_series import build_table2_series  # noqa: E402
-from klrep.post.moments import compute_table2_moments, format_table2  # noqa: E402
+from klrep.post.moments import (compute_table2_moments,  # noqa: E402
+                                compute_table2_moments_per_sim, format_table2)
 
 
 def rebuild_state(spec, device):
@@ -97,8 +98,9 @@ def main():
           f"state_series {tuple(sim['state_series'].shape)}", flush=True)
 
     series = build_table2_series(st.const, st.g, sim, disast_shock=p["disast_shock"])
-    moms = compute_table2_moments(series, bg_yss=p["bg_yss"])
-    print(format_table2(moms), flush=True)
+    per_sim = compute_table2_moments_per_sim(series, bg_yss=p["bg_yss"])
+    moms = {k: float(v.mean()) for k, v in per_sim.items()}
+    print(format_table2(moms, per_sim=per_sim), flush=True)
     print(f"\ntotal {time.time() - t0:.1f}s", flush=True)
 
 

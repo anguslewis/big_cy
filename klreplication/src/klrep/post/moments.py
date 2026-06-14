@@ -61,15 +61,11 @@ def _corr(a, b):
     return num / den
 
 
-def compute_table2_moments(s, *, bg_yss):
-    """Compute the 12 deliverable Table-2 moments, averaged across sims.
-
-    `s` is the dict of named (n_sims, T) series from `build_table2_series`.
-    Returns dict[moment_number -> float].
-    """
+def compute_table2_moments_per_sim(s, *, bg_yss):
+    """Per-simulation Table-2 moments (each value a (n_sims,) tensor) — the moment
+    computed on each path before the cross-sim average of `collect_moments.m`."""
     ratio = s["yf"] / s["yh"]                                   # y*/y
-
-    per_sim = {
+    return {
         1: (s["yf"] / (s["s"] * s["yh"])).mean(dim=1),
         2: 100.0 * _std(_dlog(s["ch"])),
         3: 100.0 * _std(_dlog(s["yf"])),
@@ -83,17 +79,41 @@ def compute_table2_moments(s, *, bg_yss):
         14: 100.0 * torch.log(s["infl_h"]).mean(dim=1),
         15: 100.0 * torch.log(s["infl_f"]).mean(dim=1),
     }
-    return {k: float(v.mean()) for k, v in per_sim.items()}
 
 
-def format_table2(moments):
-    """Render a comparison table (Model vs KL target) to a string."""
-    lines = ["", "KL Table-2 moment comparison (12 deliverable; 8/9/10 deferred):",
-             f"  {'#':>3}  {'moment':<22} {'model':>10} {'KL':>8}"]
+def compute_table2_moments(s, *, bg_yss):
+    """Compute the 12 deliverable Table-2 moments, averaged across sims.
+
+    `s` is the dict of named (n_sims, T) series from `build_table2_series`.
+    Returns dict[moment_number -> float].
+    """
+    return {k: float(v.mean()) for k, v in
+            compute_table2_moments_per_sim(s, bg_yss=bg_yss).items()}
+
+
+def format_table2(moments, per_sim=None):
+    """Render a comparison table (Model vs KL target) to a string. If `per_sim`
+    (dict[int -> (n_sims,) tensor]) is given, also report the cross-sim standard
+    deviation and the standard error of the mean (sd/sqrt(n_sims)) — so a gap vs
+    KL can be read against sampling error (NFA, the persistent level, has the
+    largest SE; the RNG is not bit-reproducible vs KL's NAG stream)."""
+    show_se = per_sim is not None
+    head = f"  {'#':>3}  {'moment':<22} {'model':>10} {'KL':>8}"
+    if show_se:
+        head += f" {'sd_sim':>9} {'se_mean':>9} {'(KL-mdl)/se':>12}"
+    lines = ["", "KL Table-2 moment comparison (12 deliverable; 8/9/10 deferred):", head]
     for k in range(1, 16):
         kl = KL_TARGETS[k]
         if k in moments:
-            lines.append(f"  {k:>3}  {LABELS[k]:<22} {moments[k]:>10.3f} {kl:>8.2f}")
+            row = f"  {k:>3}  {LABELS[k]:<22} {moments[k]:>10.3f} {kl:>8.2f}"
+            if show_se and k in per_sim:
+                v = per_sim[k]
+                n = v.shape[0]
+                sd = float(v.std(unbiased=True))
+                se = sd / (n ** 0.5)
+                z = (kl - moments[k]) / se if se > 0 else float("nan")
+                row += f" {sd:>9.3f} {se:>9.3f} {z:>12.2f}"
+            lines.append(row)
         else:
             lines.append(f"  {k:>3}  {LABELS[k]:<22} {'(deferred)':>10} {kl:>8.2f}")
     return "\n".join(lines)
