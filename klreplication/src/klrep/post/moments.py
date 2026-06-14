@@ -61,11 +61,42 @@ def _corr(a, b):
     return num / den
 
 
+def _ols(cols_list, y):
+    """Batched per-sim OLS. `cols_list` = regressors (each (n_sims,L)); an intercept
+    is prepended. Returns (beta (n_sims, 1+k), resid (n_sims, L))."""
+    n_sims, L = y.shape
+    X = torch.stack([torch.ones_like(y)] + list(cols_list), dim=2)   # (n_sims, L, 1+k)
+    sol = torch.linalg.lstsq(X, y.unsqueeze(-1)).solution            # (n_sims, 1+k, 1)
+    resid = (y.unsqueeze(-1) - X @ sol).squeeze(-1)
+    return sol.squeeze(-1), resid
+
+
+def _bond_moments_per_sim(s):
+    """Moments 8/9/10 + their regressions (calc_moments.m:15-31,40-42). Requires the
+    bond-dependent series (exc_retA, exc_rf, rA, uip_pvt, ...). Returns dict 8/9/10."""
+    # R1: excess equity returns on lagged smoothed dividend-price -> resid_dp.
+    y1 = 4.0 * 100.0 * s["exc_retA"][:, 4:]
+    x1 = s["div_price_smoothed_1"][:, 3:-1]
+    _, resid_dp = _ols([x1], y1)
+    # R2: UIP residual on lagged yield spread + lagged output growth -> resid_carry.
+    xdep = s["uip_pvt"][:, 4:]
+    _, resid_carry = _ols([s["fama_yield_pvt"][:, 3:-1], s["y_growth"][:, 3:-1]], xdep)
+    # R3: nfa growth on excess equity + excess foreign-bond returns -> slope on equity.
+    y3 = s["nfa_rel_growth"][:, 2:-1]
+    beta3, _ = _ols([s["exc_retA"][:, 2:-1], s["exc_rf"][:, 2:-1]], y3)
+    return {
+        8: _corr(resid_dp, resid_carry),
+        9: 4.0 * 100.0 * (s["rA"][:, 1:-1].mean(dim=1) - s["rfh"][:, 1:-1].mean(dim=1)),
+        10: beta3[:, 1],     # loading on excess equity return
+    }
+
+
 def compute_table2_moments_per_sim(s, *, bg_yss):
     """Per-simulation Table-2 moments (each value a (n_sims,) tensor) — the moment
-    computed on each path before the cross-sim average of `collect_moments.m`."""
+    computed on each path before the cross-sim average of `collect_moments.m`.
+    Moments 8/9/10 are included only if the bond-dependent series are present."""
     ratio = s["yf"] / s["yh"]                                   # y*/y
-    return {
+    out = {
         1: (s["yf"] / (s["s"] * s["yh"])).mean(dim=1),
         2: 100.0 * _std(_dlog(s["ch"])),
         3: 100.0 * _std(_dlog(s["yf"])),
@@ -79,6 +110,9 @@ def compute_table2_moments_per_sim(s, *, bg_yss):
         14: 100.0 * torch.log(s["infl_h"]).mean(dim=1),
         15: 100.0 * torch.log(s["infl_f"]).mean(dim=1),
     }
+    if "exc_retA" in s:
+        out.update(_bond_moments_per_sim(s))
+    return out
 
 
 def compute_table2_moments(s, *, bg_yss):
@@ -151,7 +185,7 @@ def format_table2(moments, per_sim=None):
     head = f"  {'#':>3}  {'moment':<22} {'model':>10} {'KL':>8}"
     if show_se:
         head += f" {'sd_sim':>9} {'se_mean':>9} {'(KL-mdl)/se':>12}"
-    lines = ["", "KL Table-2 moment comparison (12 deliverable; 8/9/10 deferred):", head]
+    lines = ["", "KL Table-2 moment comparison (all 15; 8/9/10 use the bond ladder):", head]
     for k in range(1, 16):
         kl = KL_TARGETS[k]
         if k in moments:
