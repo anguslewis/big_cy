@@ -91,6 +91,55 @@ def compute_table2_moments(s, *, bg_yss):
             compute_table2_moments_per_sim(s, bg_yss=bg_yss).items()}
 
 
+# KL NFA-decomposition targets (spec-1 "Model" columns).
+#   Table-3 memo (% of 4y): (k-kappa), b_H, b_F  — sum ~= nfa/4y = -23.
+#   Table-10 portfolio shares (% of a=h_sav): k/a, b_H/a, b_F/a — sum 100.
+KL_NFA_DECOMP = {
+    "t3_kmk": 59.8, "t3_bH": -102.5, "t3_bF": 19.8,
+    "t10_k": 137.09, "t10_bH": 73.34, "t10_bF": -110.43,
+}
+
+
+def nfa_decomposition(s):
+    """Localize the NFA level: Table-3 memo (k-kappa, b_H, b_F as % of 4y) and
+    Table-10 portfolio shares (k, b_H, b_F as % of total savings a). Per-sim then
+    averaged. Matches calc_moments.m table_3 rows 4-6 and table_10 rows 1-3."""
+    h_bf_sav = (s["h_sav"] - s["h_ksav"]) - s["h_bh_sav"]
+    fy = 4.0 * s["yh"]
+    per_sim = {
+        "t3_kmk": 100.0 * ((s["h_ksav"] - s["h_kap"]) / fy).mean(dim=1),
+        "t3_bH": 100.0 * (s["h_bh_sav"] / fy).mean(dim=1),
+        "t3_bF": 100.0 * (h_bf_sav / fy).mean(dim=1),
+        "t10_k": 100.0 * (s["h_ksav"] / s["h_sav"]).mean(dim=1),
+        "t10_bH": 100.0 * (s["h_bh_sav"] / s["h_sav"]).mean(dim=1),
+        "t10_bF": 100.0 * (h_bf_sav / s["h_sav"]).mean(dim=1),
+    }
+    return {k: float(v.mean()) for k, v in per_sim.items()}
+
+
+def format_nfa_decomposition(dec):
+    """Render the NFA decomposition vs KL (localizes the nfa/4y gap)."""
+    rows = [
+        ("Table-3 (k-kappa)/4y %", "t3_kmk"),
+        ("Table-3 b_H/4y %", "t3_bH"),
+        ("Table-3 b_F/4y %", "t3_bF"),
+        ("  sum = nfa/4y %", None),
+        ("Table-10 k/a %", "t10_k"),
+        ("Table-10 b_H/a %", "t10_bH"),
+        ("Table-10 b_F/a %", "t10_bF"),
+    ]
+    lines = ["", "NFA decomposition vs KL (localizes the nfa/4y gap):",
+             f"  {'component':<24} {'model':>10} {'KL':>10}"]
+    nfa_sum = dec["t3_kmk"] + dec["t3_bH"] + dec["t3_bF"]
+    kl_sum = KL_NFA_DECOMP["t3_kmk"] + KL_NFA_DECOMP["t3_bH"] + KL_NFA_DECOMP["t3_bF"]
+    for label, key in rows:
+        if key is None:
+            lines.append(f"  {label:<24} {nfa_sum:>10.2f} {kl_sum:>10.2f}")
+        else:
+            lines.append(f"  {label:<24} {dec[key]:>10.2f} {KL_NFA_DECOMP[key]:>10.2f}")
+    return "\n".join(lines)
+
+
 def format_table2(moments, per_sim=None):
     """Render a comparison table (Model vs KL target) to a string. If `per_sim`
     (dict[int -> (n_sims,) tensor]) is given, also report the cross-sim standard

@@ -41,6 +41,7 @@ RESULT_NAMES = [
     "q",        # results_vec(17) q_current/P1            [ratio]
     "h_kap",    # results_vec(30) kappa_vec(1)            [level -> *z]
     "h_ksav",   # results_vec(29) savings(1)*(1-share)/P1 [level -> *z]
+    "h_bh_sav", # results_vec(40) savings(1)*(share-bF)/P1[level -> *z]
     "h_sav",    # results_vec(44) savings(1)/P1           [level -> *z]
     "infl_h",   # results_vec(25) infl_vec(1)             [gross]
     "infl_f",   # results_vec(26) infl_vec(2)             [gross]
@@ -49,7 +50,7 @@ RESULT_NAMES = [
 ]
 
 # Names that are de-trended levels (re-trended by * exp(cumsum z_shock)).
-LEVEL_NAMES = {"yh", "yf", "ch", "cf", "inv", "h_kap", "h_ksav", "h_sav"}
+LEVEL_NAMES = {"yh", "yf", "ch", "cf", "inv", "h_kap", "h_ksav", "h_bh_sav", "h_sav"}
 
 
 @dataclass
@@ -105,6 +106,7 @@ def compute_results_vec(const, g) -> ResultsGrid:
         "q": g.q / P[:, 0],
         "h_kap": cp.kappa[:, 0],
         "h_ksav": savings[:, 0] * (1.0 - g.share[:, 0]) / P[:, 0],
+        "h_bh_sav": savings[:, 0] * (g.share[:, 0] - g.bF_share[:, 0]) / P[:, 0],
         "h_sav": savings[:, 0] / P[:, 0],
         "infl_h": g.infl[:, 0],
         "infl_f": g.infl[:, 1],

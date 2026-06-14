@@ -42,7 +42,9 @@ from klrep.simulate.simulate import (build_sim_coeffs, stochastic_ss,  # noqa: E
                                      burn_in, simulate_ensemble)
 from klrep.post.table2_series import build_table2_series  # noqa: E402
 from klrep.post.moments import (compute_table2_moments,  # noqa: E402
-                                compute_table2_moments_per_sim, format_table2)
+                                compute_table2_moments_per_sim, format_table2,
+                                nfa_decomposition, format_nfa_decomposition)
+from klrep.params import IDX_THH                          # noqa: E402
 
 
 def rebuild_state(spec, device):
@@ -101,6 +103,14 @@ def main():
     per_sim = compute_table2_moments_per_sim(series, bg_yss=p["bg_yss"])
     moms = {k: float(v.mean()) for k, v in per_sim.items()}
     print(format_table2(moms, per_sim=per_sim), flush=True)
+
+    # NFA diagnostics: decomposition (localizes the level gap) + ergodic theta.
+    dec = nfa_decomposition(series)
+    print(format_nfa_decomposition(dec), flush=True)
+    theta_erg = float(sim["state_series"][:, :, IDX_THH].mean())
+    print(f"\nergodic theta_h (ensemble mean) {theta_erg:.4f}  | "
+          f"tht_trgt_h {p['tht_trgt_h']:.4f}  | stochastic-ss theta {float(econ[IDX_THH]):.4f}",
+          flush=True)
     print(f"\ntotal {time.time() - t0:.1f}s", flush=True)
 
 
