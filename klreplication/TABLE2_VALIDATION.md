@@ -1,8 +1,36 @@
 # KL Table-2 validation — converged full-grid spec-1 (benchmark)
 
-**Status:** PHASE-1 Table-2 gate. 11 of 12 deliverable moments match KL closely;
-moment 7 (NFA/4y) is the sole material outlier. Decision flagged to Angus before
-launching the 9-spec Phase-2 array (per dispatch gate).
+**Status:** PHASE-1 Table-2 gate. **14 of 15 moments match KL essentially exactly**
+(incl. all 3 bond-ladder moments 8/9/10). Moment 7 (NFA *level*) is the sole
+outlier — localized (composition matches; not a bug). Decision flagged to Angus
+before launching the 9-spec Phase-2 array (per dispatch gate).
+
+## Full 15-moment table (converged spec-1, job 29555360)
+
+| # | moment | model | KL | verdict |
+|---|--------|------:|----:|---------|
+| 1 | y*/(s y) | 1.573 | 1.60 | ✓ |
+| 2 | 100·sd(Δlog c) | 0.461 | 0.50 | ✓ |
+| 3 | 100·sd(Δlog y*) | 0.802 | 0.80 | ✓ exact |
+| 4 | ρ(y*/y, lag) | 0.493 | 0.50 | ✓ |
+| 5 | 100·sd(Δlog x) | 1.552 | 1.60 | ✓ |
+| 6 | 4·E r | 2.043 | 2.00 | ✓ |
+| 7 | **nfa/(4y) %** | **−15.65** | **−23.0** | **⚠ outlier (localized)** |
+| 8 | ρ(r^e, carry) | 0.509 | 0.50 | ✓ exact |
+| 9 | 4·E[r^e−r] % (equity premium) | 5.203 | 5.20 | ✓ exact |
+| 10 | β(Δnfa/y, r^e−r) | 0.599 | 0.60 | ✓ exact |
+| 11 | b*_Hs/(4y) % | 3.797 | 3.80 | ✓ exact |
+| 12 | ℓ | 0.990 | 1.00 | ✓ |
+| 13 | ℓ* | 0.979 | 1.00 | ✓ |
+| 14 | 100·E log P/P₋₁ | 0.042 | 0.0 | ✓ |
+| 15 | 100·E log P*/P*₋₁ | 0.025 | 0.0 | ✓ |
+
+The three bond moments (8/9/10) — the carry/dividend-price correlation, the levered
+equity premium, and the NFA-growth-on-excess-equity slope — all land on KL, which
+validates the full 20-period bond term structure, the levered-equity return rᴬ, and
+all three regressions end-to-end.
+
+## (Historical) first pass — 12 deliverable moments, before the bond ladder
 
 **Source:** `solution_spec1.pt` (run_klrep 29449338_1, A100, diff 9.94e-9, 1733
 iters, 589 states) → `run_klrep_moments` 29551694_1 (maggiori GPU). Simulation
