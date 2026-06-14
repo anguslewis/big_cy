@@ -52,11 +52,48 @@ levered-equity return rᴬ; Task 5, post-gate).
   thesis** (home-currency bias, equity bias, US net-short-carry), so it warrants
   Angus's call before the 9-spec counterfactuals.
 
-## Gate decision
+## NFA-gap localization (Angus: "investigate NFA first")
 
-Per the dispatch ("if a MATERIAL discrepancy → STOP and flag Angus before spending
-GPU on all 9"), STOPPED at the gate. Flagged to Angus with options: (a) proceed to
-Phase-2 anyway (model validated; NFA-level fidelity diagnosed in parallel), (b)
-investigate the NFA gap first (compare ergodic θ to KL; check NFA *composition*
-via Table-3/10 moments which localize level vs mix; verify the realized-NFA
-construction against a longer sim / multiple seeds), (c) other.
+Decomposed NFA against KL's Table-3 memo (% of 4y) and Table-10 portfolio shares
+(% of total savings a). ⚠ Table-10's columns are specs [7,2,8,9,1] → the benchmark
+(spec 1) is the **last** column (142.41 / −51.94 / 9.53); Table-3 "Model" col is
+the benchmark.
+
+| component | model | KL (spec-1) | gap |
+|-----------|------:|------------:|----:|
+| Table-3 (k−κ)/4y % | 64.61 | 59.8 | +4.8 |
+| Table-3 b_H/4y % | −102.21 | −102.5 | +0.3 |
+| Table-3 b_F/4y % | 21.56 | 19.8 | +1.8 |
+| **sum = nfa/4y %** | **−16.0** | **−22.9** | **+6.9** |
+| Table-10 k/a % | 137.21 | 142.41 | −5.2 |
+| Table-10 b_H/a % | −46.99 | −51.94 | +5.0 |
+| Table-10 b_F/a % | 9.79 | 9.53 | +0.3 |
+| ergodic θ_h (ensemble mean) | 0.3636 | (target 0.3496) | +0.014 |
+
+**Findings:**
+1. **Portfolio composition matches KL.** Shares of total savings (Table-10): b_F/a
+   exact (9.79 vs 9.53), k/a and b_H/a within ~5pp, all correct sign. The home-bias
+   / carry portfolio structure central to big_cy is reproduced. NOT a composition bug.
+2. **The level gap (~7pp) is driven by the capital-NFA piece** (k−κ)/4y (+4.8) and
+   b_F/4y (+1.8); the home-bond piece matches (+0.3). It co-moves with a slightly
+   high ergodic home wealth share (θ 0.364 vs target 0.350): a richer home holds
+   more capital-NFA → less-negative NFA.
+3. **`bbeta_coeff`=0.001 and the `bbeta_adj` θ-nudge confirmed faithful** vs
+   mod_param.f90:244 / mod_calc.f90:2051,2309 — the θ stationarity device is not the bug.
+4. **se_mean=1.36 over 100 independent paths** → our model's ergodic NFA/4y is
+   confidently ≈ −16.0 ± 1.4, i.e. a genuine ~7pp pipeline difference vs KL's −23,
+   not a sampling fluke. RNG is not bit-reproducible (NAG vs torch).
+
+**Assessment:** the gap is a *second-order ergodic/numerical difference* on the
+single most simulation-sensitive moment (a near-unit-root level; per-path sd
+13.6pp), localized to the capital-NFA component and a ~1.4pp-higher ergodic θ —
+**not a structural/portfolio bug**. The big_cy-relevant signs and composition are
+right. Remaining (deeper) suspects for the residual θ/level difference: the
+θ-transition (51)/seigniorage detail, the burn-in ergodic distribution, or RNG.
+
+## Gate status
+
+STOPPED at the gate per dispatch; Angus chose "investigate NFA first" — done
+(localized above). Awaiting Angus's call: (a) accept (composition is what the
+project needs) and launch Phase-2; (b) deeper θ-transition/burn-in forensics;
+(c) port the bond ladder for the full 15-moment picture first.

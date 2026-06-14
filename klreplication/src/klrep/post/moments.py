@@ -91,12 +91,13 @@ def compute_table2_moments(s, *, bg_yss):
             compute_table2_moments_per_sim(s, bg_yss=bg_yss).items()}
 
 
-# KL NFA-decomposition targets (spec-1 "Model" columns).
-#   Table-3 memo (% of 4y): (k-kappa), b_H, b_F  — sum ~= nfa/4y = -23.
-#   Table-10 portfolio shares (% of a=h_sav): k/a, b_H/a, b_F/a — sum 100.
+# KL NFA-decomposition targets, BENCHMARK (spec-1) columns.
+#   Table-3 memo (% of 4y): "Model" col = benchmark → (k-kappa),b_H,b_F (sum≈nfa/4y=-23).
+#   Table-10 portfolio shares (% of a=h_sav): columns are specs [7,2,8,9,1], so the
+#   benchmark (spec 1) is the LAST column → k/a,b_H/a,b_F/a (sum 100).
 KL_NFA_DECOMP = {
     "t3_kmk": 59.8, "t3_bH": -102.5, "t3_bF": 19.8,
-    "t10_k": 137.09, "t10_bH": 73.34, "t10_bF": -110.43,
+    "t10_k": 142.41, "t10_bH": -51.94, "t10_bF": 9.53,
 }
 
 
