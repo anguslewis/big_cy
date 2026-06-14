@@ -39,12 +39,13 @@ echo "Submitting big_cy"
 # committed default below (space-padded; the guards match " name "). Edit it to
 # pick what a `submit` fires.
 #   Env built OK (job 29446396) -> drop setup_klrep_env_sherlock; just solve.
-#   PHASE 1 (done): to_run=" run_klrep " with specs=1 (baseline) -> solution_spec1.pt.
-#   TABLE-2 GATE (now): to_run=" run_klrep_moments " with specs=1 — simulate the
-#     already-solved spec-1 and print the Table-2 comparison (loads solution_spec1.pt).
-#   PHASE 2 (after gate passes): set specs=1-9 and to_run=" run_klrep " (solve all).
+#   PHASE 1 (done): to_run=" run_klrep " specs=1 -> solution_spec1.pt.
+#   TABLE-2 GATE (done): to_run=" run_klrep_moments " specs=1 -> 14/15 moments match KL.
+#   PHASE 2 (now): to_run=" run_klrep " specs=1-9, KLREP_CONV=1e-8 -> solve all 9.
+#     (run_klrep_moments per spec runs separately afterwards; the KL targets are
+#      spec-specific so its comparison column needs the per-table calib map first.)
 #   (To rebuild the env, add ' setup_klrep_env_sherlock ' back.)
-to_run="${to_run:- run_klrep_moments }"
+to_run="${to_run:- run_klrep }"
 
 ############################################################################
 # Shared SLURM settings
@@ -59,7 +60,7 @@ shared_settings_gpu="--partition=maggiori --nodes=1 --requeue --mail-user=${mail
 # (e.g.  specs=1  for Phase-1 baseline;  specs=1-9  for the full set).
 #   PHASE 1 (baseline): specs="1"
 #   PHASE 2 (all 9):    specs="1-9"
-specs="${specs:-1}"
+specs="${specs:-1-9}"
 
 ############################################################################
 # EXAMPLE pipeline (delete once you add real jobs).
@@ -147,7 +148,10 @@ depend_run_klrep_moments=""               # reset; set only if the solve fires
 if [[ ${to_run} == *" $file "* ]]; then
     # ~7-10s/iter on A100; conv to 1e-8 can take ~1-1.5k dampened iters. 7h wall
     # (maggiori allows 7 days) so the per-spec solve never TIMEOUTs mid-convergence.
+    # KLREP_CONV=1e-8 = the final high-fidelity tolerance (Phase-2), set explicitly
+    # so the run is deterministic regardless of the submit-time environment.
     job_id=`sbatch ${shared_settings_gpu} ${depend_run_klrep} --gpus=1 --array=${specs} \
+                --export=ALL,KLREP_CONV=1e-8 \
                 --time=0-07:00:00 --ntasks=1 --cpus-per-task=8 --mem=96G \
                 --job-name=$file --output="${logs}/${file}_%A_%a.out" --error="${logs}/${file}_%A_%a.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
