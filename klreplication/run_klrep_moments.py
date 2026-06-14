@@ -107,9 +107,14 @@ def main():
     # NFA diagnostics: decomposition (localizes the level gap) + ergodic theta.
     dec = nfa_decomposition(series)
     print(format_nfa_decomposition(dec), flush=True)
-    theta_erg = float(sim["state_series"][:, :, IDX_THH].mean())
-    print(f"\nergodic theta_h (ensemble mean) {theta_erg:.4f}  | "
-          f"tht_trgt_h {p['tht_trgt_h']:.4f}  | stochastic-ss theta {float(econ[IDX_THH]):.4f}",
+    theta_path = sim["state_series"][:, :, IDX_THH]          # (n_sims, T)
+    theta_per_sim = theta_path.mean(dim=1)                    # (n_sims,)
+    theta_erg = float(theta_per_sim.mean())
+    theta_se = float(theta_per_sim.std(unbiased=True)) / (theta_per_sim.shape[0] ** 0.5)
+    print(f"\nergodic theta_h {theta_erg:.4f} +/- {theta_se:.4f} (cross-sim se)  | "
+          f"det. target tht_trgt_h {p['tht_trgt_h']:.4f}  | "
+          f"stochastic-ss theta {float(econ[IDX_THH]):.4f}  | "
+          f"range [{float(theta_path.min()):.3f}, {float(theta_path.max()):.3f}]",
           flush=True)
     print(f"\ntotal {time.time() - t0:.1f}s", flush=True)
 
