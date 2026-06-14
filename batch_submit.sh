@@ -39,10 +39,12 @@ echo "Submitting big_cy"
 # committed default below (space-padded; the guards match " name "). Edit it to
 # pick what a `submit` fires.
 #   Env built OK (job 29446396) -> drop setup_klrep_env_sherlock; just solve.
-#   PHASE 1 (now): to_run=" run_klrep " with specs=1 (baseline).
-#   PHASE 2: set specs=1-9 (above) and keep to_run=" run_klrep ".
+#   PHASE 1 (done): to_run=" run_klrep " with specs=1 (baseline) -> solution_spec1.pt.
+#   TABLE-2 GATE (now): to_run=" run_klrep_moments " with specs=1 — simulate the
+#     already-solved spec-1 and print the Table-2 comparison (loads solution_spec1.pt).
+#   PHASE 2 (after gate passes): set specs=1-9 and to_run=" run_klrep " (solve all).
 #   (To rebuild the env, add ' setup_klrep_env_sherlock ' back.)
-to_run="${to_run:- run_klrep }"
+to_run="${to_run:- run_klrep_moments }"
 
 ############################################################################
 # Shared SLURM settings
@@ -141,11 +143,30 @@ fi
 # --- GPU array solve: one array index per specification ------------------
 # maggiori 80G GPU (--gpus=1); the node has ~1000G RAM so mem is generous.
 file="run_klrep"
+depend_run_klrep_moments=""               # reset; set only if the solve fires
 if [[ ${to_run} == *" $file "* ]]; then
     # ~7-10s/iter on A100; conv to 1e-8 can take ~1-1.5k dampened iters. 7h wall
     # (maggiori allows 7 days) so the per-spec solve never TIMEOUTs mid-convergence.
     job_id=`sbatch ${shared_settings_gpu} ${depend_run_klrep} --gpus=1 --array=${specs} \
                 --time=0-07:00:00 --ntasks=1 --cpus-per-task=8 --mem=96G \
+                --job-name=$file --output="${logs}/${file}_%A_%a.out" --error="${logs}/${file}_%A_%a.err" \
+                "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
+    echo "Submitted $folder/$file (array=${specs}): ${job_id}"
+    sleep 1
+    depend_run_klrep_moments="--depend=afterok:${job_id}"   # moments wait on the solve
+fi
+
+# --- Table-2 moments: simulate the solved spec + print the comparison -----
+# Loads solution_spec<N>.pt (from run_klrep), simulates (stochastic SS + burn-in
+# + no-disaster ensemble), computes the 12 deliverable Table-2 moments and PRINTS
+# the KL comparison to stdout (returns via the synced .out log — no data-path
+# allowlist needed). GPU maggiori (the solution tensors are cuda-native); the run
+# is minutes. Submit ALONE to re-use an already-solved solution (depend var stays
+# empty), or chained after run_klrep (depend=afterok set above).
+file="run_klrep_moments"
+if [[ ${to_run} == *" $file "* ]]; then
+    job_id=`sbatch ${shared_settings_gpu} ${depend_run_klrep_moments} --gpus=1 --array=${specs} \
+                --time=0-01:00:00 --ntasks=1 --cpus-per-task=8 --mem=64G \
                 --job-name=$file --output="${logs}/${file}_%A_%a.out" --error="${logs}/${file}_%A_%a.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
     echo "Submitted $folder/$file (array=${specs}): ${job_id}"
