@@ -108,7 +108,10 @@ def stochastic_ss(sc: SimCoeffs, *, tol=1.49e-8, max_iter=100000):
 
 def _draw_nodes(weights_cum, u):
     """Given per-sim cumulative weights (N, n_quad) and uniforms u (N,), return the
-    first node index whose cumulative weight exceeds u (matches the Fortran walk)."""
+    first node index whose cumulative weight exceeds u (matches the Fortran walk).
+    The uniforms are drawn on a CPU generator (reproducible across devices); move
+    them onto the weights' device before comparing (the solve runs on GPU)."""
+    u = u.to(weights_cum.device)
     q = (weights_cum <= u.unsqueeze(1)).sum(dim=1)
     return q.clamp(max=weights_cum.shape[1] - 1)
 
@@ -164,8 +167,8 @@ def simulate_ensemble(sc: SimCoeffs, pool, *, n_sims=100, n_periods=400,
     z_shock_series (n_sims,T) [the realized z-shock, for de-trending]."""
     g = torch.Generator(device="cpu").manual_seed(seed)
     n_burn = pool.shape[0]
-    starts = torch.randperm(n_burn, generator=g)[:n_sims]
-    state = pool[starts].clone()                                  # (n_sims, d)
+    starts = torch.randperm(n_burn, generator=g)[:n_sims]        # CPU index tensor
+    state = pool[starts.to(pool.device)].clone()                 # (n_sims, d)
 
     state_series = torch.empty((n_sims, n_periods, 9), dtype=DTYPE, device=sc.state.device)
     pol_series = torch.empty((n_sims, n_periods, sc.pol.shape[1]), dtype=DTYPE, device=sc.state.device)
