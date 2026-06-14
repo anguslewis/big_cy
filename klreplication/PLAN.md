@@ -507,15 +507,20 @@ sync `logs/klreplication`, read `run_klrep_moments_29550357_1.out`, compare the
 12 moments to KL table_2.tex. **GATE: align → closeness note + Phase-2 (specs=1-9,
 KLREP_CONV=1e-8, to_run=" run_klrep "); material discrepancy → STOP + flag Angus.**
 
-**Bond ladder (Task 5, post-gate) — read + understood (mod_calc.f90:716-800):**
-recursive: `q_bond_mat[:,:,1]=1`; for bbb=1..n_bond(20): fit Smolyak coeffs to
-q_bond_mat[:,:,bbb], interpolate nxt_bond_prices(Q,3)=basis@coeffs, then
-calc_bond_prices → q_bond_mat[:,:,bbb+1] = maxval_agent Σ big_w·M·(nxt_bp/
-homegood_infl)·P_agent/P_nxt_agent (hw currency adds /(1-omg)). M_vec_mat reuses
-equilibrium_step steps 1-2 + the step-8 SDF formula at CONVERGED policies (no
-Euler iter). Stored maturities [1,2,3,4,19,20]; q1=,[:,:,2]..q20=[:,:,21].
-rq20_h=log(q19_h_t/infl_h_t/q20_h_{t-1}); rA levered via rfh_lev (1+ζ blend of
-rq20_h/rq20_fh); → moments 8,9,10.
+**Bond ladder (Task 5) — DONE + committed (000eb2a, 57 tests green).**
+`model/bond_ladder.py`: `compute_pricing_block` (SDF M_vec + hg_infl/P/P_nxt/omg
+from converged g; reproduces equilibrium_step M_vec, validated) + `compute_bond_columns`
+(recursion q_bond[:,:,1]=1; for m=1..20 fit Smolyak coeffs → interpolate at
+next_state → `_price_one_step` = maxval_agent Σ big_w·M·(nxt_bp/hg_infl)·P/P_nxt,
+hw adds /(1-omg); store maturities [1,2,3,4,19,20] → q1_h/f/hw, q19/q20 h/f).
+`post/table2_series._build_bond_series`: yields, rq20_h/fh, rfh_lev (1/(1+ζ) blend),
+rk (disaster-corrected), rA=log((1+d2e)e^rk−d2e·e^rfh_lev) [d2e=1], exc_retA,
+exc_rf (rff_h−rfh), E_change, uip_pvt, fama_yield_pvt, y_growth(4q),
+div_price_smoothed_1 (movsum[3,0]). `post/moments._bond_moments_per_sim`: mom8=
+corr(resid_dp,resid_carry) via R1/R2 batched OLS, mom9=4·100·(mean rA−mean rfh),
+mom10=R3 slope on exc_retA. run_klrep_moments prices the ladder + passes bond_grid.
+Coarse smoke: all 15 moments finite; 8/9/10 in KL ballpark. Converged full-15
+cluster run submitted (29555360).
 
 ### 13.6 RESUME NOTE — simulation/moments for KL Table-2 (session 7, in progress)
 
