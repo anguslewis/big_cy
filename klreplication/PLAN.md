@@ -479,6 +479,19 @@ steps (shared scratch — our `EquilibriumState`).
 These are tightly coupled and only testable once the loop converges; port together,
 then gate on the proactive SS/Table-2 cross-check (§7 step 5).
 
+### 13.5 PHASE-1 GATE PASSED — baseline solved on Sherlock GPU (2026-06-13)
+
+`run_klrep` job 29449338_1 (spec 1, benchmark) on an **A100-80GB**: full grid
+(589 states) converged to **diff 9.94e-9 in 1733 iters, 3h09m**, on `cuda:0`
+(float64). Central node vs det. SS: q/s/ℓ at SS; v_h 0.826, 1+i 1.00697 (both
+lower = disaster-risk pricing); **share_h −0.383 (equity bias)**. Baseline ALIGNS
+qualitatively + at SS level; the GPU pipeline works end-to-end. **Full Table-2
+moment comparison still needs the simulation port.** Details + table:
+`klreplication/PHASE1_BASELINE.md`. STOPPED at the gate per dispatch (awaiting
+Angus before the 9-spec array). Infra fixes en route: 16G→96G OOM; CPU→GPU node;
+conda-solver grind→pip torch; conda-not-found→bootstrap+py3-assert; 4h→7h wall;
+configurable KLREP_CONV (1e-6 gate / 1e-8 final).
+
 ### 13.4 RESUME NOTE — Sherlock migration (04b), state as of session 5
 
 **DONE + pushed (origin/main 0c4a16b):**
