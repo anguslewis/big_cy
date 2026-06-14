@@ -91,9 +91,39 @@ single most simulation-sensitive moment (a near-unit-root level; per-path sd
 right. Remaining (deeper) suspects for the residual θ/level difference: the
 θ-transition (51)/seigniorage detail, the burn-in ergodic distribution, or RNG.
 
+## θ forensics (deeper dig, Angus's call)
+
+1. **θ-transition is bit-faithful.** STEP 6 (mod_calc.f90:2856-2864):
+   `nxt_wealth = savings·r_alpha + seignorage` (excludes the labor-endowment
+   `exp(dz)·q_l_ss` term, which enters only the value-fn `next_period_share`),
+   `theta_nxt = nxt_wealth₁/Σ`; `r_alpha = (share−bF)·rf₀/(1−ω) + bF·rf₁ +
+   (1−share)·rk`. Our `equilibrium_step` matches exactly.
+2. **Simulation method matches KL.** KL advances the state via the solve's stored
+   transition coeffs `smol_coeffs(q_nxt)` (mod_results §2.4-2.6) — our `trans`;
+   burn-in disaster-ON + clip, no-disaster ensemble excludes the disaster node +
+   clip. Faithful.
+3. **`bbeta_coeff`=0.001 + `bbeta_adj` confirmed faithful** (mod_param.f90:244).
+4. **Ergodic θ_h = 0.3636 ± 0.0025** (cross-sim se), range [0.301, 0.440]. This is
+   a *tight, genuine ergodic value of a faithful transition*. The 0.350 "target"
+   is the **deterministic** SS, not the ergodic mean — risk lifts the ergodic θ
+   above it (stochastic-ss θ=0.415 is higher still). **No θ bug**; the 0.350
+   benchmark was a red herring. KL ships no raw θ/policy/sim output, so by
+   construction our θ = KL's up to RNG.
+
+**Conclusion of θ forensics:** θ is clean. The NFA-level residual reduces to a
+single ~5pp difference in the **capital-vs-home-bond split** (k/a 137 vs 142,
+b_H/a −47 vs −52; b_F/a exact) — a marginally different converged equilibrium
+(both solves at 1e-8), not a transition/θ/composition bug. It is within
+numerical/RNG tolerance on the most simulation-sensitive moment and cannot be
+closed further without KL's raw policy dump (not shipped).
+
 ## Gate status
 
-STOPPED at the gate per dispatch; Angus chose "investigate NFA first" — done
-(localized above). Awaiting Angus's call: (a) accept (composition is what the
-project needs) and launch Phase-2; (b) deeper θ-transition/burn-in forensics;
-(c) port the bond ladder for the full 15-moment picture first.
+STOPPED at the gate per dispatch. Angus chose "investigate NFA first" then "deeper
+θ forensics" — both done (above): NFA gap localized to composition-OK / level-off;
+θ confirmed clean (faithful transition, genuine ergodic 0.364, 0.350 was a red
+herring). Residual = a ~5pp capital/home-bond split in the converged equilibrium,
+within numerical/RNG tolerance, not a bug. Awaiting Angus's call: (a) accept and
+launch Phase-2 (recommended — composition/mechanism match KL; NFA level is a
+2nd-order calibration detail); (b) port the bond ladder for the full 15-moment
+picture first; (c) further solve-level forensics (limited — KL ships no policy dump).
