@@ -479,6 +479,44 @@ steps (shared scratch — our `EquilibriumState`).
 These are tightly coupled and only testable once the loop converges; port together,
 then gate on the proactive SS/Table-2 cross-check (§7 step 5).
 
+### 13.7 RESUME NOTE — Table-2 moments pipeline BUILT + submitted (session 8)
+
+**DONE + committed (4087d92, pushed origin/main, 53 tests green):**
+- `model/compute_results_vec.py` — grid-level Table-2 columns from converged `g`
+  (reuses `compute_current_period`): yh,yf,lh,lf,ch,cf, inv=k_next_new-(1-δ)k,
+  pi, P_Phh,P_Phf,qx,s,q=q/P1, h_kap=kappa_h, h_ksav, h_sav=savings_h/P1,
+  infl_h/f, nom_ih/if. `level_mask` flags the de-trended levels.
+- `post/table2_series.py` — `build_table2_series(const,g,sim,disast_shock)`: fits
+  Smolyak coeffs to results_grid, interpolates at `sim['std_series']`, de-trends
+  levels by `*exp(cumsum z_shock)`, builds dis/rfh/nfa/nfa_rel. (Matches
+  extract_series.m exactly: rfh=log(nom_ih_{t-1}/infl_h_t) prepend-first; nfa=
+  h_sav_t - h_kap_{t+1}·exp(-dis_{t+1})·q_t duplicate-LAST.)
+- `post/moments.py` — `compute_table2_moments` (12 moments {1-7,11-15}, avg over
+  sims) + `format_table2`/KL_TARGETS. Verified against calc_moments.m lines 33-47.
+- `run_klrep_moments.py` — cluster entry: rebuild const from param_file_N, load
+  solution_spec<N>.pt, reassemble SolverState, simulate (n_burn=10000, n_sims=100,
+  n_per=400, no-disaster), print KL Table-2 comparison to stdout (.out log).
+- `batch_submit.sh` — `run_klrep_moments` GPU block (depends-afterok on run_klrep
+  if chained; else loads existing solution). Committed default `to_run` set to it.
+- **Local validation:** coarse smoke (full pipeline) + reload-path smoke both OK.
+  Even coarse/unconverged, moms 1,3,5,11,12,13,15 ≈ KL; mom 4/6/7 are the
+  grid-resolution/convergence-sensitive ones (nfa, mean rate, autocorr).
+
+**SUBMITTED:** job **29550357_1** (specs=1, maggiori GPU) — RUNNING. When done:
+sync `logs/klreplication`, read `run_klrep_moments_29550357_1.out`, compare the
+12 moments to KL table_2.tex. **GATE: align → closeness note + Phase-2 (specs=1-9,
+KLREP_CONV=1e-8, to_run=" run_klrep "); material discrepancy → STOP + flag Angus.**
+
+**Bond ladder (Task 5, post-gate) — read + understood (mod_calc.f90:716-800):**
+recursive: `q_bond_mat[:,:,1]=1`; for bbb=1..n_bond(20): fit Smolyak coeffs to
+q_bond_mat[:,:,bbb], interpolate nxt_bond_prices(Q,3)=basis@coeffs, then
+calc_bond_prices → q_bond_mat[:,:,bbb+1] = maxval_agent Σ big_w·M·(nxt_bp/
+homegood_infl)·P_agent/P_nxt_agent (hw currency adds /(1-omg)). M_vec_mat reuses
+equilibrium_step steps 1-2 + the step-8 SDF formula at CONVERGED policies (no
+Euler iter). Stored maturities [1,2,3,4,19,20]; q1=,[:,:,2]..q20=[:,:,21].
+rq20_h=log(q19_h_t/infl_h_t/q20_h_{t-1}); rA levered via rfh_lev (1+ζ blend of
+rq20_h/rq20_fh); → moments 8,9,10.
+
 ### 13.6 RESUME NOTE — simulation/moments for KL Table-2 (session 7, in progress)
 
 **Goal (Angus): port simulation/moments → validate KL Table-2 on the solved
