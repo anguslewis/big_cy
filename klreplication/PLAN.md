@@ -522,6 +522,42 @@ mom10=R3 slope on exc_retA. run_klrep_moments prices the ladder + passes bond_gr
 Coarse smoke: all 15 moments finite; 8/9/10 in KL ballpark. Converged full-15
 cluster run submitted (29555360).
 
+### 13.8 RESUME NOTE — moment tables validated; figures + T6/7/8 remain (session 8)
+
+**DONE + committed (d2b1ceb, 58 tests green):** all 9 specs solved (1e-8); full
+Table-2 (14/15) + Tables 3/4/5/9/10 validated across specs vs KL — see
+`CLOSENESS_NOTE.md`. Entries: run_klrep (solve), run_klrep_moments (Table-2 + NFA
+forensics), run_klrep_tables (Tables 3/4/5/9/10, loops all specs). Code:
+model/{compute_results_vec,bond_ladder}, post/{table2_series,moments}.
+
+**REMAINING (next chunk — each needs NEW machinery; port from the read-only Fortran/
+MATLAB; do in committable sub-milestones; gate each on KL .tex):**
+1. **Table-10 corr rows 4-5** (SMALL): add `corr_rf_spread_m1B/m2B` (results_vec
+   49,50) to a grid-results path — the pricing block already has M_vec + the rf
+   spread; port the corr_rf_spread block (calc_bond_prices:3406-3443, the
+   quad_weight_vec-only branch → results_vec(49)=corr(5), (50)=corr(6)). Mean over sim.
+2. **Table 6** (MODERATE): net-exports `nx` series (extract_series:409-414) — needs
+   chf/cfh (consumption splits via varsigma/s), inv_h (results_vec 38, ADD column),
+   deployed-capital flow (h_kap, q, dis). Then table_6_moms 1-6 (nfa_rel_growth +
+   nx vol/means). nfa_rel_growth already built.
+3. **Table 7 / A2** (SUBSTANTIAL): port `calc_valuation` (mod_calc.f90:3503-3774,
+   the n_bond valuation columns: nfa/Enfa/val/Eval/... → jx 138-151) + run the
+   DISASTER ensemble (simulate_ensemble disaster=True already exists). table_7 is the
+   `dis` branch of calc_moments (innovations = temp(2:end,jx_val_*) - temp(1:end-1,
+   jx_val_E*); covariances with nfa innovations). Needs var_indices jx_val_* map.
+4. **Table 8** (SUBSTANTIAL): swap-line MIT experiment (`collect_swap_moments.m` +
+   the swap IRF in mod_results) — a counterfactual policy experiment, NOT the moment
+   ensemble. Lower priority.
+5. **Figures 2-20** (LARGEST): generalized IRF port (MIT shocks z/ω/p/zf/bg/fix from
+   mod_results create_results IRF section) → extract_irfs.m → matplotlib (Python first
+   pass per §6; Stata only if a fig becomes a big_cy deliverable). Figs 4/6/7/10 need
+   the empirical SAMPLE-PATH sim (sample{1,2,3}_mat.txt + NAG e01zmf/e01znf →
+   scipy RegularGridInterpolator/griddata). Headline = fig 10 (ω-shock vs swapped-Tbill).
+
+**FLAGS:** (a) pulling .pt/figures to local needs SYNC_ALLOWED_big_cy=(data/output/
+klreplication) in sherlock-agent-com (Angus). (b) The benchmark NFA-level residual
+(−15.6 vs −23) is benign/localized — do NOT re-chase without KL's policy dump.
+
 ### 13.6 RESUME NOTE — simulation/moments for KL Table-2 (session 7, in progress)
 
 **Goal (Angus): port simulation/moments → validate KL Table-2 on the solved
