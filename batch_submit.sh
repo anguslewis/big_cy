@@ -45,7 +45,7 @@ echo "Submitting big_cy"
 #     (run_klrep_moments per spec runs separately afterwards; the KL targets are
 #      spec-specific so its comparison column needs the per-table calib map first.)
 #   (To rebuild the env, add ' setup_klrep_env_sherlock ' back.)
-to_run="${to_run:- run_klrep }"
+to_run="${to_run:- run_klrep_tables }"
 
 ############################################################################
 # Shared SLURM settings
@@ -174,5 +174,18 @@ if [[ ${to_run} == *" $file "* ]]; then
                 --job-name=$file --output="${logs}/${file}_%A_%a.out" --error="${logs}/${file}_%A_%a.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
     echo "Submitted $folder/$file (array=${specs}): ${job_id}"
+    sleep 1
+fi
+
+# --- Per-spec moment TABLES: load all 9 solutions, print Table-3/4/5/9/10 ------
+# Single GPU job (loops over specs internally); compares each spec to its KL table
+# column (spec->column map from create_tables.m). Prints to the synced .out log.
+file="run_klrep_tables"
+if [[ ${to_run} == *" $file "* ]]; then
+    job_id=`sbatch ${shared_settings_gpu} --gpus=1 \
+                --time=0-01:00:00 --ntasks=1 --cpus-per-task=8 --mem=64G \
+                --job-name=$file --output="${logs}/${file}_%A.out" --error="${logs}/${file}_%A.err" \
+                "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
+    echo "Submitted $folder/$file: ${job_id}"
     sleep 1
 fi

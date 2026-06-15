@@ -141,6 +141,7 @@ def _build_bond_series(cols, *, debt_to_equity, zeta, delta):
     # expected log nominal depreciation (UIP forward term), prepend first.
     qx = cols["qx"]
     E_change = _prepend_first(-torch.log(qx[:, :-1] / qx[:, 1:] * infl_h[:, 1:] / infl_f[:, 1:]))
+    cols["E_change"] = E_change
     # UIP residual on private/omega-adjusted yields (extract_series.m:469-470), prepend 0.
     uip_base = 100.0 * (cols["yield1_f"][:, :-1] - cols["yield1_hw"][:, :-1] - E_change[:, 1:])
     cols["uip_pvt"] = torch.cat([torch.zeros_like(uip_base[:, :1]), uip_base], dim=1)

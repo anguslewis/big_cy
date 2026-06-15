@@ -12,7 +12,8 @@ from klrep.grid.smolyak_polynomial import smolyak_polynomial
 from klrep.model.equilibrium_step import equilibrium_step
 from klrep.model.bond_ladder import (compute_bond_columns, compute_pricing_block,
                                      STORED_MATS, N_BOND)
-from klrep.post.moments import compute_table2_moments_per_sim, _ols
+from klrep.post.moments import (compute_table2_moments_per_sim, _ols,
+                                compute_extended_tables)
 
 
 def _coarse_solved(n_iters=120):
@@ -85,3 +86,20 @@ def test_full_15_moments_synthetic():
     assert set(moms.keys()) == set(range(1, 16))
     for k, v in moms.items():
         assert torch.isfinite(v).all(), f"moment {k} non-finite"
+
+
+def test_extended_tables_synthetic():
+    # Series needed by Tables 3/4/5/10 -> all 17 moments finite.
+    n_sims, T = 3, 40
+    g = torch.Generator().manual_seed(2)
+    pos = lambda: 1.0 + 0.05 * torch.rand(n_sims, T, dtype=torch.float64, generator=g)
+    s = {k: pos() for k in ["yh", "yf", "ch", "cf", "qx", "h_sav", "h_ksav",
+                            "h_kap", "h_bh_sav"]}
+    for k in ["exc_retA", "exc_rf", "rfh", "uip_pvt", "y_growth", "nfa_rel_growth",
+              "E_change"]:
+        s[k] = torch.randn(n_sims, T, dtype=torch.float64, generator=g)
+    ext = compute_extended_tables(s)
+    assert set(ext) == {"t3_1", "t3_2", "t3_3", "t3_4", "t3_5", "t3_6",
+                        "t4_1", "t4_2", "t4_3", "t4_4", "t4_5", "t4_6",
+                        "t5_1", "t5_2", "t10_k", "t10_bH", "t10_bF"}
+    assert all(math.isfinite(v) for v in ext.values())

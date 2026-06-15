@@ -115,6 +115,52 @@ def compute_table2_moments_per_sim(s, *, bg_yss):
     return out
 
 
+def compute_extended_tables(s):
+    """Compute the cross-spec moment TABLES that reuse the no-disaster series +
+    bond ladder: Table-3/9 comovements (rows 1-6), Table-4 second moments (1-6),
+    Table-5 output vol (1-2), Table-10 portfolio shares (1-3). Returns a flat dict
+    label -> cross-sim mean. Requires the bond-dependent series in `s`.
+    (Tables 6-nx, 7-valuation, 8-swap, Table-10 corr rows 4-5 need extra machinery.)
+    """
+    out = {}
+
+    # ---- Table 3 / 9 comovements (calc_moments.m table_3 rows 1-6) ----
+    # 1: beta(uip_pvt, lagged 4q output growth)
+    beta1, _ = _ols([s["y_growth"][:, 4:-2]], s["uip_pvt"][:, 5:-1])
+    out["t3_1"] = float(beta1[:, 1].mean())
+    # 2: beta(uip_pvt, excess equity return)
+    beta2, _ = _ols([100.0 * s["exc_retA"][:, 2:-1]], s["uip_pvt"][:, 2:-1])
+    out["t3_2"] = float(beta2[:, 1].mean())
+    # 3: R3 loading on excess foreign-bond return (reg_coeffs1(3))
+    beta3, _ = _ols([s["exc_retA"][:, 2:-1], s["exc_rf"][:, 2:-1]], s["nfa_rel_growth"][:, 2:-1])
+    out["t3_3"] = float(beta3[:, 2].mean())
+    # 4,5,6: NFA decomposition memo (k-kappa)/4y, b_H/4y, b_F/4y
+    dec = nfa_decomposition(s)
+    out["t3_4"], out["t3_5"], out["t3_6"] = dec["t3_kmk"], dec["t3_bH"], dec["t3_bF"]
+
+    # ---- Table 4 additional second moments (table_4 rows 1-6) ----
+    out["t4_1"] = float((4.0 * 100.0 * _std(s["rfh"][:, 1:-1])).mean())
+    out["t4_2"] = float((4.0 * 100.0 * _std(s["exc_retA"][:, 1:-1])).mean())
+    out["t4_3"] = float((4.0 * 100.0 * _std(s["exc_rf"][:, 1:-1])).mean())
+    qx = s["qx"]
+    qx_change = torch.cat([(-torch.log(qx[:, :-1] / qx[:, 1:]))[:, :1],
+                           -torch.log(qx[:, :-1] / qx[:, 1:])], dim=1)
+    out["t4_4"] = float((100.0 * _std(qx_change[:, :-1])).mean())
+    out["t4_5"] = float((100.0 * _std(s["E_change"][:, 1:-1])).mean())
+    a = torch.log(qx[:, 2:-1] / qx[:, 1:-2])
+    b = (torch.log(s["cf"][:, 2:-1] / s["cf"][:, 1:-2])
+         - torch.log(s["ch"][:, 2:-1] / s["ch"][:, 1:-2]))
+    out["t4_6"] = float(_corr(a, b).mean())
+
+    # ---- Table 5 output growth vol (table_5 rows 1-2) ----
+    out["t5_1"] = float((100.0 * _std(torch.log(s["yh"][:, 2:-1] / s["yh"][:, 1:-2]))).mean())
+    out["t5_2"] = float((100.0 * _std(torch.log(s["yf"][:, 2:-1] / s["yf"][:, 1:-2]))).mean())
+
+    # ---- Table 10 portfolio shares (table_10 rows 1-3) ----
+    out["t10_k"], out["t10_bH"], out["t10_bF"] = dec["t10_k"], dec["t10_bH"], dec["t10_bF"]
+    return out
+
+
 def compute_table2_moments(s, *, bg_yss):
     """Compute the 12 deliverable Table-2 moments, averaged across sims.
 
