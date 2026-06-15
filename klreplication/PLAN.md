@@ -530,16 +530,13 @@ Table-2 (14/15) + Tables 3/4/5/9/10 validated across specs vs KL — see
 forensics), run_klrep_tables (Tables 3/4/5/9/10, loops all specs). Code:
 model/{compute_results_vec,bond_ladder}, post/{table2_series,moments}.
 
-**REMAINING (next chunk — each needs NEW machinery; port from the read-only Fortran/
-MATLAB; do in committable sub-milestones; gate each on KL .tex):**
-1. **Table-10 corr rows 4-5** (SMALL): add `corr_rf_spread_m1B/m2B` (results_vec
-   49,50) to a grid-results path — the pricing block already has M_vec + the rf
-   spread; port the corr_rf_spread block (calc_bond_prices:3406-3443, the
-   quad_weight_vec-only branch → results_vec(49)=corr(5), (50)=corr(6)). Mean over sim.
-2. **Table 6** (MODERATE): net-exports `nx` series (extract_series:409-414) — needs
-   chf/cfh (consumption splits via varsigma/s), inv_h (results_vec 38, ADD column),
-   deployed-capital flow (h_kap, q, dis). Then table_6_moms 1-6 (nfa_rel_growth +
-   nx vol/means). nfa_rel_growth already built.
+**DONE since (committed):** Table-10 corr rows (corr_rf_spread port) + Table 6 (nx)
+— validated vs KL (Tables 2-6,9,10 all match). Generalized-IRF subsystem
+(`solve/irf.py` + `run_klrep_figures.py`): MIT-shock transition fixed point +
+simulate_irf_paths + figure pipeline — validated locally (ω→dollar appreciates;
+disaster→log y −10.3%; baseline self-IRF ~3e-14). Cluster PDF run submitted.
+
+**REMAINING (next chunk — each needs NEW machinery):**
 3. **Table 7 / A2** (SUBSTANTIAL): port `calc_valuation` (mod_calc.f90:3503-3774,
    the n_bond valuation columns: nfa/Enfa/val/Eval/... → jx 138-151) + run the
    DISASTER ensemble (simulate_ensemble disaster=True already exists). table_7 is the
