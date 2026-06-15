@@ -45,7 +45,7 @@ echo "Submitting big_cy"
 #     (run_klrep_moments per spec runs separately afterwards; the KL targets are
 #      spec-specific so its comparison column needs the per-table calib map first.)
 #   (To rebuild the env, add ' setup_klrep_env_sherlock ' back.)
-to_run="${to_run:- run_klrep_tables }"
+to_run="${to_run:- run_klrep_figures }"
 
 ############################################################################
 # Shared SLURM settings
@@ -183,6 +183,20 @@ fi
 file="run_klrep_tables"
 if [[ ${to_run} == *" $file "* ]]; then
     job_id=`sbatch ${shared_settings_gpu} --gpus=1 \
+                --time=0-01:00:00 --ntasks=1 --cpus-per-task=8 --mem=64G \
+                --job-name=$file --output="${logs}/${file}_%A.out" --error="${logs}/${file}_%A.err" \
+                "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
+    echo "Submitted $folder/$file: ${job_id}"
+    sleep 1
+fi
+
+# --- Generalized-IRF figures (PDF): per-shock IRFs -> matplotlib PDFs on oak ----
+# Loads the solved spec(s), builds MIT-shock transitions, simulates IRF paths, and
+# writes PDF figures under data/output/klreplication/figures/. KLREP_SPECS selects
+# specs (default 1 = benchmark). Prints impact values to the .out log for validation.
+file="run_klrep_figures"
+if [[ ${to_run} == *" $file "* ]]; then
+    job_id=`sbatch ${shared_settings_gpu} --gpus=1 --export=ALL,KLREP_SPECS=${KLREP_SPECS:-1} \
                 --time=0-01:00:00 --ntasks=1 --cpus-per-task=8 --mem=64G \
                 --job-name=$file --output="${logs}/${file}_%A.out" --error="${logs}/${file}_%A.err" \
                 "${big_cy_code}/batch_controller.sh" $folder $file | awk '{print $NF}'`
