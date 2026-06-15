@@ -71,18 +71,33 @@ correct across the policy variants.
 σ(Δlog y): 0.607 / 0.442 / 0.596 vs KL 0.61 / 0.44 / 0.60.
 σ(Δlog y\*): 0.802 / 0.748 / 0.807 vs KL 0.81 / 0.75 / 0.81.
 
-## Table 10 — portfolio shares (specs no_ω_symm, no_ω, nocorr_nobg, nocorr, bm)
+## Table 6 — NFA / net-export vol + means (specs bm, no_ω, γ=γ\*): vol exact
 
-| share | no_ω_symm | no_ω | nocorr_nobg | nocorr | bm |
-|-------|----|----|----|----|----|
+| moment | bm | no_ω | γ=γ\* |
+|--------|----|----|----|
+| σ(Δnfa/y) % | 3.33 / 3.3 | 1.60 / 1.6 | 0.83 / 0.8 |
+| σ(nx/y) % | 0.98 / 1.0 | 0.75 / 0.8 | 0.83 / 0.8 |
+| σ((Δnfa−nx)/y) % | 3.11 / 3.1 | 1.75 / 1.8 | 0.19 / 0.2 |
+| mean Δnfa/y % | 0.15 / 0.2 | 0.11 / 0.1 | 0.003 / 0.0 |
+| mean nx/y % | −0.84 / −0.6 | 0.11 / −0.2 | 0.07 / 0.1 |
+| mean (Δnfa−nx)/y % | 0.99 / 0.7 | 0.004 / 0.3 | −0.07 / −0.1 |
+
+Volatilities essentially exact across specs; the means are tiny, sensitive ratios
+(close, a couple flip sign near zero).
+
+## Table 10 — portfolio shares + conditional corr (specs no_ω_symm, no_ω, nocorr_nobg, nocorr, bm)
+
+| row | no_ω_symm | no_ω | nocorr_nobg | nocorr | bm |
+|-----|----|----|----|----|----|
 | k/a % | 100.0 / 100.0 | 137.0 / 137.1 | 137.4 / 137.7 | 137.4 / 137.7 | 137.2 / 142.4 |
 | b_H/a % | 106.1 / 105.9 | 73.5 / 73.3 | 4.7 / 4.7 | 1.9 / 1.8 | −47.0 / −51.9 |
 | b_F/a % | −106.1 / −105.9 | −110.5 / −110.4 | −42.1 / −42.4 | −39.3 / −39.6 | 9.8 / 9.5 |
+| corr(rf-sp, m) | 0.067 / 0.06 | 0.094 / 0.09 | 0.017 / 0.02 | 0.017 / 0.02 | −0.561 / −0.53 |
+| corr(rf-sp, m\*) | 0.067 / 0.07 | 0.084 / 0.08 | 0.017 / 0.02 | 0.017 / 0.02 | −0.486 / −0.49 |
 
-Exact for 4 of 5 specs (incl. the γ=γ\*+no-ω spec 7 at exactly k/a=100%, i.e. no
-leverage). Only the benchmark shows the known ~5pp capital/home-bond split; b_F/a is
-exact even there. (Table-10 conditional-corr rows 4–5 need the solver's
-corr_rf_spread columns — deferred, see below.)
+Shares exact for 4 of 5 specs (incl. spec 7 at exactly k/a=100% — no leverage); only
+the benchmark shows the known ~5pp split (b_F/a exact even there). The conditional
+rf-spread/SDF correlations (rows 4–5) match KL across all 5 specs.
 
 ## The one systematic residual — benchmark NFA level
 
@@ -97,24 +112,18 @@ near-unit-root level, per-path sd 13.6pp), **not a structural bug**, and absent 
 the counterfactual specs. Cannot be closed further without KL's raw policy/sim
 output (not shipped).
 
-## Not yet reproduced (clearly-scoped next chunk — need new machinery)
+## Coverage: moment tables COMPLETE except 7 & 8
 
-- **Table 6** (NFA/net-export vol): needs the net-exports series `nx` (consumption
-  splits chf/cfh + inv_h + deployed-capital flow). Moderate.
+Tables **2, 3, 4, 5, 6, 9, 10** all reproduced + validated across their KL spec
+columns. Remaining:
 - **Table 7 / A2** (external-adjustment variance decomposition): needs `calc_valuation`
-  (the n_bond valuation columns) + the **disaster** simulation ensemble (the `dis`
-  branch). Substantial.
+  (the n_bond valuation columns) + the **disaster** simulation ensemble. Substantial.
 - **Table 8** (dollar swap-line effects): needs the swap-line MIT-shock experiment
-  (`collect_swap_moments`) — a counterfactual policy experiment, not in the moment
-  ensemble. Substantial.
-- **Table-10 rows 4–5** (conditional corr of the rf spread with the SDF): need the
-  solver's `corr_rf_spread_m` columns (results_vec 49–52) added to the grid results.
-  Small.
-- **Figures 2–20**: the IRF figures need the **generalized impulse-response** port
-  (MIT shocks to z/ω/p/zf/bg/fix from mod_results); figs 4/6/7/10 need the
-  **empirical sample-path** simulation (NAG scattered-data interp → scipy). The
-  headline fig 10 (ω-shock vs swapped-T-bill) needs the sample-path machinery.
-  Substantial; the largest remaining piece.
+  (`collect_swap_moments`) — a counterfactual policy experiment. Substantial.
+- **Figures 2–20**: IRF figures need the **generalized impulse-response** port (MIT
+  shocks z/zf/p/ω/disaster → shock-transition fixed point + n_sample IRF sim →
+  extract_irfs). Figs 4/6/7/10 also need the **empirical sample-path** sim (NAG
+  scattered-data interp → scipy). IRF subsystem in progress (`solve/irf.py`).
 
 **Pulling artifacts back to local:** the moment tables print to the synced `.out`
 logs (done). Pulling `solution_spec*.pt` or figure files to local would need a
