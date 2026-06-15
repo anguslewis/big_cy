@@ -112,6 +112,30 @@ near-unit-root level, per-path sd 13.6pp), **not a structural bug**, and absent 
 the counterfactual specs. Cannot be closed further without KL's raw policy/sim
 output (not shipped).
 
+## Generalized-IRF figures — reproduced + validated vs KL's PDFs
+
+Ported the MIT-shock generalized-IRF subsystem (`solve/irf.py`: shock-transition
+fixed point + `simulate_irf_paths`; `run_klrep_figures.py`: shocked−baseline
+differencing → 6-panel IRF PDFs on Sherlock). Benchmark spec, shocks {p, ω, z,
+disaster}. Validation:
+
+- **ω safety-shock (vs KL fig 3, "Model" line): essentially exact.** ω +124 (KL
+  ~125), r^e−r −162→+135 spike (KL −160→+135), r*−Δq−r −114→+132 (KL −115→+135),
+  **log q +25 then ≈−1 (KL +26→−1) — the dollar's safe-haven appreciation**, log y
+  −81→−4 (KL −82→−5). θ −16 vs KL −19 (the known benchmark NFA/θ residual).
+- **p disaster-risk shock (vs KL fig 2): shapes + key magnitudes match.** r^e−r −686
+  with small overshoot (KL ~−680), r*−Δq−r +0.5→−0.76 (KL +0.55→−0.76), log y
+  −60→+4 (KL −62→+1). p-level, log q, θ run a bit higher (convenience/wealth-share
+  sensitive — same NFA/θ residual).
+- **Disaster realization: log y impact −1033bp ≈ −10.3%** — matches the −0.10
+  disaster calibration exactly; equity return −2084bp. **z-shock −82.5bp = −5·σ_z.**
+  Baseline self-IRF ~3e-14 (differencing exact).
+
+PDFs: `data/output/klreplication/figures/irf_spec1_{p,omg,z,dis}.pdf`. The IRF
+machinery is validated against KL's published figures. (KL's 12-panel figs 11-20
+and the recession/sample-path figs 4/6/7/10 add more variables/the empirical
+sample-path sim — straightforward extensions of the same machinery; next chunk.)
+
 ## Coverage: moment tables COMPLETE except 7 & 8
 
 Tables **2, 3, 4, 5, 6, 9, 10** all reproduced + validated across their KL spec
