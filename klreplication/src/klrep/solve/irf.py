@@ -150,3 +150,33 @@ def build_shock_transition(const, g, v_mat, mc_mat, next_state, k_next_new,
         if diff < conv:
             break
     return state
+
+
+def simulate_irf_paths(sc, irf_trans_coeffs, starts, *, is_disaster, z_at_jump,
+                       n_periods=200):
+    """Generalized-IRF state paths from continuous `starts` (n_sample, d): sit at the
+    start for periods 1-2, jump at period 3 (via the shock-transition coeffs, or the
+    disaster quad node), then propagate the no-shock transition. Returns a sim-like
+    dict (state_series econ 9, std_series, z_shock_series) for build_table2_series."""
+    from ..simulate.simulate import _basis
+    n_sample = starts.shape[0]
+    d = starts.shape[1]
+    dev = starts.device
+    std = torch.empty((n_sample, n_periods, d), dtype=DTYPE, device=dev)
+    z_shock = torch.zeros((n_sample, n_periods), dtype=DTYPE, device=dev)
+    std[:, 0] = starts
+    std[:, 1] = starts
+    b0 = _basis(starts, sc)
+    if is_disaster:
+        nxt = torch.einsum("ns,sd->nd", b0, sc.trans[sc.n_quad - 1])
+    else:
+        nxt = b0 @ irf_trans_coeffs
+    std[:, 2] = nxt.clamp(-1.0, 1.0)
+    z_shock[:, 2] = z_at_jump
+    no_shock = sc.no_shock_idx
+    for t in range(3, n_periods):
+        b = _basis(std[:, t - 1], sc)
+        std[:, t] = (torch.einsum("ns,sd->nd", b, sc.trans[no_shock])).clamp(-1.0, 1.0)
+    flat = _basis(std.reshape(n_sample * n_periods, d), sc) @ sc.state
+    state_series = flat.reshape(n_sample, n_periods, 9)
+    return {"state_series": state_series, "std_series": std, "z_shock_series": z_shock}
