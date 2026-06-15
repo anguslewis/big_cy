@@ -33,6 +33,7 @@ RESULT_NAMES = [
     "ch",       # results_vec(5)  c_vec(1)=c_spend/P1     [level -> *z]
     "cf",       # results_vec(6)  c_vec(2)=c_spend/P2     [level -> *z]
     "inv",      # results_vec(7)  k_nxt(1)-(1-d)k         [level -> *z]
+    "inv_h",    # results_vec(38) inv_h/P1 (home-good inv) [level -> *z]
     "pi",       # results_vec(8)  pi_current(1)/P1        [ratio]
     "P_Phh",    # results_vec(10) P_div_P_h(1)            [ratio]
     "P_Phf",    # results_vec(11) P_div_P_h(2)            [ratio]
@@ -50,7 +51,8 @@ RESULT_NAMES = [
 ]
 
 # Names that are de-trended levels (re-trended by * exp(cumsum z_shock)).
-LEVEL_NAMES = {"yh", "yf", "ch", "cf", "inv", "h_kap", "h_ksav", "h_bh_sav", "h_sav"}
+LEVEL_NAMES = {"yh", "yf", "ch", "cf", "inv", "inv_h", "h_kap", "h_ksav",
+               "h_bh_sav", "h_sav"}
 
 
 @dataclass
@@ -89,6 +91,9 @@ def compute_results_vec(const, g) -> ResultsGrid:
     # next aggregate capital and investment (exact on the grid).
     k_next_new = (savings * (1.0 - g.share) / g.q.unsqueeze(1)).sum(dim=1)
     inv = k_next_new - (1.0 - ddelta) * k_aggr
+    # home-good investment spending (equilibrium_step STEP 7 / results_vec 38).
+    ish = const.inv_share_h
+    inv_h = inv * g.q / (1.0 + g.s ** (const.sigma - 1.0) * (1.0 - ish) / ish)
 
     cols = {
         "yh": cp.y_current[:, 0],
@@ -98,6 +103,7 @@ def compute_results_vec(const, g) -> ResultsGrid:
         "ch": c_vec[:, 0],
         "cf": c_vec[:, 1],
         "inv": inv,
+        "inv_h": inv_h / P[:, 0],
         "pi": cp.pi_current[:, 0] / P[:, 0],
         "P_Phh": P[:, 0],
         "P_Phf": P[:, 1],

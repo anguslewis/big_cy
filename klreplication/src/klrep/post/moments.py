@@ -156,8 +156,21 @@ def compute_extended_tables(s):
     out["t5_1"] = float((100.0 * _std(torch.log(s["yh"][:, 2:-1] / s["yh"][:, 1:-2]))).mean())
     out["t5_2"] = float((100.0 * _std(torch.log(s["yf"][:, 2:-1] / s["yf"][:, 1:-2]))).mean())
 
-    # ---- Table 10 portfolio shares (table_10 rows 1-3) ----
+    # ---- Table 6 NFA / net-export vol + means (table_6 rows 1-6) ----
+    g = s["nfa_rel_growth"][:, 1:-1]
+    nx = s["nx_rely"][:, 1:-1]
+    out["t6_1"] = float((100.0 * _std(g)).mean())
+    out["t6_2"] = float((100.0 * _std(nx)).mean())
+    out["t6_3"] = float((100.0 * _std(g - nx)).mean())
+    out["t6_4"] = float((100.0 * g.mean(dim=1)).mean())
+    out["t6_5"] = float((100.0 * nx.mean(dim=1)).mean())
+    out["t6_6"] = float((100.0 * (g - nx).mean(dim=1)).mean())
+
+    # ---- Table 10 portfolio shares + conditional corr (table_10 rows 1-5) ----
     out["t10_k"], out["t10_bH"], out["t10_bF"] = dec["t10_k"], dec["t10_bH"], dec["t10_bF"]
+    if "corr_m1B" in s:
+        out["t10_4"] = float(s["corr_m1B"].mean())
+        out["t10_5"] = float(s["corr_m2B"].mean())
     return out
 
 

@@ -49,6 +49,28 @@ class PricingBlock:
     P_nxt: torch.Tensor       # (S,Q,2) basket cost next period
     omg: torch.Tensor         # (S,) convenience wedge
     next_state: torch.Tensor  # (S,Q,d) standardized next states (active dims)
+    corr_m1B: torch.Tensor    # (S,) cond. corr(rf-spread, log m_home)   [Table-10 r4]
+    corr_m2B: torch.Tensor    # (S,) cond. corr(rf-spread, log m*_home)  [Table-10 r5]
+
+
+def _corr_rf_spread(rf0, rf1, M_vec, P, P_nxt, qw, big_w):
+    """Conditional (per grid point) correlations of the log rf-spread with the log
+    SDF — port of calc_bond_prices:3418-3431 (the quad_weight branch -> corr(5),(6)
+    -> results_vec 49,50). Computed over the non-disaster nodes. Returns (corr1, corr2)."""
+    Q1 = qw.shape[0]                              # n_quad - 1 (non-disaster nodes)
+    qw = qw.unsqueeze(0)                          # (1, Q1)
+    bw = big_w[:, :Q1]                            # (S, Q1) = quad_weight*(1-p_dis)
+    spread = torch.log(rf1[:, :Q1] / rf0[:, :Q1])  # (S, Q1)
+    logM1 = torch.log(M_vec[:, :Q1, 0])
+    conv = P_nxt[:, :Q1, 0] / P[:, 0].unsqueeze(1) * P[:, 1].unsqueeze(1) / P_nxt[:, :Q1, 1]
+    logM2 = torch.log(M_vec[:, :Q1, 1] * conv)
+    E_sp = (qw * spread).sum(1)
+    var_sp = (qw * spread ** 2).sum(1) - E_sp ** 2
+    var_m1 = (qw * logM1 ** 2).sum(1) - (bw * logM1).sum(1) ** 2   # KL quirk: bw mean
+    var_m2 = (qw * logM2 ** 2).sum(1) - (qw * logM2).sum(1) ** 2
+    cov1 = (qw * spread * logM1).sum(1) - (qw * spread).sum(1) * (qw * logM1).sum(1)
+    cov2 = (qw * spread * logM2).sum(1) - (qw * spread).sum(1) * (qw * logM2).sum(1)
+    return cov1 / torch.sqrt(var_sp * var_m1), cov2 / torch.sqrt(var_sp * var_m2)
 
 
 def _interp_input(const, g, v_mat, mc_mat):
@@ -155,8 +177,10 @@ def compute_pricing_block(const, g, v_mat, mc_mat, next_state) -> PricingBlock:
         M_vec[:, :, iii] = bbeta[:, iii].unsqueeze(1) * mc_temp[:, :, iii] / util_c_deriv.unsqueeze(1) \
             * (v_temp[:, :, iii] / EV.unsqueeze(1)) ** (1.0 / ies - gma) * nps ** (-gma)
 
+    corr_m1B, corr_m2B = _corr_rf_spread(rf0, rf1, M_vec, P, P_nxt,
+                                         const.quad_weight_vec, big_w)
     return PricingBlock(M_vec=M_vec, hg_infl=hg_infl, P=P, P_nxt=P_nxt, omg=omg,
-                        next_state=next_state)
+                        next_state=next_state, corr_m1B=corr_m1B, corr_m2B=corr_m2B)
 
 
 def _price_one_step(nxt_bp, pb: PricingBlock, big_w):
@@ -202,5 +226,6 @@ def compute_bond_columns(const, g, v_mat, mc_mat, next_state):
         "q1_h": stored[1][:, 0], "q1_f": stored[1][:, 1], "q1_hw": stored[1][:, 2],
         "q19_h": stored[19][:, 0], "q19_f": stored[19][:, 1],
         "q20_h": stored[20][:, 0], "q20_f": stored[20][:, 1],
+        "corr_m1B": pb.corr_m1B, "corr_m2B": pb.corr_m2B,
     }
     return cols

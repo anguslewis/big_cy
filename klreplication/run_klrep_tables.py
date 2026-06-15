@@ -102,15 +102,21 @@ def main():
     t5lab = ["sd(dlog y) %", "sd(dlog y*) %"]
     table_block("TABLE 5 output vol", [SPEC["bm"], SPEC["no_omg"], SPEC["symm"]], t5keys, t5lab)
 
-    t10keys = ["t10_k", "t10_bH", "t10_bF"]
-    t10lab = ["k/a %", "b_H/a %", "b_F/a %"]
-    table_block("TABLE 10 portfolio shares",
+    t6keys = ["t6_1", "t6_2", "t6_3", "t6_4", "t6_5", "t6_6"]
+    t6lab = ["sd(dnfa/y) %", "sd(nx/y) %", "sd((dnfa-nx)/y) %",
+             "mean dnfa/y %", "mean nx/y %", "mean (dnfa-nx)/y %"]
+    table_block("TABLE 6 nfa/nx", [SPEC["bm"], SPEC["no_omg"], SPEC["symm"]], t6keys, t6lab)
+
+    t10keys = ["t10_k", "t10_bH", "t10_bF", "t10_4", "t10_5"]
+    t10lab = ["k/a %", "b_H/a %", "b_F/a %",
+              "corr(rf-sp, m)", "corr(rf-sp, m*)"]
+    table_block("TABLE 10 portfolios + corr",
                 [SPEC["no_omg_symm"], SPEC["no_omg"], SPEC["nocorr_nobg"],
                  SPEC["nocorr"], SPEC["bm"]], t10keys, t10lab)
 
-    print("\nNOTE: Tables 6(nx)/7(valuation,disaster)/8(swap) + Table-10 corr rows "
-          "4-5 + figures(IRFs/sample-path) need additional machinery (nx series, "
-          "calc_valuation, swap-line MIT experiment, generalized IRFs) — next chunk.",
+    print("\nNOTE: Table 7(valuation,disaster) + Table 8(swap) + figures(IRFs/"
+          "sample-path) need additional machinery (calc_valuation + disaster "
+          "ensemble, swap-line MIT experiment, generalized IRFs) — in progress.",
           flush=True)
     print(f"\ntotal {time.time() - t0:.0f}s", flush=True)
 

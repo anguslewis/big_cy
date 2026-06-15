@@ -95,9 +95,29 @@ def build_table2_series(const, g, sim, *, disast_shock, bond_grid=None,
     cols["nfa_rel_growth"] = _prepend_first(
         (cols["nfa"][:, 1:] - cols["nfa"][:, :-1]) / cols["yh"][:, 1:])
 
+    _build_nx_series(cols, varsigma=const.varsigma_vec, sigma=const.sigma, delta=delta)
     if bond_grid is not None:
         _build_bond_series(cols, debt_to_equity=debt_to_equity, zeta=zeta, delta=delta)
     return cols
+
+
+def _build_nx_series(cols, *, varsigma, sigma, delta):
+    """Net exports (extract_series.m:409-414) + nx/y. Adds `nx`, `nx_rely`."""
+    vsh, vsf = varsigma[0], varsigma[1]
+    s, P_hh, P_hf = cols["s"], cols["P_Phh"], cols["P_Phf"]
+    c_h, c_f = cols["ch"], cols["cf"]
+    # consumption splits: home/foreign good, in home-good units.
+    chh = c_h / ((1.0 - vsh) / vsh * s ** (sigma - 1.0) + 1.0)
+    chf = c_h - chh
+    cfh = c_f * P_hf / P_hh / ((1.0 - vsf) / vsf * s ** (sigma - 1.0) + 1.0)
+    imports = chf / s / P_hh
+    q, h_kap = cols["q"], cols["h_kap"]
+    exports_base = (cfh[:, :-1] / P_hh[:, :-1] + cols["inv_h"][:, :-1] / P_hh[:, :-1]
+                    + q[:, :-1] * (1.0 - delta) * h_kap[:, :-1]
+                    - q[:, :-1] * torch.exp(-cols["dis"][:, 1:]) * h_kap[:, 1:])
+    exports = torch.cat([exports_base, exports_base[:, -1:]], dim=1)   # duplicate last
+    cols["nx"] = exports - imports
+    cols["nx_rely"] = cols["nx"] / cols["yh"]
 
 
 def _build_bond_series(cols, *, debt_to_equity, zeta, delta):

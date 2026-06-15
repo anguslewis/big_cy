@@ -49,11 +49,14 @@ def test_bond_columns_finite_positive():
     p, st, _ = _coarse_solved(120)
     bg = compute_bond_columns(st.const, st.g, st.v_mat, st.mc_mat, st.next_state)
     S = st.const.state_grid.shape[0]
-    assert set(bg) == {"q1_h", "q1_f", "q1_hw", "q19_h", "q19_f", "q20_h", "q20_f"}
+    assert set(bg) == {"q1_h", "q1_f", "q1_hw", "q19_h", "q19_f", "q20_h", "q20_f",
+                       "corr_m1B", "corr_m2B"}
+    price_keys = {"q1_h", "q1_f", "q1_hw", "q19_h", "q19_f", "q20_h", "q20_f"}
     for k, v in bg.items():
         assert v.shape == (S,), k
         assert torch.isfinite(v).all(), k
-        assert (v > 0).all(), k          # bond prices are positive
+        if k in price_keys:
+            assert (v > 0).all(), k          # bond prices are positive (corr can be <0)
     assert STORED_MATS == [1, 2, 3, 4, 19, 20] and N_BOND == 20
 
 
@@ -96,10 +99,11 @@ def test_extended_tables_synthetic():
     s = {k: pos() for k in ["yh", "yf", "ch", "cf", "qx", "h_sav", "h_ksav",
                             "h_kap", "h_bh_sav"]}
     for k in ["exc_retA", "exc_rf", "rfh", "uip_pvt", "y_growth", "nfa_rel_growth",
-              "E_change"]:
+              "E_change", "nx_rely", "corr_m1B", "corr_m2B"]:
         s[k] = torch.randn(n_sims, T, dtype=torch.float64, generator=g)
     ext = compute_extended_tables(s)
     assert set(ext) == {"t3_1", "t3_2", "t3_3", "t3_4", "t3_5", "t3_6",
                         "t4_1", "t4_2", "t4_3", "t4_4", "t4_5", "t4_6",
-                        "t5_1", "t5_2", "t10_k", "t10_bH", "t10_bF"}
+                        "t5_1", "t5_2", "t6_1", "t6_2", "t6_3", "t6_4", "t6_5", "t6_6",
+                        "t10_k", "t10_bH", "t10_bF", "t10_4", "t10_5"}
     assert all(math.isfinite(v) for v in ext.values())
